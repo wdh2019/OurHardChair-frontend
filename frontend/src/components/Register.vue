@@ -3,34 +3,34 @@
 
     <el-form :model="registerForm" :rules="rules" class="register_container" label-position="left"
              label-width="0px" v-loading="loading" :ref="registerForm">
-      //标题
-      <h3 class="register_title">注册Register</h3>
-      //用户名
+      <!--标题-->
+      <h3 class="register_title">Register</h3>
+      <!--用户名-->
       <el-form-item prop="username">
-        <el-input type="text" v-model="registerForm.username"
+      <el-input type="text" v-model="registerForm.username"
                   auto-complete="off" placeholder="username"></el-input>
       </el-form-item>
-      //密码
+      <!--密码-->
       <el-form-item prop="password">
         <el-input type="password" v-model="registerForm.password"
                   auto-complete="off" placeholder="password"></el-input>
       </el-form-item>
-      //邮箱
+      <!--邮箱-->
       <el-form-item prop="email">
         <el-input type="text" v-model="registerForm.email"
                   auto-complete="off" placeholder="email"></el-input>
       </el-form-item>
-      //所属单位
+      <!--所属单位-->
       <el-form-item prop="company">
         <el-input type="text" v-model="registerForm.company"
                   auto-complete="off" placeholder="company"></el-input>
       </el-form-item>
-      //所在区域
-      <el-form-item prop="district">
-        <el-input type="text" v-model="registerForm.district"
-                  auto-complete="off" placeholder="district"></el-input>
+      <!--所在区域-->
+      <el-form-item prop="country">
+        <el-input type="text" v-model="registerForm.country"
+                  auto-complete="off" placeholder="country"></el-input>
       </el-form-item>
-      //用户类型（admin,contributor或reviewer)
+      <!--用户类型（admin,contributor或reviewer)-->
       <el-form-item prop="usertype">
         <el-radio-group v-model="registerForm.usertype" @change="userTypeChange">
           <el-radio label="Admin" border>Admin</el-radio>
@@ -38,10 +38,18 @@
           <el-radio label="Reviewer" border>Reviewer</el-radio>
         </el-radio-group>
       </el-form-item>
-      //提交按钮
+      <!--提交按钮-->
       <el-form-item style="width: 100%">
-        <el-button type="primary" style="width: 40%;background: #afb4db;border: none" v-on:click="register(registerForm)">register</el-button>
+        <el-button type="primary"
+                   style="width: 40%;background: #afb4db;border: none"
+                   v-on:click="register">register</el-button>
       </el-form-item>
+      <!--转到登陆-->
+      <p>I have already got an account.
+      <router-link to="login">
+      login
+      </router-link>
+      </p>
 
     </el-form>
   </div>
@@ -50,13 +58,21 @@
 <script>
 export default {
   name: 'Register',
+//data
   data () {
     const dataValid = (rule, value, callback) => {
       //未填写信息的处理
       if(!value || value === '') {
         return callback(new Error('Can\'t be empty'))
       }
-
+      return callback()
+    }
+    const emailValid=(rule, value, callback) =>{
+      //邮箱格式检查
+      var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+      if(!regEmail.test(value)){
+        return callback(new Error('email filled in a wrong form!'))
+      }
       return callback()
     }
     return {
@@ -65,22 +81,22 @@ export default {
         password: '',
         email: '',
         company:'',
-        district:'',
+        country:'',
         usertype: ''
       },
       rules: {
         // blur 失去鼠标焦点时触发验证
         username: [{required: true, message: '', trigger: 'blur'}, {validator: dataValid, trigger: 'blur'}],
         password: [{required: true, message: '', trigger: 'blur'}, {validator: dataValid, trigger: 'blur'}],
-        email:    [{required: true, message: '', trigger: 'blur'}, {validator: dataValid, trigger: 'blur'}],
+        email:    [{required: true, message: '', trigger: 'blur'}, {validator: emailValid, message:'email filled in a wrong form!',trigger: 'blur'}],
         company:  [{required: true, message: '', trigger: 'blur'}, {validator: dataValid, trigger: 'blur'}],
-        district: [{required: true, message: '', trigger: 'blur'}, {validator: dataValid, trigger: 'blur'}],
+        country: [{required: true, message: '', trigger: 'blur'}, {validator: dataValid, trigger: 'blur'}],
         usertype: [{required: true, message: '', trigger: 'blur'}, {validator: dataValid, trigger: 'blur'}]
       },
       loading: false
     }
   },
-
+  //methods包括了所有的functions
   methods: {
     userTypeChange() {    },
     //表单验证
@@ -93,7 +109,7 @@ export default {
               password: this.registerForm.password,
               email: this.registerForm.email,
               company: this.registerForm.company,
-              district:this.registerForm.district,
+              country:this.registerForm.country,
               authorities: [this.registerForm.usertype]
             }
           )
@@ -101,18 +117,18 @@ export default {
               // 根据后端的返回数据修改
               if(resp.status === 200 && resp.data.hasOwnProperty("id")) {
                 // 跳转到login
-                alert('注册成功！')
+                alert('register successfully！')
                 this.$router.replace('/login')
               } else{
-                alert('注册失败！')
+                alert('register error！')
               }
             })
             .catch(error => {
               console.log(error)
-              alert('服务器后端出现错误！')
+              alert('register error！')
             })
         } else {
-          alert('您的填写有不正确的地方！')
+          alert('wrong submit！')
         }
       })
     }
@@ -142,6 +158,9 @@ export default {
   .register_title{
     margin: 0px auto 40px auto;
     text-align: center;
-    color: #505458;
+    color: #494e8f;
+  }
+  .el-form-item{
+    margin-bottom: 10px;
   }
 </style>

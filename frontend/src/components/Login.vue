@@ -3,32 +3,34 @@
 
     <el-form :model="loginForm" :rules="rules" class="login_container" label-position="left"
               label-width="0px" v-loading="loading">
-      //标题
-      <h3 class="login_title">登录Login</h3>
-      //用户名
+      <!--标题-->
+      <h3 class="login_title">Login</h3>
+      <!--用户名-->
       <el-form-item prop="username">
         <el-input type="text"
                   v-model="loginForm.username"
                   auto-complete="off"
                   placeholder="username"></el-input>
       </el-form-item>
-      //密码
+      <!--密码-->
       <el-form-item prop="password">
         <el-input type="password"
                   v-model="loginForm.password"
                   auto-complete="off"
                   placeholder="password"></el-input>
       </el-form-item>
-      //按钮组
+      <!--登陆按钮-->
       <el-form-item style="width: 100%">
         <el-button type="primary"
                    style="width: 40%;background: #afb4db;border: none"
                    v-on:click="login">login</el-button>
+        </el-form-item>
+        <!--转到注册-->
+        <p>Not register yet?
         <router-link to="register">
-          <el-button type="primary"
-                     style="width: 40%;background: #afb4db;border: none">register</el-button>
+        register
         </router-link>
-      </el-form-item>
+        </p>
 
     </el-form>
   </div>
@@ -62,12 +64,12 @@ export default {
             this.$store.commit('login', resp.data)
             this.$router.replace({path: '/'})
           } else{
-            alert('登陆失败！')
+            alert('login error！')
           }
         })
         .catch(error => {
           console.log(error)
-          alert('服务器后端出现错误！')
+          alert('login error！')
         })
     }
   }
@@ -101,5 +103,8 @@ export default {
     margin: 0px auto 40px auto;
     text-align: center;
     color: #494e8f;
+  }
+  .el-form-item{
+    margin-bottom: 10px;
   }
 </style>
