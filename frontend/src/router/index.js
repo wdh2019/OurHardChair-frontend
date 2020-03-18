@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import MeetingApply from '@/components/MeetingApply'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import store from '../store'
@@ -8,14 +8,15 @@ import store from '../store'
 Vue.use(Router)
 
 export const router = new Router({
+  //通过路由转到的页面
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld,
-      meta: {
+      name: 'MeetingApply',
+      component: MeetingApply,
+      /*meta: {
         requireAuth: true // 需要登录权限
-      }
+      }*/
     },
     {
       path: '/login',
