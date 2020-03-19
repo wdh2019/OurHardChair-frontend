@@ -46,7 +46,7 @@
       </el-form-item>
       <!--转到登陆-->
       <p>I have already got an account.
-      <router-link to="login">
+      <router-link to="/">
       login
       </router-link>
       </p>

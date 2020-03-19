@@ -1,83 +1,88 @@
 <template>
   <div id="base_login">
-
-    <el-form :model="loginForm" :rules="rules" class="login_container" label-position="left"
-              label-width="0px" v-loading="loading">
-      <!--标题-->
-      <h3 class="login_title">Login</h3>
-      <!--用户名-->
-      <el-form-item prop="username">
-        <el-input type="text"
-                  v-model="loginForm.username"
-                  auto-complete="off"
-                  placeholder="username"></el-input>
-      </el-form-item>
-      <!--密码-->
-      <el-form-item prop="password">
-        <el-input type="password"
-                  v-model="loginForm.password"
-                  auto-complete="off"
-                  placeholder="password"></el-input>
-      </el-form-item>
-      <!--登陆按钮-->
-      <el-form-item style="width: 100%">
-        <el-button type="primary"
-                   style="width: 40%;background: #afb4db;border: none"
-                   v-on:click="login">login</el-button>
+    <!--标题-->
+    <div>
+      <h3 class="login_title">登录</h3>
+      <el-form :model="loginForm" :rules="rules" class="login_container" label-position="left"
+               label-width="0px" v-loading="loading">
+        <!--用户名-->
+        <el-tooltip content="tishi">
+          <el-form-item prop="username">
+            <el-input type="text"
+                      v-model="loginForm.username"
+                      auto-complete="off"
+                      placeholder="username"></el-input>
+          </el-form-item>
+        </el-tooltip>
+        <!--密码-->
+        <el-form-item prop="password">
+          <el-input type="password"
+                    v-model="loginForm.password"
+                    auto-complete="off"
+                    placeholder="password"></el-input>
+        </el-form-item>
+        <!--登陆按钮-->
+        <el-form-item style="width: 100%">
+          <el-button type="primary"
+                     style="width: 40%;background: #afb4db;border: none"
+                     v-on:click="login">login
+          </el-button>
         </el-form-item>
         <!--转到注册-->
         <p>Not register yet?
-        <router-link to="register">
-        register
-        </router-link>
+          <router-link to="register">
+            register
+          </router-link>
         </p>
 
-    </el-form>
+      </el-form>
+    </div>
+
   </div>
 
 </template>
 
 <script>
-export default {
-  name: 'Login',
-  data () {
-    return {
-      loginForm: {
-        username: '',
-        password: ''
-      },
-      rules: {
-        username: [{required: true, message: '', trigger: 'blur'}],
-        password: [{required: true, message: '', trigger: 'blur'}]
-      },
-      loading: false
-    }
-  },
-  methods: {
-    login () {
-      this.$axios.post('/login', {
-        username: this.loginForm.username,
-        password: this.loginForm.password
-      })
-        .then(resp => {
-          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-            this.$store.commit('login', resp.data)
-            this.$router.replace({path: '/'})
-          } else{
+  export default {
+    name: 'Login',
+    data() {
+      return {
+        loginForm: {
+          username: '',
+          password: ''
+        },
+        rules: {
+          username: [{required: true, message: '', trigger: 'blur'}],
+          password: [{required: true, message: '', trigger: 'blur'}]
+        },
+        loading: false
+      }
+    },
+    methods: {
+      login() {
+        this.$axios.post('/login', {
+          username: this.loginForm.username,
+          password: this.loginForm.password
+        })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              this.$store.commit('login', resp.data)
+              this.$router.replace({path: '/'})
+            } else {
+              alert('login error！')
+            }
+          })
+          .catch(error => {
+            console.log(error)
             alert('login error！')
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          alert('login error！')
-        })
+          })
+      }
     }
   }
-}
 </script>
 
 <style scoped>
-  #base_login{
+  #base_login {
     background: url("../assets/background/checkerboard-cross.png") repeat;
     background-position: center;
     height: 100%;
@@ -85,11 +90,13 @@ export default {
     background-size: cover;
     position: fixed;
   }
-  body{
+
+  body {
     margin: 0px;
     padding: 0px;
   }
-  .login_container{
+
+  .login_container {
     border-radius: 15px;
     background-clip: padding-box;
     margin: 90px auto;
@@ -99,12 +106,14 @@ export default {
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
   }
+
   .login_title {
     margin: 0px auto 40px auto;
     text-align: center;
     color: #494e8f;
   }
-  .el-form-item{
+
+  .el-form-item {
     margin-bottom: 10px;
   }
 </style>
