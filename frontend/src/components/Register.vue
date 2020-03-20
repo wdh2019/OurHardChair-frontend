@@ -143,12 +143,12 @@
           if (valid) {
             //this.$axios.post用来向后台请求数据
             this.$axios.post('/register', {
-                username: this.registerForm.username,
-                password: this.registerForm.password,
-                email: this.registerForm.email,
-                company: this.registerForm.company,
-                country: this.registerForm.country,
-                authorities: [this.registerForm.usertype]
+                username: this.ruleForm.username,
+                password: this.ruleForm.password,
+                email: this.ruleForm.email,
+                company: this.ruleForm.company,
+                country: this.ruleForm.country,
+                authorities: [this.ruleForm.usertype]
               }
             )
               .then(resp => {
@@ -156,7 +156,7 @@
                 if (resp.status === 200 && resp.data.hasOwnProperty("id")) {
                   // 跳转到login
                   alert('register successfully！');
-                  this.$router.replace('/login')
+                  this.$router.replace('/UserPage')
                 } else {
                   alert('register error！')
                 }
