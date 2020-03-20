@@ -60,6 +60,7 @@
 </template>
 
 <script>
+
   export default {
     name: "Register1",
     data() {
@@ -221,5 +222,6 @@
     margin-top: 40px;
     font-size: 15px;
     margin-left: 300px;
+
   }
 </style>

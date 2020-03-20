@@ -39,7 +39,6 @@
 
       </el-form>
     </div>
-
   </div>
 
 </template>
@@ -140,6 +139,7 @@
     border: none
   }
 
+
   .login_title {
     margin: 0px auto 40px auto;
     text-align: center;
@@ -159,5 +159,6 @@
     margin-top: 60px;
     font-size: 15px;
     margin-left: 300px;
+
   }
 </style>

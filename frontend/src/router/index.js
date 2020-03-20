@@ -27,8 +27,8 @@ export const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
-    },
 
+    },
   ]
 })
 
