@@ -11,15 +11,7 @@ export const router = new Router({
   //通过路由转到的页面
   routes: [
     {
-      path: '/MeetingApply',
-      name: 'MeetingApply',
-      component: MeetingApply,
-      /*meta: {
-        requireAuth: true // 需要登录权限
-      }*/
-    },
-    {
-      path: '/',
+      path: '/login',
       name: 'Login',
       component: Login
     },
@@ -29,11 +21,21 @@ export const router = new Router({
       component: Register
 
     },
+    {
+      path: '/MeetingApply',
+      name: 'MeetingApply',
+      component: MeetingApply,
+      /*meta: {
+        requireAuth: true // 需要登录权限
+      }*/
+    },
+
+
   ]
 })
 
 // 前端登录拦截
-router.beforeEach(function (to, from ,next) {
+router.beforeEach(function (to, from, next) {
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (store.state.token) {
       next()
