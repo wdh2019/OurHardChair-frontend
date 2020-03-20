@@ -50,7 +50,7 @@
           <el-button type='danger' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
         </el-form-item>
         <p class="tip">已有账号!
-          <router-link to="/login" class="router_link_active">
+          <router-link to="/" class="router_link_active">
             登录
           </router-link>
         </p>
