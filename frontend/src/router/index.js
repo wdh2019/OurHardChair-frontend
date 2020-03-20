@@ -4,7 +4,6 @@ import MeetingApply from '@/components/MeetingApply'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import store from '../store'
-import Test from "@/components/Test"
 
 Vue.use(Router)
 
@@ -29,11 +28,7 @@ export const router = new Router({
       name: 'Register',
       component: Register
     },
-    {
-      path:"/Test",
-      name:'Test',
-      component:Test
-    }
+
   ]
 })
 
