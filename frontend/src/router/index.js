@@ -11,7 +11,7 @@ export const router = new Router({
   //通过路由转到的页面
   routes: [
     {
-      path: '/',
+      path: '/MeetingApply',
       name: 'MeetingApply',
       component: MeetingApply,
       /*meta: {
@@ -19,7 +19,7 @@ export const router = new Router({
       }*/
     },
     {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: Login
     },
@@ -27,7 +27,8 @@ export const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
-    }
+    },
+
   ]
 })
 
