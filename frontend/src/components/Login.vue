@@ -32,7 +32,7 @@
         </el-form-item>
         <!--转到注册-->
         <p class="tip">尚未注册？
-          <router-link to="register" class="router_link_active">
+          <router-link to="/register" class="router_link_active">
             注册
           </router-link>
         </p>
