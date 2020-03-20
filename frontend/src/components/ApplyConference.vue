@@ -110,9 +110,6 @@
       }
     },
     methods: {
-      getMonthSelected(e){
-        console.log(e.target);
-      },
       submitForm (formName) {
         this.$axios.post('/ApplyConference', {
           shortname: this.ruleForm.shortname,

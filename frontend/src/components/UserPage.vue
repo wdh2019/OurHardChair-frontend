@@ -48,7 +48,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   header{
     postion:relative;
     color:white;
