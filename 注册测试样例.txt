@@ -1,0 +1,50 @@
+注册
+用户名：
+1、只能以字母或-开头：
+_1234   X
+`1234   X
+/1234   X
+\1234   X
+[1234   X
+ 1234   X
+-1234   √
+a1234   √
+2、只能包含字母，数字或两种特殊字符
+ab+12  X
+ab 12   X
+ab/12   X
+a&123  X
+-----     √
+-_____    √
+-_ab1    √
+3、长度5-32
+-ab1     X
+-a1       X
+-a         X
+-           X
+-_abcdefghijklmnopqrstuvwxyz12345    X
+-_abcdefghijklmnopqrstuvwxyz1234      √
+密码
+1、字母，数字或者特殊字符(-_)至少两种
+ab1234  √
+-_----     X
+abcdefg X
+1234567 X
+-_abcd   √
+-abcd1   √
+_1234a   √
+2、长度6-32
+ab123    X
+ab12      X
+-_abcdefghijklmnopqrstuvwxyz12345    X
+-_abcdefghijklmnopqrstuvwxyz1234      √
+3、不能包含账号
+用户名abc123  密码abc12345  √ 出现问题 已改正
+用户名-_abc123 密码-_abcd1234  √
+用户名-_abc123 密码-_abc1234    X
+邮箱
+1、使用标准E-mail格式
+fudan@edu.cn   √
+123@163.com    √
+abc@cnm           X
+abc@cnm.com    √

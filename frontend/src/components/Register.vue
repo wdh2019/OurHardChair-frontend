@@ -7,7 +7,7 @@
                label-width="0px" v-loading="loading">
 
         <el-form-item prop="username" class="item">
-          <el-input v-model="ruleForm.username" placeholder="用户名" type="text" auto-complete="off">
+          <el-input ref="username" v-model="ruleForm.username" placeholder="用户名" type="text" auto-complete="off">
           </el-input>
         </el-form-item>
         <el-form-item prop="password" class="item">
@@ -50,7 +50,7 @@
           <el-button type='danger' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
         </el-form-item>
         <p class="tip">已有账号!
-          <router-link to="\" class="router_link_active">
+          <router-link to="/login" class="router_link_active">
             登录
           </router-link>
         </p>
@@ -73,8 +73,12 @@
       };
       let checkPassword = (rule, value, callback) => {
         var regPassword = /(?!^(\d+|[a-zA-Z]+|[-_]+)$)^[\w-_]{6,32}$/;
+        var username = this.$refs.username.value;
         if (!regPassword.test(value)) {
-          return callback(new Error("密码格式不正确，必须包含字母、数字以及特殊符号（-_）中两种"))
+          return callback(new Error("密码格式不正确，必须包含字母、数字以及特殊符号（-_）中两种"));
+        }
+        if(value.includes(username)){
+          return callback(new Error("密码不能包含账号"));
         }
         return callback();
       };
