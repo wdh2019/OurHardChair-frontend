@@ -74,8 +74,9 @@
               password: this.ruleForm.password
             })
               .then(resp => {
+                alert(resp.status);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-                  this.$store.commit('login', resp.data)
+                  this.$store.commit('/login', resp.data)
                   this.$router.replace({path: '/'})
                 } else {
                   alert('login error！')

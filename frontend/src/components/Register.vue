@@ -125,7 +125,7 @@
             {validator: checkEmail, trigger: 'blur'}
           ],
           country: [
-            {required: true, message: '地区不能为空', trigger: 'blur'}
+            {required: true, message: '地区不能为空', trigger: 'change'}
           ],
           company: [
             {required: true, message: '单位不能为空', trigger: 'blur'}
@@ -146,28 +146,28 @@
                 username: this.ruleForm.username,
                 password: this.ruleForm.password,
                 email: this.ruleForm.email,
+                institution: this.ruleForm.company,
                 country: this.ruleForm.country,
-                company: this.ruleForm.company,
-                user_type:this.ruleForm.user_type
+                authorities:this.ruleForm.user_type
               }
             )
               .then(resp => {
                 // 根据后端的返回数据修改
-                if (resp.status === 200 && resp.data.hasOwnProperty("id")) {
+                alert(resp.data);
+                  if (resp.status === 200 && resp.data.hasOwnProperty("id")) {
                   // 跳转到login
                   alert('register successfully！');
                   this.$router.replace('/login')
                 } else {
-                  alert('register error！')
+                  alert('register error！1')
                 }
               })
               .catch(error => {
-                console.log(error);
-                alert('register error！')
+                console.log(error+"1234");
+                alert('register error！2')
               })
           } else {
             alert('wrong submit！');
-            return false;
           }
         });
       },
