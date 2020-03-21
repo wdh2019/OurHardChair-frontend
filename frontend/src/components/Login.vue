@@ -76,8 +76,8 @@
               .then(resp => {
                 alert(resp.status);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-                  this.$store.commit('/login', resp.data)
-                  this.$router.replace({path: '/'})
+                  this.$store.commit('login', resp.data)
+                  this.$router.replace({path: '/UserPage'})
                 } else {
                   alert('login error！')
                 }
@@ -88,26 +88,7 @@
               })
           }
         });
-      },
-      login() {
-        this.$axios.post('/login', {
-          username: this.ruleForm.username,
-          password: this.ruleForm.password
-        })
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              this.$store.commit('login', resp.data)
-              this.$router.replace({path: '/'})
-            } else {
-              alert('login error！')
-            }
-          })
-          .catch(error => {
-            console.log(error);
-            alert('login error！')
-          })
-      },
-
+      }
     }
   }
 </script>

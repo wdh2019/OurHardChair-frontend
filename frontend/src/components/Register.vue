@@ -50,7 +50,7 @@
           <el-button type='danger' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
         </el-form-item>
         <p class="tip">已有账号!
-          <router-link to="/login" class="router_link_active">
+          <router-link to="/" class="router_link_active">
             登录
           </router-link>
         </p>
@@ -77,7 +77,7 @@
         if (!regPassword.test(value)) {
           return callback(new Error("密码格式不正确，必须包含字母、数字以及特殊符号（-_）中两种"));
         }
-        if (value.includes(username)) {
+        if(value.includes(username)){
           return callback(new Error("密码不能包含账号"));
         }
         return callback();
@@ -146,9 +146,9 @@
                 username: this.ruleForm.username,
                 password: this.ruleForm.password,
                 email: this.ruleForm.email,
-                institution: this.ruleForm.company,
+                company: this.ruleForm.company,
                 country: this.ruleForm.country,
-                authorities:this.ruleForm.user_type
+                authorities: [this.ruleForm.usertype]
               }
             )
               .then(resp => {
@@ -157,7 +157,7 @@
                   if (resp.status === 200 && resp.data.hasOwnProperty("id")) {
                   // 跳转到login
                   alert('register successfully！');
-                  this.$router.replace('/login')
+                  this.$router.replace('/UserPage')
                 } else {
                   alert('register error！1')
                 }
@@ -203,7 +203,7 @@
   .register_title {
     margin: 0px auto 40px auto;
     text-align: center;
-    color: #494e8f;
+    color:#494e8f;
   }
 
   .register_container .item {
@@ -214,18 +214,15 @@
     width: 30%;
     border: none
   }
-
-  .router_link_active {
+  .router_link_active{
     text-decoration: none;
     color: #ff5a60;
 
   }
-
-  .router_link_active:hover {
+  .router_link_active:hover{
     color: #55b6ff;
   }
-
-  .tip {
+  .tip{
     margin-top: 40px;
     font-size: 15px;
     margin-left: 300px;
