@@ -108,21 +108,19 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.ruleForm.username);
-            console.log(this.ruleForm.password);
             //this.$axios.post用来向后台请求数据
             this.$axios.post('/login', {
               username: this.ruleForm.username,
               password: this.ruleForm.password
             })
               .then(resp => {
-                //console.log(resp.data);
+                console.log(resp.data);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$store.commit('login', resp.data);
                   this.$router.replace({path: '/UserPage'});
                   //console.log(this.$store.state.country);
                 } else {
-                  alert('登录失败，用户名或密码错误')
+                  alert(resp.data.message)
                 }
               })
               .catch(error => {

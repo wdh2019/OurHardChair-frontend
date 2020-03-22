@@ -13,52 +13,30 @@
         <el-form-item prop="fullname">
           <el-input v-model="ruleForm.fullname" placeholder="会议全称"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-col :span="11">
-            <el-form-item prop="start_date1">
-              <el-date-picker type="date" placeholder="开始日期" v-model="ruleForm.start_date1"
-                              style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-form-item prop="start_date2">
-              <el-time-picker placeholder="开始时间" v-model="ruleForm.start_date2" style="width: 100%;"></el-time-picker>
-            </el-form-item>
-          </el-col>
-        </el-form-item>
         <el-form-item prop="place">
           <el-input v-model="ruleForm.place" placeholder="举办地点"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-col :span="11">
-            <el-form-item prop="deadline_date1">
-              <el-date-picker type="date" placeholder="截止日期" v-model="ruleForm.deadline_date1"
-                              style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-form-item prop="deadline_date2">
-              <el-time-picker placeholder="截止时间" v-model="ruleForm.deadline_date2"
-                              style="width: 100%;"></el-time-picker>
-            </el-form-item>
-          </el-col>
+        <el-form-item prop="start_date">
+          <el-date-picker
+            v-model="ruleForm.start_date"
+            type="datetime"
+            placeholder="开始时间">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item>
-          <el-col :span="11">
-            <el-form-item prop="release_date1">
-              <el-date-picker type="date" placeholder="结果发布日期" v-model="ruleForm.release_date1"
-                              style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-form-item prop="release_date2">
-              <el-time-picker placeholder="结果发布时间" v-model="ruleForm.release_date2"
-                              style="width: 100%;"></el-time-picker>
-            </el-form-item>
-          </el-col>
+
+        <el-form-item prop="deadline_date">
+          <el-date-picker
+            v-model="ruleForm.deadline_date"
+            type="datetime"
+            placeholder="截止时间">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item prop="release_date">
+          <el-date-picker
+            v-model="ruleForm.release_date"
+            type="datetime"
+            placeholder="发布时间">
+          </el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="success" @click="submitForm('ruleForm')" class="middle_button">立即创建</el-button>
@@ -73,28 +51,25 @@
   export default {
     name: 'ConferenceApplication',
     data() {
+      let checkDeadLine = (rule, value, callback) => {
+
+      };
       return {
         ruleForm: {
           shortname: '',
           fullname: '',
-          start_date1: '',
-          start_date2: '',
+          start_date: '',
           place: '',
-          deadline_date1: '',
-          deadline_date2: '',
-          release_date1: '',
-          release_date2: '',
+          deadline_date: '',
+          release_date: '',
         },
         rules: {
           shortname: [{required: true, message: "会议简称不为空", trigger: 'blur'}],
           fullname: [{required: true, message: '会议全称不为空', trigger: 'blur'}],
-          start_date1: [{type:'date',required: true, message: "开始日期不为空", trigger: 'blur'}],
-          start_date2: [{type:'date',required: true, message: "开始日期不为空", trigger: 'blur'}],
           place: [{required: true, message: "会议地点不为空", trigger: 'blur'}],
-          deadline_date1: [{type:'date',required: true, message: "截止日期不为空", trigger: 'blur'}],
-          deadline_date2: [{type:'date',required: true, message: "截止日期不为空", trigger: 'blur'}],
-          release_date1: [{type:'date',required: true, message: "公布日期不为空", trigger: 'blur'}],
-          release_date2: [{type:'date',required: true, message: "公布日期不为空", trigger: 'blur'}]
+          start_date: [{type: 'date', required: true, message: "开始日期不为空", trigger: 'blur'}],
+          deadline_date: [{type: 'date', required: true, message: "截止日期不为空", trigger: 'blur'}],
+          release_date: [{type: 'date', required: true, message: "公布日期不为空", trigger: 'blur'}],
         },
         loading: false
       }
@@ -102,18 +77,20 @@
     methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
-          console.log(this.ruleForm.start_date1)
-          console.log(this.ruleForm.start_date2)
+          var startTime = this.formatTime(new Date(this.ruleForm.start_date));
+          var endTime = this.formatTime(new Date(this.ruleForm.deadline_date));
+          var release_time = this.formatTime(new Date(this.ruleForm.release_date));
           if (valid) {
             //this.$axios.post用来向后台请求数据
+            console.log(this.ruleForm.shortname + "\n" + this.ruleForm.fullname + "\n" + this.ruleForm.place + "\n" + startTime + "\n" + endTime + "\n" + release_time + "\n")
             this.$axios.post('/ApplyConference', {
                 shortname: this.ruleForm.shortname,
                 fullname: this.ruleForm.fullname,
                 //注意这里举办时间的拼接
-                startTime: this.ruleForm.start_date1 + "-" + this.ruleForm.start_date2,
                 place: this.ruleForm.place,
-                submit_deadline: this.ruleForm.deadline_date1 + "-" + this.ruleForm.deadline_date2,
-                release_time: this.ruleForm.release_date1 + "-" + this.ruleForm.release_date2,
+                startTime: this.startTime,
+                submit_deadline: this.endTime,
+                release_time: this.release_time
               }
             )
               .then(resp => {
@@ -140,6 +117,9 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      formatTime(date) {
+        return (date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate()) + " " + (date.getHours()) + ":" + (date.getMinutes()) + ":" + (date.getSeconds()));
       }
     },
   }
