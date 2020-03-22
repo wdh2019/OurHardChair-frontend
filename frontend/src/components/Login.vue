@@ -156,6 +156,7 @@
     font-size: 25px;
     color: white;
     text-decoration: underline;
+	cursor:pointer;
   }
   .login:hover{
     color: red;

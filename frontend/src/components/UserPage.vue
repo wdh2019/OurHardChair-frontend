@@ -13,12 +13,12 @@
         >{{item2.name}}
         </el-menu-item>
       </el-submenu>
-      <el-submenu :index="'3'" :key="3+''" style="position: relative; left: 70%;">
+      <el-submenu index="3" style="position: relative; left: 70%;">
         <template slot="title"><i class="el-icon-setting" style="color: white" ></i>设置</template>
-        <el-menu-item :index="'3-0'">
+        <el-menu-item :index="$router.options.routes[3].children[0].path"><!-- 请注意这里的路由数组-->
           用户信息
         </el-menu-item>
-        <el-menu-item @click="quit" :index="'3-1'">
+        <el-menu-item @click="quit" index="3-1">
           退出
         </el-menu-item>
       </el-submenu>

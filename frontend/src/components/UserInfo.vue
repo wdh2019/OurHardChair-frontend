@@ -1,11 +1,19 @@
 <template>
-  <div id="base_register">
-    <div class="register_container">
-      <h3 class="register_title">注册</h3>
+  <div id="base_userinfo">
 
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left"
-               label-width="0px" v-loading="loading">
+    <div class="userinfo_container">
+      <h3 class="userinfo_title">用户信息</h3>
+      <el-table class="userinfo_info" :data="userData" v-show="!form_visible">
+        <el-table-column prop="username" label="用户名"></el-table-column>
+        <el-table-column prop="password" label="密码"></el-table-column>
+        <el-table-column prop="email" label="邮箱"></el-table-column>
+        <el-table-column prop="country" label="地区"></el-table-column>
+        <el-table-column prop="company" label="所属单位"></el-table-column>
+      </el-table>
+      <el-button type="success" round @click="showChangeForm()" v-show="!form_visible">修改</el-button>
 
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px"
+                label-position="left" v-show="form_visible">
         <el-form-item prop="username" class="item">
           <el-input ref="username" v-model="ruleForm.username" placeholder="用户名" type="text" auto-complete="off">
           </el-input>
@@ -40,24 +48,18 @@
         </el-form-item>
 
         <el-form-item class="item">
-          <el-button type="success" round @click="submitForm('ruleForm')" class="middle_button">注册</el-button>
+          <el-button type="success" round @click="submitForm('ruleForm')" class="middle_button">提交修改</el-button>
           <el-button type='danger' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
         </el-form-item>
-        <p class="tip">已有账号!
-          <router-link to="/" class="router_link_active">
-            登录
-          </router-link>
-        </p>
       </el-form>
     </div>
   </div>
 </template>
 
 <script>
-
-  export default {
-    name: "Register1",
-    data() {
+  export default{
+    name:"UserInfo",
+    data(){
       let checkUserName = (rule, value, callback) => {
         var regUserName = /^[a-zA-Z-][a-zA-Z0-9_-]{4,31}$/;
         if (!regUserName.test(value)) {
@@ -89,14 +91,22 @@
         }
         return callback()
       };
-      return {
-        ruleForm: {
+      return{
+        form_visible:false,
+        userData:[{
+          username: '111',
+          password: '111',
+          email: '111',
+          country: '111',
+          company: '111',
+        }],
+        ruleForm:{
           username: '',
           password: '',
           ensure_password: '',
-          email: '',
-          country: '',
-          company: '',
+          email:'',
+          country:'',
+          company:'',
         },
         rules: {
           username: [
@@ -127,17 +137,37 @@
         loading: false
       };
     },
-    methods: {
+    methods:{
+      //用户信息从后端请求
+      getUserInfo(){
+        this.$axios.get('/UserInfo')
+        .then(resp => {
+          if(resp.status === 200){
+            this.userData=res.body;
+          }
+          else{
+            alert('请求失败！服务器状态码非200')
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          alert('请求用户数据时发生错误error')
+        });
+      },
+      //修改信息的表单 显示方法
+      showChangeForm(){
+        this.form_visible=true;
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            //this.$axios.post用来向后台请求数据
-            this.$axios.post('/register', {
-                username: this.ruleForm.username,
-                password: this.ruleForm.password,
-                email: this.ruleForm.email,
-                institution: this.ruleForm.company,
-                country: this.ruleForm.country,
+            //this.$axios.post用来向后台发送数据
+            this.$axios.post('/UserInfo', {
+                username_changed: this.ruleForm.username,
+                password_changed: this.ruleForm.password,
+                email_changed: this.ruleForm.email,
+                institution_changed: this.ruleForm.company,
+                country_changed: this.ruleForm.country,
               }
             )
               .then(resp => {
@@ -146,31 +176,37 @@
                 //console.log(resp.data);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login
-                  alert('注册成功');
-                  this.$store.commit('login', resp.data);
+                  alert('修改成功');
+                  // 修改成功后，修改表单隐藏
+                  this.form_visible=false;
                   this.$router.replace('/UserPage')
                 } else {
-                  alert('注册失败用户名重复')
+                  alert('修改失败,用户名重复')
                 }
               })
               .catch(error => {
                 console.log(error);
-                alert('注册失败')
+                alert('修改失败')
               })
           } else {
-            alert('提交信息有错误');
+            alert('wrong submit！');
           }
         });
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       }
+    },
+    mounted:function(){
+      this.form_visible=false;
+      //this.getUserInfo();
     }
+
   }
 </script>
 
 <style scoped>
-  #base_register {
+  #base_userinfo {
     background: url("../assets/background/checkerboard-cross.png") repeat;
     background-position: center;
     height: 100%;
@@ -179,47 +215,25 @@
     position: fixed;
   }
 
-  .register_container {
+  .userinfo_container {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 40px auto;
-    width: 500px;
-    height: 580px;
+    margin: 20px auto;
+    width: 600px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
+    clear: left;
   }
 
-  .register_title {
+  .userinfo_title {
     margin: 0px auto 40px auto;
     text-align: center;
     color: #494e8f;
   }
 
-  .register_container .item {
+  .userinfo_container .item {
     margin-bottom: 20px;
-  }
-
-  .register_container .item .middle_button {
-    width: 30%;
-    border: none
-  }
-
-  .router_link_active {
-    text-decoration: none;
-    color: #ff5a60;
-
-  }
-
-  .router_link_active:hover {
-    color: #55b6ff;
-  }
-
-  .tip {
-    margin-top: 40px;
-    font-size: 15px;
-    margin-left: 300px;
-
   }
 </style>

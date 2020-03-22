@@ -9,6 +9,7 @@ import PageOne from "../components/PageOne"
 import PageTwo from "../components/PageTwo"
 import PageThree from "../components/PageThree"
 import InfoPage from "../components/InfoPage"
+import UserInfo from "../components/UserInfo"
 
 Vue.use(Router)
 
@@ -30,7 +31,7 @@ export const router = new Router({
       }]
 	  },
     {
-      path: '/UserPage1',
+      path: '/UserPage',
       name: '我的工作台',
       component: UserPage,
       meta:{
@@ -51,7 +52,7 @@ export const router = new Router({
       }]
     },
     {
-      path: '/UserPage2',
+      path: '/UserPage',
       name: '消息中心',
       component: UserPage,
       meta:{
@@ -61,6 +62,19 @@ export const router = new Router({
         path: '/InfoPage',
         name: '待处理会议',
         component: InfoPage,
+      }]
+    },
+    {
+      path: '/UserPage',
+      name: '设置',
+      component: UserPage,
+      meta:{
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
+      children:[{
+        path: '/UserInfo',
+        name: '用户信息',
+        component: UserInfo,
       }]
     },
     {
