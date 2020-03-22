@@ -38,13 +38,7 @@
           <el-input v-model="ruleForm.company" placeholder="所属单位" type="text" auto-complete="off">
           </el-input>
         </el-form-item>
-        <el-form-item prop="user_type" class="item">
-          <el-radio-group v-model="ruleForm.user_type">
-            <el-radio label="Admin" border>Admin</el-radio>
-            <el-radio label="Contributor" border>Contributor</el-radio>
-            <el-radio label="Reviewer" border>Reviewer</el-radio>
-          </el-radio-group>
-        </el-form-item>
+
         <el-form-item class="item">
           <el-button type="success" round @click="submitForm('ruleForm')" class="middle_button">注册</el-button>
           <el-button type='danger' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
@@ -77,7 +71,7 @@
         if (!regPassword.test(value)) {
           return callback(new Error("密码格式不正确，必须包含字母、数字以及特殊符号（-_）中两种"));
         }
-        if(value.includes(username)){
+        if (value.includes(username)) {
           return callback(new Error("密码不能包含账号"));
         }
         return callback();
@@ -103,7 +97,6 @@
           email: '',
           country: '',
           company: '',
-          user_type: '',
         },
         rules: {
           username: [
@@ -130,9 +123,6 @@
           company: [
             {required: true, message: '单位不能为空', trigger: 'blur'}
           ],
-          user_type: [
-            {required: true, message: "注册身份不能为空", trigger: 'change'}
-          ]
         },
         loading: false
       };
@@ -146,25 +136,26 @@
                 username: this.ruleForm.username,
                 password: this.ruleForm.password,
                 email: this.ruleForm.email,
-                company: this.ruleForm.company,
+                institution: this.ruleForm.company,
                 country: this.ruleForm.country,
-                authorities: [this.ruleForm.usertype]
               }
             )
               .then(resp => {
                 // 根据后端的返回数据修改
                 alert(resp.data);
-                  if (resp.status === 200 && resp.data.hasOwnProperty("id")) {
+                //console.log(resp.data);
+                if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login
-                  alert('register successfully！');
+                  alert('注册成功');
+                  this.$store.commit('login', resp.data);
                   this.$router.replace('/UserPage')
                 } else {
-                  alert('register error！1')
+                  alert('注册失败用户名重复')
                 }
               })
               .catch(error => {
-                console.log(error+"1234");
-                alert('register error！2')
+                console.log(error);
+                alert('注册失败')
               })
           } else {
             alert('wrong submit！');
@@ -203,7 +194,7 @@
   .register_title {
     margin: 0px auto 40px auto;
     text-align: center;
-    color:#494e8f;
+    color: #494e8f;
   }
 
   .register_container .item {
@@ -214,15 +205,18 @@
     width: 30%;
     border: none
   }
-  .router_link_active{
+
+  .router_link_active {
     text-decoration: none;
     color: #ff5a60;
 
   }
-  .router_link_active:hover{
+
+  .router_link_active:hover {
     color: #55b6ff;
   }
-  .tip{
+
+  .tip {
     margin-top: 40px;
     font-size: 15px;
     margin-left: 300px;

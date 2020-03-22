@@ -5,6 +5,10 @@ import ApplyConference from '@/components/ApplyConference'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import store from '../store'
+import PageOne from "../components/PageOne"
+import PageTwo from "../components/PageTwo"
+import PageThree from "../components/PageThree"
+import InfoPage from "../components/InfoPage"
 
 Vue.use(Router)
 
@@ -13,19 +17,42 @@ export const router = new Router({
   routes: [
 	  {
 	    path: '/UserPage',
-	    name: 'UserPage',
+	    name: '操作中心',
 	    component: UserPage,
-		/*meta: {
-		  requireAuth: true // 需要登录权限
-		}*/
+      redirect:'/ApplyConference',
+      children:[{
+        path: '/ApplyConference',
+        name: '会议申请',
+        component: ApplyConference,
+      }]
 	  },
     {
-      path: '/ApplyConference',
-      name: 'ApplyConference',
-      component: ApplyConference,
-      /*meta: {
-        requireAuth: true // 需要登录权限
-      }*/
+      path: '/UserPage1',
+      name: '我的工作台',
+      component: UserPage,
+      children:[{
+        path: '/PageOne',
+        name: '选项一',
+        component: PageOne,
+      },{
+        path: '/PageTwo',
+        name: '选项二',
+        component: PageTwo,
+      },{
+        path: '/PageThree',
+        name: '选项三',
+        component: PageThree,
+      }]
+    },
+    {
+      path: '/UserPage2',
+      name: '消息中心',
+      component: UserPage,
+      children:[{
+        path: '/InfoPage',
+        name: '待处理会议',
+        component: InfoPage,
+      }]
     },
     {
       path: '/',

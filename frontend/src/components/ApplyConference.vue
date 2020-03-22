@@ -4,82 +4,66 @@
     <div class="conference_container">
       <!--标题-->
       <h3 class="conference_title">会议申请</h3>
-     <!--申请提交表单-->
-      <el-form :model="ruleForm" :rules="rules"  ref="ruleForm" label-position="left"
-              label-width="0px" v-loading="loading">
-      <!--会议简称-->
-        <el-form-item class="item" prop="shortname">
-          <el-input type="text"
-                  v-model="ruleForm.shortname"
-                  auto-complete="off"
-                  placeholder="会议简称"></el-input>
+      <!--申请提交表单-->
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm"
+               label-position="left">
+        <el-form-item prop="shortname">
+          <el-input v-model="ruleForm.shortname" placeholder="会议简称"></el-input>
         </el-form-item>
-        <!--会议全称-->
-        <el-form-item class="item" prop="fullname">
-          <el-input type="text"
-                  v-model="ruleForm.fullname"
-                  auto-complete="off"
-                  placeholder="会议全称"></el-input>
+        <el-form-item prop="fullname">
+          <el-input v-model="ruleForm.fullname" placeholder="会议全称"></el-input>
         </el-form-item>
-        <!--举办时间-->
-        <el-form-item class="item" prop="holding_time">
-        <!--月-->
-          <el-select v-model="ruleForm.month" placeholder="月">
-            <el-option label="January" value="January"></el-option>
-            <el-option label="February" value="February"></el-option>
-            <el-option label="March" value="March"></el-option>
-            <el-option label="April" value="April"></el-option>
-            <el-option label="May" value="May"></el-option>
-            <el-option label="June" value="June"></el-option>
-            <el-option label="July" value="July"></el-option>
-            <el-option label="August" value="August"></el-option>
-            <el-option label="September" value="September"></el-option>
-            <el-option label="October" value="October"></el-option>
-            <el-option label="November" value="November"></el-option>
-            <el-option label="December" value="December"></el-option>
-          </el-select>
-          <!--日-->
-          <el-input type="text"
-                  v-model="ruleForm.day"
-                  auto-complete="off"
-                  placeholder="日"></el-input>
-          <!--年-->
-          <el-input type="text"
-                  v-model="ruleForm.year"
-                  auto-complete="off"
-                  placeholder="年"></el-input>
+        <el-form-item>
+          <el-col :span="11">
+            <el-form-item prop="start_date1">
+              <el-date-picker type="date" placeholder="开始日期" v-model="ruleForm.start_date1"
+                              style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col class="line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-form-item prop="start_date2">
+              <el-time-picker placeholder="开始时间" v-model="ruleForm.start_date2" style="width: 100%;"></el-time-picker>
+            </el-form-item>
+          </el-col>
         </el-form-item>
-        <!--举办地点-->
-        <el-form-item class="item" prop="place">
-        <el-input type="text"
-                  v-model="ruleForm.place"
-                  auto-complete="off"
-                  placeholder="举办地点"></el-input>
+        <el-form-item prop="place">
+          <el-input v-model="ruleForm.place" placeholder="举办地点"></el-input>
         </el-form-item>
-        <!--投稿截止日期-->
-        <el-form-item class="item" prop="submit_deadline">
-        <el-input type="text"
-                  v-model="ruleForm.submit_deadline"
-                  auto-complete="off"
-                  placeholder="投稿截止日期"></el-input>
+        <el-form-item>
+          <el-col :span="11">
+            <el-form-item prop="deadline_date1">
+              <el-date-picker type="date" placeholder="截止日期" v-model="ruleForm.deadline_date1"
+                              style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col class="line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-form-item prop="deadline_date2">
+              <el-time-picker placeholder="截止时间" v-model="ruleForm.deadline_date2"
+                              style="width: 100%;"></el-time-picker>
+            </el-form-item>
+          </el-col>
         </el-form-item>
-        <!--评审结果发布日期-->
-        <el-form-item class="item" prop="release_time">
-          <el-input type="text"
-                  v-model="ruleForm.release_time"
-                  auto-complete="off"
-                  placeholder="评审结果发布日期"></el-input>
+        <el-form-item>
+          <el-col :span="11">
+            <el-form-item prop="release_date1">
+              <el-date-picker type="date" placeholder="结果发布日期" v-model="ruleForm.release_date1"
+                              style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col class="line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-form-item prop="release_date2">
+              <el-time-picker placeholder="结果发布时间" v-model="ruleForm.release_date2"
+                              style="width: 100%;"></el-time-picker>
+            </el-form-item>
+          </el-col>
         </el-form-item>
-
-        <el-form-item class="item" style="width: 100%">
-          <el-button type="success" round @click="submitForm(ruleForm)" class="middle_button">申请</el-button>
+        <el-form-item>
+          <el-button type="success" @click="submitForm('ruleForm')" class="middle_button">立即创建</el-button>
+          <el-button type='danger' @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
         </el-form-item>
-      <!--登出-->
-        <p class="tip">我要登出！
-        <router-link to="/" class="router_link_active">
-         登出
-        </router-link>
-        </p>
       </el-form>
     </div>
   </div>
@@ -88,75 +72,90 @@
 <script>
   export default {
     name: 'ConferenceApplication',
-    data () {
+    data() {
       return {
         ruleForm: {
           shortname: '',
           fullname: '',
-          holding_time:'',
-          place:'',
-          submit_deadline:'',
-          release_time:''
+          start_date1: '',
+          start_date2: '',
+          place: '',
+          deadline_date1: '',
+          deadline_date2: '',
+          release_date1: '',
+          release_date2: '',
         },
         rules: {
-          shortname:   [{required: true, message: '会议简称不能为空', trigger: 'blur'}],
-          fullname:    [{required: true, message: '会议全称不能为空', trigger: 'blur'}],
-          holding_time: [{required: true, message: '举办时间不能为空', trigger: 'blur'}],
-          place:       [{required: true, message: '举办地点不能为空', trigger: 'blur'}],
-          submit_deadline: [{required: true, message: '投稿截止日期不能为空', trigger: 'blur'}],
-          release_time: [{required: true, message: '评审结果发布日期不能为空', trigger: 'blur'}],
+          shortname: [{required: true, message: "会议简称不为空", trigger: 'blur'}],
+          fullname: [{required: true, message: '会议全称不为空', trigger: 'blur'}],
+          start_date1: [{type:'date',required: true, message: "开始日期不为空", trigger: 'blur'}],
+          start_date2: [{type:'date',required: true, message: "开始日期不为空", trigger: 'blur'}],
+          place: [{required: true, message: "会议地点不为空", trigger: 'blur'}],
+          deadline_date1: [{type:'date',required: true, message: "截止日期不为空", trigger: 'blur'}],
+          deadline_date2: [{type:'date',required: true, message: "截止日期不为空", trigger: 'blur'}],
+          release_date1: [{type:'date',required: true, message: "公布日期不为空", trigger: 'blur'}],
+          release_date2: [{type:'date',required: true, message: "公布日期不为空", trigger: 'blur'}]
         },
         loading: false
       }
     },
     methods: {
-      submitForm (formName) {
-        this.$axios.post('/ApplyConference', {
-          shortname: this.ruleForm.shortname,
-          fullname: this.ruleForm.fullname,
-          //注意这里举办时间的拼接
-          holding_time: this.ruleForm.month+" "+this.ruleForm.day+","+this.ruleForm.year,
-          place: this.ruleForm.place,
-          submit_deadline: this.ruleForm.submit_deadline,
-          release_time: this.ruleForm.release_time,
-        })
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              this.$router.replace({path: '/ApplyConference'})
-            } else{
-              alert('apply error！')
-            }
-          })
-          .catch(error => {
-            console.log(error)
-            alert('wrong submit！')
-          })
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          console.log(this.ruleForm.start_date1)
+          console.log(this.ruleForm.start_date2)
+          if (valid) {
+            //this.$axios.post用来向后台请求数据
+            this.$axios.post('/ApplyConference', {
+                shortname: this.ruleForm.shortname,
+                fullname: this.ruleForm.fullname,
+                //注意这里举办时间的拼接
+                startTime: this.ruleForm.start_date1 + "-" + this.ruleForm.start_date2,
+                place: this.ruleForm.place,
+                submit_deadline: this.ruleForm.deadline_date1 + "-" + this.ruleForm.deadline_date2,
+                release_time: this.ruleForm.release_date1 + "-" + this.ruleForm.release_date2,
+              }
+            )
+              .then(resp => {
+                // 根据后端的返回数据修改
+                alert(resp.data);
+                //console.log(resp.data);
+                if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+                  // 跳转到login
+                  alert('会议申请成功');
+                  this.$router.replace('/ApplyConference')
+                } else {
+                  alert('会议名重复')
+                }
+              })
+              .catch(error => {
+                console.log(error);
+                alert('申请失败')
+                this.$router.replace('/ApplyConference')
+              })
+          } else {
+            alert('提交有信息错误');
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
       }
-    }
+    },
   }
 </script>
 
 <style scoped>
-  .userinfo{
-    float:left;
-    text-align: left;
-    border-radius: 15px;
-    background-clip: padding-box;
-    width: 350px;
-    padding: 15px 15px 15px 15px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-  }
-  .userinfo ul{
-    padding:0;
+
+  .userinfo ul {
+    padding: 0;
   }
 
-  .userinfo h3{
+  .userinfo h3 {
     text-align: center;
   }
 
-  #base_conference{
+  #base_conference {
     background: url("../assets/background/checkerboard-cross.png") repeat;
     background-position: center;
     height: 100%;
@@ -165,19 +164,19 @@
     position: fixed;
   }
 
-  .conference_container{
+  .conference_container {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 90px auto;
+    margin: 20px auto;
     width: 600px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
-    clear:left;
+    clear: left;
   }
 
-  .conference_title{
+  .conference_title {
     margin: 0px auto 40px auto;
     text-align: center;
     color: #494e8f;
@@ -192,18 +191,8 @@
     border: none
   }
 
-  .router_link_active{
-    text-decoration: none;
-    color: #ff5a60;
-
-  }
-  .router_link_active:hover{
-    color: #55b6ff;
-  }
-  .tip{
-    margin-top: 40px;
-    font-size: 15px;
-    margin-left: 300px;
-
+  .middle_button {
+    width: 30%;
+    border: none
   }
 </style>
