@@ -20,6 +20,9 @@ export const router = new Router({
 	    name: '操作中心',
 	    component: UserPage,
       redirect:'/ApplyConference',
+      meta:{
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       children:[{
         path: '/ApplyConference',
         name: '会议申请',
@@ -81,5 +84,14 @@ router.beforeEach(function (to, from ,next) {
     }
   } else {
     next()
+  }
+  if(to.fullPath == "/"){
+    if(localStorage.getItem('token')){
+      next({
+        path:from.fullPath
+      });
+    }else {
+      next();
+    }
   }
 })
