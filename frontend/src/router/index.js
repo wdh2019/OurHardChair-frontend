@@ -33,6 +33,9 @@ export const router = new Router({
       path: '/UserPage1',
       name: '我的工作台',
       component: UserPage,
+      meta:{
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       children:[{
         path: '/PageOne',
         name: '选项一',
@@ -51,6 +54,9 @@ export const router = new Router({
       path: '/UserPage2',
       name: '消息中心',
       component: UserPage,
+      meta:{
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
       children:[{
         path: '/InfoPage',
         name: '待处理会议',
@@ -85,7 +91,7 @@ router.beforeEach(function (to, from ,next) {
   } else {
     next()
   }
-  if(to.fullPath == "/"){
+  if(to.fullPath == "/" || to.fullPath=='/register'){
     if(localStorage.getItem('token')){
       next({
         path:from.fullPath
