@@ -145,19 +145,35 @@
                 //console.log(resp.data);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login
-                  alert('注册成功');
+                  this.$message({
+                    showClose: true,
+                    message: "恭喜注册成功!"+resp.data.username,
+                    type:'success'
+                  });
                   this.$store.commit('login', resp.data);
                   this.$router.push('/UserPage').catch(err=>err)
                 } else {
-                  alert('注册失败用户名重复')
+                  this.$message({
+                    showClose: true,
+                    message: resp.data.message,
+                    type:'warning'
+                  });
                 }
               })
               .catch(error => {
                 console.log(error);
-                alert('注册失败')
+                this.$message({
+                  showClose: true,
+                  message: "注册失败",
+                  type:'warning'
+                });
               })
           } else {
-            alert('提交信息有错误');
+            this.$message({
+              showClose: true,
+              message: "请按要求填写注册信息",
+              type:'warning'
+            });
           }
         });
       },

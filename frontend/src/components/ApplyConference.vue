@@ -113,18 +113,34 @@
                 console.log(resp.data)
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login
-                  alert('会议申请成功');
-                  this.$router.push('/ApplyConference').catch(err=>{err})
+                  this.$message({
+                    showClose: true,
+                    message: '会议申请成功',
+                    type:"success"
+                  });
+                  this.$router.push('/UserPage').catch(err=>{err})
                 } else {
-                  alert(resp.data.message)
+                  this.$message({
+                    showClose: true,
+                    message: resp.data.message,
+                    type:'warning'
+                  });
                 }
               })
               .catch(error => {
                 console.log(error);
-                alert('申请失败');
+                this.$message({
+                  showClose: true,
+                  message: '申请失败',
+                  type:'warning'
+                });
               })
           } else {
-            alert('提交有信息错误');
+            this.$message({
+              showClose: true,
+              message: '请按要求填写会议内容',
+              type:'warning'
+            });
           }
         });
       },
