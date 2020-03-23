@@ -142,7 +142,6 @@
             )
               .then(resp => {
                 // 根据后端的返回数据修改
-                alert(resp.data);
                 //console.log(resp.data);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login

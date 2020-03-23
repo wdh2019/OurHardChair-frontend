@@ -9,7 +9,7 @@
         <el-table-column prop="country" label="地区"></el-table-column>
         <el-table-column prop="company" label="所属单位"></el-table-column>
       </el-table>
-      <el-button type="success" round @click="showChangeForm()" v-show="!form_visible" class="middle_button">修改
+      <el-button type="success" round  v-show="!form_visible" class="middle_button">修改
       </el-button>
 
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px"
