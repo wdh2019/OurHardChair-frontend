@@ -118,7 +118,7 @@
                     message: '会议申请成功',
                     type:"success"
                   });
-                  this.$router.push('/UserPage').catch(err=>{err})
+                  this.$router.push('/UserPage').catch(err=>err)
                 } else {
                   this.$message({
                     showClose: true,
