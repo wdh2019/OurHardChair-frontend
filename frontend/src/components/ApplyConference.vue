@@ -99,13 +99,13 @@
           if (valid) {
             //this.$axios.post用来向后台请求数据
             this.$axios.post('/ApplyConference', {
-                shortname: this.ruleForm.shortname,
-                fullname: this.ruleForm.fullname,
+                abbreviation: this.ruleForm.shortname,
+                fullName: this.ruleForm.fullname,
                 //注意这里举办时间的拼接
-                place: this.ruleForm.place,
-                startTime: startTime,
-                submit_deadline: endTime,
-                release_time: release_time
+                holdingPlace: this.ruleForm.place,
+                holdingTime: startTime,
+                submissionDeadline: endTime,
+                reviewReleaseDate: release_time
               }
             )
               .then(resp => {
