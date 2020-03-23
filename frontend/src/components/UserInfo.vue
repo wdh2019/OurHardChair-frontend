@@ -175,7 +175,7 @@
                   alert('修改成功');
                   // 修改成功后，修改表单隐藏
                   this.form_visible = false;
-                  this.$router.replace('/UserPage')
+                  this.$router.push('/UserPage').catch(err=>err)
                 } else {
                   alert('修改失败,用户名重复')
                 }

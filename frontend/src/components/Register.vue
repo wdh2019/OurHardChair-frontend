@@ -148,7 +148,7 @@
                   // 跳转到login
                   alert('注册成功');
                   this.$store.commit('login', resp.data);
-                  this.$router.replace('/UserPage')
+                  this.$router.push('/UserPage').catch(err=>err)
                 } else {
                   alert('注册失败用户名重复')
                 }

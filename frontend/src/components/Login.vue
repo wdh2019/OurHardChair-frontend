@@ -117,8 +117,7 @@
                 console.log(resp.data);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$store.commit('login', resp.data);
-                  this.$router.replace({path: '/UserPage'});
-                  //console.log(this.$store.state.country);
+                  this.$router.push("/UserPage").catch(err=>err);
                 } else {
                   alert(resp.data.message)
                 }

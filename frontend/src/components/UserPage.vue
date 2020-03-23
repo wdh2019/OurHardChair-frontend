@@ -35,7 +35,7 @@
     methods:{
       quit:function () {
         this.$store.commit('logout');
-        this.$router.replace({path: '/'});
+        this.$router.push("/").catch(err=>err);
       }
 
     }

@@ -49,6 +49,7 @@
 
 <script>
   export default {
+
     name: 'ConferenceApplication',
     data() {
       let checkDeadLine = (rule, value, callback) => {
@@ -92,7 +93,6 @@
     methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
-          console.log(this.ruleForm.start_date > this.ruleForm.deadline_date);
           var startTime = this.formatTime(new Date(this.ruleForm.start_date));
           var endTime = this.formatTime(new Date(this.ruleForm.deadline_date));
           var release_time = this.formatTime(new Date(this.ruleForm.release_date));
@@ -110,20 +110,18 @@
             )
               .then(resp => {
                 // 根据后端的返回数据修改
-                alert(resp.data);
-                //console.log(resp.data);
+                console.log(resp.data)
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login
                   alert('会议申请成功');
-                  this.$router.replace('/ApplyConference')
+                  this.$router.push('/ApplyConference').catch(err=>{err})
                 } else {
-                  alert('申请失败')
+                  alert('申请失败12')
                 }
               })
               .catch(error => {
                 console.log(error);
-                alert('申请失败');
-                this.$router.replace('/ApplyConference')
+                alert('申请失败1');
               })
           } else {
             alert('提交有信息错误');
