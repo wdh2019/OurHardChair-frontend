@@ -18,7 +18,7 @@ export default new Vuex.Store({
       localStorage.setItem('username', data.username);
       localStorage.setItem('email', data.email);
       localStorage.setItem('country', data.country);
-      localStorage.setItem('institution', data.insititution);
+      localStorage.setItem('institution', data.institution);
       state.username = data.username;
       state.email = data.email;
       state.country = data.country;

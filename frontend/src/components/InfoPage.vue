@@ -1,5 +1,5 @@
 <template>
-    <h1>信息中心</h1>
+    <h1>后续功能中实现</h1>
 </template>
 
 <script>

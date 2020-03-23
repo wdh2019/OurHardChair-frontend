@@ -1,5 +1,5 @@
 <template>
-    <h2>这是页面二</h2>
+    <h2>预留接口后续实现</h2>
 </template>
 
 <script>

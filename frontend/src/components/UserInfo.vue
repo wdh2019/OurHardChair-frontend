@@ -5,17 +5,21 @@
       <h3 class="userinfo_title">用户信息</h3>
       <el-table class="userinfo_info" :data="userData" v-show="!form_visible">
         <el-table-column prop="username" label="用户名"></el-table-column>
-        <el-table-column prop="password" label="密码"></el-table-column>
         <el-table-column prop="email" label="邮箱"></el-table-column>
         <el-table-column prop="country" label="地区"></el-table-column>
         <el-table-column prop="company" label="所属单位"></el-table-column>
       </el-table>
-      <el-button type="success" round @click="showChangeForm()" v-show="!form_visible">修改</el-button>
+      <el-button type="success" round @click="showChangeForm()" v-show="!form_visible" class="middle_button">修改
+      </el-button>
 
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px"
-                label-position="left" v-show="form_visible">
+               label-position="left" v-show="form_visible">
         <el-form-item prop="username" class="item">
           <el-input ref="username" v-model="ruleForm.username" placeholder="用户名" type="text" auto-complete="off">
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="old_password" class="item">
+          <el-input v-model="ruleForm.old_password" placeholder="输入原密码" type="password" auto-complete="off">
           </el-input>
         </el-form-item>
         <el-form-item prop="password" class="item">
@@ -50,6 +54,7 @@
         <el-form-item class="item">
           <el-button type="success" round @click="submitForm('ruleForm')" class="middle_button">提交修改</el-button>
           <el-button type='danger' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
+          <el-button type="primary" round @click="showChangeForm" class="middle_button">返回</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -57,9 +62,9 @@
 </template>
 
 <script>
-  export default{
-    name:"UserInfo",
-    data(){
+  export default {
+    name: "UserInfo",
+    data() {
       let checkUserName = (rule, value, callback) => {
         var regUserName = /^[a-zA-Z-][a-zA-Z0-9_-]{4,31}$/;
         if (!regUserName.test(value)) {
@@ -91,28 +96,31 @@
         }
         return callback()
       };
-      return{
-        form_visible:false,
-        userData:[{
-          username: '111',
-          password: '111',
-          email: '111',
-          country: '111',
-          company: '111',
+      return {
+        form_visible: false,
+        userData: [{
+          username: this.$store.state.username,
+          email: this.$store.state.email,
+          country: this.$store.state.country,
+          company: this.$store.state.institution,
         }],
-        ruleForm:{
+        ruleForm: {
           username: '',
+          old_password: '',
           password: '',
           ensure_password: '',
-          email:'',
-          country:'',
-          company:'',
+          email: '',
+          country: '',
+          company: '',
         },
         rules: {
           username: [
             {required: true, message: '用户名不能为空', trigger: 'blur'},
             {min: 5, max: 32, message: '用户名长度在5-32之间', trigger: 'blur'},
             {validator: checkUserName, trigger: 'blur'}
+          ],
+          old_password: [
+            {required: true, message: '原密码不能为空', trigger: 'blur'}
           ],
           password: [
             {required: true, message: '密码不能为空', trigger: 'blur'},
@@ -137,26 +145,13 @@
         loading: false
       };
     },
-    methods:{
-      //用户信息从后端请求
-      getUserInfo(){
-        this.$axios.get('/UserInfo')
-        .then(resp => {
-          if(resp.status === 200){
-            this.userData=res.body;
-          }
-          else{
-            alert('请求失败！服务器状态码非200')
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          alert('请求用户数据时发生错误error')
-        });
-      },
+    methods: {
       //修改信息的表单 显示方法
-      showChangeForm(){
-        this.form_visible=true;
+      showChangeForm() {
+        if (this.form_visible)
+          this.form_visible = false;
+        else
+          this.form_visible = true;
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -164,6 +159,7 @@
             //this.$axios.post用来向后台发送数据
             this.$axios.post('/UserInfo', {
                 username_changed: this.ruleForm.username,
+                old_password: this.ruleForm.old_password,
                 password_changed: this.ruleForm.password,
                 email_changed: this.ruleForm.email,
                 institution_changed: this.ruleForm.company,
@@ -178,7 +174,7 @@
                   // 跳转到login
                   alert('修改成功');
                   // 修改成功后，修改表单隐藏
-                  this.form_visible=false;
+                  this.form_visible = false;
                   this.$router.replace('/UserPage')
                 } else {
                   alert('修改失败,用户名重复')
@@ -197,8 +193,8 @@
         this.$refs[formName].resetFields();
       }
     },
-    mounted:function(){
-      this.form_visible=false;
+    mounted: function () {
+      this.form_visible = false;
       //this.getUserInfo();
     }
 
@@ -219,7 +215,7 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 20px auto;
-    width: 600px;
+    width: 800px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -235,5 +231,11 @@
 
   .userinfo_container .item {
     margin-bottom: 20px;
+  }
+
+  .middle_button {
+    margin-top: 20px;
+    width: 30%;
+    border: none
   }
 </style>
