@@ -52,7 +52,16 @@
     name: 'ConferenceApplication',
     data() {
       let checkDeadLine = (rule, value, callback) => {
-
+        if(value<this.ruleForm.start_date){
+         return callback(new Error("截止时间不能早于开始时间"))
+        }
+        return callback();
+      };
+      let checkSubmitTime=(rule,value,callback)=>{
+        if(value<this.ruleForm.deadline_date){
+          return callback(new Error("公布时间不能早于截止时间"))
+        }
+        return callback();
       };
       return {
         ruleForm: {
@@ -68,8 +77,14 @@
           fullname: [{required: true, message: '会议全称不为空', trigger: 'blur'}],
           place: [{required: true, message: "会议地点不为空", trigger: 'blur'}],
           start_date: [{type: 'date', required: true, message: "开始日期不为空", trigger: 'blur'}],
-          deadline_date: [{type: 'date', required: true, message: "截止日期不为空", trigger: 'blur'}],
-          release_date: [{type: 'date', required: true, message: "公布日期不为空", trigger: 'blur'}],
+          deadline_date: [
+            {type: 'date', required: true, message: "截止日期不为空", trigger: 'blur'},
+            {validator:checkDeadLine}
+          ],
+          release_date: [
+            {type: 'date', required: true, message: "公布日期不为空", trigger: 'blur'},
+            {validator:checkSubmitTime}
+          ],
         },
         loading: false
       }
@@ -77,20 +92,20 @@
     methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
+          console.log(this.ruleForm.start_date > this.ruleForm.deadline_date);
           var startTime = this.formatTime(new Date(this.ruleForm.start_date));
           var endTime = this.formatTime(new Date(this.ruleForm.deadline_date));
           var release_time = this.formatTime(new Date(this.ruleForm.release_date));
           if (valid) {
             //this.$axios.post用来向后台请求数据
-            console.log(this.ruleForm.shortname + "\n" + this.ruleForm.fullname + "\n" + this.ruleForm.place + "\n" + startTime + "\n" + endTime + "\n" + release_time + "\n")
             this.$axios.post('/ApplyConference', {
                 shortname: this.ruleForm.shortname,
                 fullname: this.ruleForm.fullname,
                 //注意这里举办时间的拼接
                 place: this.ruleForm.place,
-                startTime: this.startTime,
-                submit_deadline: this.endTime,
-                release_time: this.release_time
+                startTime: startTime,
+                submit_deadline: endTime,
+                release_time: release_time
               }
             )
               .then(resp => {
@@ -102,7 +117,7 @@
                   alert('会议申请成功');
                   this.$router.replace('/ApplyConference')
                 } else {
-                  alert('会议名重复')
+                  alert('申请失败')
                 }
               })
               .catch(error => {
