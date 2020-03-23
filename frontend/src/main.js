@@ -45,11 +45,10 @@ axios.interceptors.response.use(
     if(error) {
       // 清除token 如果不是register/login, 跳转至login
       store.commit('logout')
-	    router.currentRoute.path !== '/'&&
-      router.currentRoute.path !== '/login' &&
+	  router.currentRoute.path !== '/'&&
       router.currentRoute.path !== '/register' &&
       router.replace({
-        path: '/login',
+        path: '/',
         query: { redirect: router.currentRoute.path }
       })
     }

@@ -88,9 +88,9 @@
                 fullname: this.ruleForm.fullname,
                 //注意这里举办时间的拼接
                 place: this.ruleForm.place,
-                startTime: this.startTime,
-                submit_deadline: this.endTime,
-                release_time: this.release_time
+                startTime: startTime,
+                submit_deadline: endTime,
+                release_time: release_time
               }
             )
               .then(resp => {
