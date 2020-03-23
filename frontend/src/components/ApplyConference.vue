@@ -116,12 +116,12 @@
                   alert('会议申请成功');
                   this.$router.push('/ApplyConference').catch(err=>{err})
                 } else {
-                  alert('申请失败12')
+                  alert(resp.data.message)
                 }
               })
               .catch(error => {
                 console.log(error);
-                alert('申请失败1');
+                alert('申请失败');
               })
           } else {
             alert('提交有信息错误');
