@@ -9,7 +9,7 @@
         <el-table-column prop="country" label="地区"></el-table-column>
         <el-table-column prop="company" label="所属单位"></el-table-column>
       </el-table>
-      <el-button type="success" round @click="showChangeForm()" v-show="!form_visible" class="middle_button">修改
+      <el-button type="success" round  v-show="!form_visible" class="middle_button">修改
       </el-button>
 
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px"
@@ -167,25 +167,39 @@
               }
             )
               .then(resp => {
-                // 根据后端的返回数据修改
-                alert(resp.data);
                 //console.log(resp.data);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login
-                  alert('修改成功');
+                  this.$message({
+                    showClose: true,
+                    message: "修改成功",
+                    type:'success'
+                  });
                   // 修改成功后，修改表单隐藏
                   this.form_visible = false;
-                  this.$router.replace('/UserPage')
+                  this.$router.push('/UserPage').catch(err=>err)
                 } else {
-                  alert('修改失败,用户名重复')
+                  this.$message({
+                    showClose: true,
+                    message: resp.data.message,
+                    type:'warning'
+                  });
                 }
               })
               .catch(error => {
                 console.log(error);
-                alert('修改失败')
+                this.$message({
+                  showClose: true,
+                  message: "修改失败",
+                  type:'warning'
+                });
               })
           } else {
-            alert('wrong submit！');
+            this.$message({
+              showClose: true,
+              message: "请按要求填写修改信息",
+              type:'warning'
+            });
           }
         });
       },

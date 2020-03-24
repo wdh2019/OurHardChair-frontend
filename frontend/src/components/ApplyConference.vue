@@ -49,10 +49,20 @@
 
 <script>
   export default {
+
     name: 'ConferenceApplication',
     data() {
       let checkDeadLine = (rule, value, callback) => {
-
+        if(value<this.ruleForm.start_date){
+         return callback(new Error("截止时间不能早于开始时间"))
+        }
+        return callback();
+      };
+      let checkSubmitTime=(rule,value,callback)=>{
+        if(value<this.ruleForm.deadline_date){
+          return callback(new Error("公布时间不能早于截止时间"))
+        }
+        return callback();
       };
       return {
         ruleForm: {
@@ -68,8 +78,14 @@
           fullname: [{required: true, message: '会议全称不为空', trigger: 'blur'}],
           place: [{required: true, message: "会议地点不为空", trigger: 'blur'}],
           start_date: [{type: 'date', required: true, message: "开始日期不为空", trigger: 'blur'}],
-          deadline_date: [{type: 'date', required: true, message: "截止日期不为空", trigger: 'blur'}],
-          release_date: [{type: 'date', required: true, message: "公布日期不为空", trigger: 'blur'}],
+          deadline_date: [
+            {type: 'date', required: true, message: "截止日期不为空", trigger: 'blur'},
+            {validator:checkDeadLine}
+          ],
+          release_date: [
+            {type: 'date', required: true, message: "公布日期不为空", trigger: 'blur'},
+            {validator:checkSubmitTime}
+          ],
         },
         loading: false
       }
@@ -82,36 +98,49 @@
           var release_time = this.formatTime(new Date(this.ruleForm.release_date));
           if (valid) {
             //this.$axios.post用来向后台请求数据
-            console.log(this.ruleForm.shortname + "\n" + this.ruleForm.fullname + "\n" + this.ruleForm.place + "\n" + startTime + "\n" + endTime + "\n" + release_time + "\n")
             this.$axios.post('/ApplyConference', {
-                shortname: this.ruleForm.shortname,
-                fullname: this.ruleForm.fullname,
+                abbreviation: this.ruleForm.shortname,
+                fullName: this.ruleForm.fullname,
                 //注意这里举办时间的拼接
-                place: this.ruleForm.place,
-                startTime: startTime,
-                submit_deadline: endTime,
-                release_time: release_time
+                holdingPlace: this.ruleForm.place,
+                holdingTime: startTime,
+                submissionDeadline: endTime,
+                reviewReleaseDate: release_time
               }
             )
               .then(resp => {
                 // 根据后端的返回数据修改
-                alert(resp.data);
-                //console.log(resp.data);
+                console.log(resp.data)
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login
-                  alert('会议申请成功');
-                  this.$router.replace('/ApplyConference')
+                  this.$message({
+                    showClose: true,
+                    message: '会议申请成功',
+                    type:"success"
+                  });
+                  this.$router.push('/UserPage').catch(err=>err)
                 } else {
-                  alert('会议名重复')
+                  this.$message({
+                    showClose: true,
+                    message: resp.data.message,
+                    type:'warning'
+                  });
                 }
               })
               .catch(error => {
                 console.log(error);
-                alert('申请失败')
-                this.$router.replace('/ApplyConference')
+                this.$message({
+                  showClose: true,
+                  message: '申请失败',
+                  type:'warning'
+                });
               })
           } else {
-            alert('提交有信息错误');
+            this.$message({
+              showClose: true,
+              message: '请按要求填写会议内容',
+              type:'warning'
+            });
           }
         });
       },

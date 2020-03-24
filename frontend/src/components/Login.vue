@@ -6,7 +6,7 @@
           <div class="demo1">
             <p class="welcome">欢迎使用全新的会议系统</p>
             <img ref='img' :src="item.imageUrl" height="740px" width="100%"/>
-            <p class="login" @click="show=!show" >加入我们</p>
+            <p class="login" @click="show=!show">加入我们</p>
           </div>
         </el-carousel-item>
       </el-carousel>
@@ -114,18 +114,29 @@
               password: this.ruleForm.password
             })
               .then(resp => {
-                console.log(resp.data);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+                  this.$message({
+                    showClose: true,
+                    message: '欢迎回来' + resp.data.username,
+                    type: 'success'
+                  });
                   this.$store.commit('login', resp.data);
-                  this.$router.replace({path: '/UserPage'});
-                  //console.log(this.$store.state.country);
+                  this.$router.push("/UserPage").catch(err => err);
                 } else {
-                  alert(resp.data.message)
+                  this.$message({
+                    showClose: true,
+                    message: resp.data.message,
+                    type: 'warning'
+                  });
                 }
               })
               .catch(error => {
                 console.log(error);
-                alert('登录失败')
+                this.$message({
+                  showClose: true,
+                  message: "登录失败",
+                  type:'warning'
+                });
               })
           }
         });
@@ -156,12 +167,14 @@
     font-size: 25px;
     color: white;
     text-decoration: underline;
-	cursor:pointer;
+    cursor: pointer;
   }
-  .login:hover{
+
+  .login:hover {
     color: red;
 
   }
+
   #base_login {
     background: url("../assets/background/checkerboard-cross.png");
     background-position: center;
