@@ -11,8 +11,8 @@
             <i slot="suffix" class="el-icon-warning-outline" title="只能包含字母,数字或两种特殊字符(-_),只能以字母或-开头,长度为5-32个字符"></i>
           </el-input>
         </el-form-item>
-        <el-form-item prop="name" class="item">
-          <el-input v-model="ruleForm.name" placeholder="您的姓名" type="text" auto-complete="off">
+        <el-form-item prop="fullName" class="item">
+          <el-input v-model="ruleForm.fullName" placeholder="您的姓名" type="text" auto-complete="off">
           </el-input>
         </el-form-item>
         <el-form-item prop="password" class="item">
@@ -108,8 +108,8 @@
         ],
         ruleForm: {
           username: '',
-          name: '',
           password: '',
+          fullName: '',
           ensure_password: '',
           email: '',
           country: '',
@@ -121,7 +121,7 @@
             {min: 5, max: 32, message: '用户名长度在5-32之间', trigger: 'blur'},
             {validator: checkUserName, trigger: 'blur'}
           ],
-          name: [
+          fullName: [
             {required: true, message: '姓名不能为空', trigger: 'blur'},
           ],
           password: [
@@ -154,8 +154,8 @@
             //this.$axios.post用来向后台请求数据
             this.$axios.post('/register', {
                 username: this.ruleForm.username,
-                name: this.ruleForm.name,
                 password: this.ruleForm.password,
+                fullName: this.ruleForm.fullName,
                 email: this.ruleForm.email,
                 institution: this.ruleForm.company,
                 country: this.ruleForm.country,

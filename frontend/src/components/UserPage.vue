@@ -14,7 +14,7 @@
         </el-menu-item>
       </el-submenu>
       <el-submenu index="3" style="position: relative; left: 70%;">
-        <template slot="title"><i class="el-icon-user" style="color: white" ></i>{{$store.state.name}}</template>
+        <template slot="title"><i class="el-icon-user" style="color: white" ></i>{{$store.state.fullName}}</template>
         <el-menu-item :index="$router.options.routes[3].children[0].path"><!-- 请注意这里的路由数组-->
           用户信息
         </el-menu-item>
