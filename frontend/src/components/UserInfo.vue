@@ -1,62 +1,67 @@
 <template>
   <div id="base_userinfo">
-
     <div class="userinfo_container">
+      <div class="title_section">
       <h3 class="userinfo_title">用户信息</h3>
-      <el-table class="userinfo_info" :data="userData" v-show="!form_visible">
-        <el-table-column prop="username" label="用户名"></el-table-column>
-        <el-table-column prop="email" label="邮箱"></el-table-column>
-        <el-table-column prop="country" label="地区"></el-table-column>
-        <el-table-column prop="company" label="所属单位"></el-table-column>
-      </el-table>
-      <el-button type="success" round  v-show="!form_visible" class="middle_button">修改
-      </el-button>
+      <p class="description">管理您的Gysw账号详情，包括您的用户名，邮箱等信息</p>
+      </div>
+      <div class="userinfo_form">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  label-position="left">
+        <h3 class="userinfo_title">账户信息</h3>
+        <p class="id"><span class="id_bold">ID:</span>{{$store.state.token}}</p>
 
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px"
-               label-position="left" v-show="form_visible">
-        <el-form-item prop="username" class="item">
-          <el-input ref="username" v-model="ruleForm.username" placeholder="用户名" type="text" auto-complete="off">
-          </el-input>
-        </el-form-item>
+        <div class="inline_block display_username_field">
+           <el-form-item prop="username" class="item" label="用户名" disabled>
+              <el-input v-model="ruleForm.username" :placeholder="$store.state.username" type="text" auto-complete="off" :disabled="username_disabled">
+              </el-input>
+           </el-form-item>
+        </div>
+        <el-button class="inline_block" type="primary" icon="el-icon-edit" @click="unlockUsername" title="用户名是重要信息,请勿随意更改"></el-button>
+
+        <div class="inline_block display_email_field">
+          <el-form-item prop="email" class="item" label="邮箱">
+            <el-input v-model="ruleForm.email" :placeholder="$store.state.email" type="text" auto-complete="off"  :disabled="email_disabled">
+            </el-input>
+          </el-form-item>
+        </div>
+        <el-button class="inline_block" type="primary" icon="el-icon-edit" @click="unlockEmail" title="绑定邮箱是重要信息,请勿随意更改"></el-button>
+
+        <h3 class="userinfo_title">密码与安全</h3>
+        <div class="display_password_field">
         <el-form-item prop="old_password" class="item">
-          <el-input v-model="ruleForm.old_password" placeholder="输入原密码" type="password" auto-complete="off">
+          <el-input v-model="ruleForm.old_password" placeholder="输入原密码" type="password" auto-complete="off" show-password>
           </el-input>
         </el-form-item>
-        <el-form-item prop="password" class="item">
-          <el-input v-model="ruleForm.password" placeholder="密码" type="password" auto-complete="off">
-          </el-input>
-        </el-form-item>
+        </div>
+        <div class="display_ensure_password_field">
         <el-form-item prop="ensure_password" class="item">
-          <el-input v-model="ruleForm.ensure_password" placeholder="确认密码" type="password"
-                    auot-complete="off">
+          <el-input v-model="ruleForm.ensure_password" placeholder="确认密码" type="password" auto-complete="off" show-password>
           </el-input>
         </el-form-item>
-        <el-form-item prop="email" class="item">
-          <el-input v-model="ruleForm.email" placeholder="邮箱" type="text" auto-complete="off">
-          </el-input>
-        </el-form-item>
-        <el-form-item prop="country" class="item">
-          <el-select v-model="ruleForm.country" placeholder="区域地区">
-            <el-option label="Asia" value="Asia"></el-option>
-            <el-option label="Europe" value="Europe"></el-option>
-            <el-option label="North American" value="North American"></el-option>
-            <el-option label="South American" value="South American"></el-option>
-            <el-option label="Africa" value="Africa"></el-option>
-            <el-option label="Oceania" value="Oceania"></el-option>
-            <el-option label="Antarctica" value="Antarctica"></el-option>
+        </div>
+        <h3 class="userinfo_title title3">个人信息</h3>
+        <div class="inline_block display_country_field">
+        <el-form-item prop="country" class="item" label="国家/地区">
+          <el-select v-model="ruleForm.country" :placeholder="$store.state.country" filterable>
+            <el-option v-for="country in countries" :key="country.value" :value="country.value" :label="country.label">
+              <span style="float: left">{{ country.label }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ country.value }}</span>
+            </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="company" class="item">
-          <el-input v-model="ruleForm.company" placeholder="所属单位" type="text" auto-complete="off">
+        </div>
+        <div class="inline_block display_company_field">
+        <el-form-item prop="company" class="item" label="所属单位">
+          <el-input v-model="ruleForm.company" :placeholder="$store.state.company" type="text" auto-complete="off">
           </el-input>
         </el-form-item>
-
+        </div>
         <el-form-item class="item">
-          <el-button type="success" round @click="submitForm('ruleForm')" class="middle_button">提交修改</el-button>
-          <el-button type='danger' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
-          <el-button type="primary" round @click="showChangeForm" class="middle_button">返回</el-button>
+          <el-button type="primary"  @click="submitForm('ruleForm')" class="middle_button">保存变更</el-button>
+          <el-button type='info'  @click="resetForm('ruleForm')" class="middle_button">放弃变更</el-button>
         </el-form-item>
       </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -84,7 +89,7 @@
         return callback();
       };
       let checkEnsurePassword = (rule, value, callback) => {
-        if (value !== this.ruleForm.password) {
+        if (value !== this.ruleForm.old_password) {
           return callback(new Error("确认密码与密码不相符"))
         }
         return callback();
@@ -97,7 +102,23 @@
         return callback()
       };
       return {
+        username_disabled:true,
+        email_disabled:true,
         form_visible: false,
+        countries:[{value: 'China', label:'中国'},
+        {value: 'United States', label:'美国'},
+        {value: 'United Kingdom', label:'英国'},
+        {value: 'Russia', label:'俄罗斯'},
+        {value: 'Japan', label: '日本'},
+        {value: 'Others', label: '其他区域'}
+        /*<el-option label="Asia" value="Asia"></el-option>
+        <el-option label="Europe" value="Europe"></el-option>
+        <el-option label="North American" value="North American"></el-option>
+        <el-option label="South American" value="South American"></el-option>
+        <el-option label="Africa" value="Africa"></el-option>
+        <el-option label="Oceania" value="Oceania"></el-option>
+        <el-option label="Antarctica" value="Antarctica"></el-option>*/
+        ],
         userData: [{
           username: this.$store.state.username,
           email: this.$store.state.email,
@@ -120,11 +141,7 @@
             {validator: checkUserName, trigger: 'blur'}
           ],
           old_password: [
-            {required: true, message: '原密码不能为空', trigger: 'blur'}
-          ],
-          password: [
-            {required: true, message: '密码不能为空', trigger: 'blur'},
-            {min: 6, max: 32, message: "密码长度在6-32之间", trigger: 'blur'},
+            {required: true, message: '原密码不能为空', trigger: 'blur'},
             {validator: checkPassword, trigger: 'blur'}
           ],
           ensure_password: [
@@ -146,12 +163,11 @@
       };
     },
     methods: {
-      //修改信息的表单 显示方法
-      showChangeForm() {
-        if (this.form_visible)
-          this.form_visible = false;
-        else
-          this.form_visible = true;
+      unlockUsername(){
+        this.username_disabled=false;
+      },
+      unlockEmail(){
+        this.email_disabled=false;
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -207,9 +223,9 @@
         this.$refs[formName].resetFields();
       }
     },
-    mounted: function () {
-      this.form_visible = false;
-      //this.getUserInfo();
+    mounted() {
+      this.username_disabled=true;
+      this.email_disabled=true;
     }
 
   }
@@ -217,8 +233,6 @@
 
 <style scoped>
   #base_userinfo {
-    background: url("../assets/background/checkerboard-cross.png") repeat;
-    background-position: center;
     height: 100%;
     width: 100%;
     background-size: cover;
@@ -228,8 +242,8 @@
   .userinfo_container {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 20px auto;
-    width: 800px;
+    margin: 10px auto;
+    width: 750px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -238,18 +252,74 @@
   }
 
   .userinfo_title {
-    margin: 0px auto 40px auto;
-    text-align: center;
+    margin: 20px auto;
+    text-align: left;
     color: #494e8f;
+    font-size:24px;
+    font-weight: normal;
+  }
+  .title3{
+    margin-top: 40px;
+    margin-bottom: 10px;
   }
 
+  p.description{
+    text-align: left;
+    color: #999;
+    line-height: 1.4285;
+    padding-top: 10px;
+    font-size: 14px;
+  }
+  .userinfo_form{
+    margin-top: 40px;
+    text-align: left;
+  }
+  .id{
+    margin-top: 25px;
+    font-size:14px;
+    text-align: left;
+  }
+  .id_bold{
+    font-weight: bold;
+  }
+  .inline_block{
+    display: inline-block;
+  }
+  .display_username_field{
+    width: 250px;
+  }
+  .display_email_field{
+    width: 300px;
+  }
+  .display_password_field{
+    width:50%;
+  }
+  .display_ensure_password_field{
+    width:50%;
+  }
+  .display_country_field{
+    width:250px;
+  }
+  .display_company_field{
+    width: 350px;
+  }
   .userinfo_container .item {
+    margin-top: 0px;
     margin-bottom: 20px;
   }
-
   .middle_button {
     margin-top: 20px;
-    width: 30%;
+    width: 15%;
+    height: 50px;
     border: none
   }
+  .item .el-form-item__label{
+    color:red;
+  }
+  .item .el-form-item__label:before{
+  content: '' !important;
+  width: 0px;
+  margin-right: 0px;
+  }
+
 </style>

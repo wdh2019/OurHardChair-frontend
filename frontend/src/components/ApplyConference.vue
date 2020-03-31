@@ -7,16 +7,16 @@
       <!--申请提交表单-->
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm"
                label-position="left">
-        <el-form-item prop="shortname">
+        <el-form-item prop="shortname" class="item">
           <el-input v-model="ruleForm.shortname" placeholder="会议简称"></el-input>
         </el-form-item>
-        <el-form-item prop="fullname">
+        <el-form-item prop="fullname" class="item">
           <el-input v-model="ruleForm.fullname" placeholder="会议全称"></el-input>
         </el-form-item>
-        <el-form-item prop="place">
+        <el-form-item prop="place" class="item">
           <el-input v-model="ruleForm.place" placeholder="举办地点"></el-input>
         </el-form-item>
-        <el-form-item prop="start_date">
+        <el-form-item prop="start_date" class="item">
           <el-date-picker
             v-model="ruleForm.start_date"
             type="datetime"
@@ -24,23 +24,23 @@
           </el-date-picker>
         </el-form-item>
 
-        <el-form-item prop="deadline_date">
+        <el-form-item prop="deadline_date" class="item">
           <el-date-picker
             v-model="ruleForm.deadline_date"
             type="datetime"
             placeholder="截止时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item prop="release_date">
+        <el-form-item prop="release_date" class="item">
           <el-date-picker
             v-model="ruleForm.release_date"
             type="datetime"
             placeholder="发布时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item>
-          <el-button type="success" @click="submitForm('ruleForm')" class="middle_button">立即创建</el-button>
-          <el-button type='danger' @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
+        <el-form-item class="item">
+          <el-button type="primary" @click="submitForm('ruleForm')" class="middle_button">立即创建</el-button>
+          <el-button type='info' @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -165,8 +165,6 @@
   }
 
   #base_conference {
-    background: url("../assets/background/checkerboard-cross.png") repeat;
-    background-position: center;
     height: 100%;
     width: 100%;
     background-size: cover;
@@ -176,8 +174,8 @@
   .conference_container {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 20px auto;
-    width: 600px;
+    margin: 100px auto;
+    width: 400px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -191,13 +189,14 @@
     color: #494e8f;
   }
 
-  .conference_container .item {
+  .conference_container . {
     margin-bottom: 20px;
   }
 
   .conference_container .item .middle_button {
     width: 30%;
-    border: none
+    border: none;
+    margin-top:40px;
   }
 
   .middle_button {

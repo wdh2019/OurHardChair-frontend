@@ -8,7 +8,7 @@ module.exports = {
   dev: {
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsPublicPath: '/', //部署时请改回./
     proxyTable: {
       '/api': {
         target: 'http://localhost:8080',

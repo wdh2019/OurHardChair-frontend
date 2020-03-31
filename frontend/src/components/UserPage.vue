@@ -14,12 +14,12 @@
         </el-menu-item>
       </el-submenu>
       <el-submenu index="3" style="position: relative; left: 70%;">
-        <template slot="title"><i class="el-icon-setting" style="color: white" ></i>设置</template>
+        <template slot="title"><i class="el-icon-user" style="color: white" ></i>{{$store.state.username}}</template>
         <el-menu-item :index="$router.options.routes[3].children[0].path"><!-- 请注意这里的路由数组-->
           用户信息
         </el-menu-item>
         <el-menu-item @click="quit" index="3-1">
-          退出
+          注销
         </el-menu-item>
       </el-submenu>
     </el-menu>

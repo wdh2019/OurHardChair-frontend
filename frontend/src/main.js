@@ -43,9 +43,10 @@ axios.interceptors.response.use(
   error => {
     console.log(error.response)
     if(error) {
-      // 清除token 如果不是register/login, 跳转至login
+      // 清除token 如果不是首页/register/login, 跳转至首页
       store.commit('logout')
 	  router.currentRoute.path !== '/'&&
+	  router.currentRoute.path !== '/login'&&
       router.currentRoute.path !== '/register' &&
       router.replace({
         path: '/',

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import HomePage from '../components/HomePage'
 import UserPage from '@/components/UserPage'
 import ApplyConference from '@/components/ApplyConference'
 import Login from '@/components/Login'
@@ -22,7 +23,7 @@ export const router = new Router({
 	    component: UserPage,
       redirect:'/ApplyConference',
       meta:{
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children:[{
         path: '/ApplyConference',
@@ -35,7 +36,7 @@ export const router = new Router({
       name: '我的工作台',
       component: UserPage,
       meta:{
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+       // requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children:[{
         path: '/PageOne',
@@ -56,7 +57,7 @@ export const router = new Router({
       name: '消息中心',
       component: UserPage,
       meta:{
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children:[{
         path: '/InfoPage',
@@ -69,7 +70,7 @@ export const router = new Router({
       name: '设置',
       component: UserPage,
       meta:{
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children:[{
         path: '/UserInfo',
@@ -79,6 +80,11 @@ export const router = new Router({
     },
     {
       path: '/',
+      name: 'HomePage',
+      component: HomePage
+    },
+    {
+      path: '/login',
       name: 'Login',
       component: Login
     },
@@ -86,7 +92,6 @@ export const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
-
     },
   ]
 })
@@ -98,14 +103,14 @@ router.beforeEach(function (to, from ,next) {
       next()
     } else {
       next({
-        path: '/',
+        path: '/login',
         query: {redirect: to.fullPath} // 登录成功之后重新跳转到该路由
       })
     }
   } else {
     next()
   }
-  if(to.fullPath == "/" || to.fullPath=='/register'){
+  if(to.fullPath == "/" ||to.fullPath == "/login" || to.fullPath=='/register'){
     if(localStorage.getItem('token')){
       next({
         path:from.fullPath

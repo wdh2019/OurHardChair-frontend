@@ -1,17 +1,6 @@
 <template>
   <div>
-    <transition name="el-zoom-in-center">
-      <el-carousel indicator-position="inside" height="740px" v-show="show">
-        <el-carousel-item v-for="(item,index) in imgUrls" :key="index">
-          <div class="demo1">
-            <p class="welcome">欢迎使用全新的会议系统</p>
-            <img ref='img' :src="item.imageUrl" height="740px" width="100%"/>
-            <p class="login" @click="show=!show">加入我们</p>
-          </div>
-        </el-carousel-item>
-      </el-carousel>
-    </transition>
-    <div id="base_login" v-if="!show">
+    <div id="base_login">
       <div class="login_container">
         <h3 class="login_title">登录</h3>
 
@@ -30,6 +19,7 @@
           <el-form-item prop="password">
             <el-input type="password"
                       v-model="ruleForm.password"
+                      show-password
                       auto-complete="off"
                       placeholder="密码">
 
@@ -37,7 +27,7 @@
           </el-form-item>
           <!--登陆按钮-->
           <el-form-item style="width: 100%">
-            <el-button type="success" round
+            <el-button type="primary" round
                        class="submit"
                        @click="submitForm('ruleForm')">登录
             </el-button>
@@ -48,7 +38,6 @@
               注册
             </router-link>
           </p>
-
         </el-form>
       </div>
     </div>
@@ -61,8 +50,6 @@
     data() {
 
       return {
-        imgUrls: [],
-        show: true,
         ruleForm: {
           username: '',
           password: ''
@@ -78,33 +65,8 @@
         loading: false
       }
     },
-    mounted() {
-      this.getImages();
-    },
-    methods: {
-      getImages() {
-        this.getImgUrl().then(res => {
-          this.imgUrls = res
-        })
-      },
 
-      // 数据请求服务，一般是返回的一个promise对象，  是一个异步处理的解决方案，
-      getImgUrl() {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            const data = [];
-            //遍历图片
-            for (let index = 1; index < 5; index++) {
-              const obj = {};
-              //对图片名如果小于十就在前面加一个0
-              obj.imageUrl = require(`../assets/background/${index}.jpg`)
-              data.push(obj)
-            }
-            resolve(data);
-            reject();
-          }, 200);
-        })
-      },
+    methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -146,40 +108,10 @@
 </script>
 
 <style scoped>
-  .demo1 {
-    position: relative;
-  }
-
-  .welcome {
-    position: absolute;
-    z-index: 10;
-    left: 34%;
-    top: 22%;
-    font-size: 50px;
-    color: white;
-  }
-
-  .login {
-    position: absolute;
-    z-index: 10;
-    left: 47%;
-    top: 45%;
-    font-size: 25px;
-    color: white;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  .login:hover {
-    color: red;
-
-  }
-
   #base_login {
-    background: url("../assets/background/checkerboard-cross.png");
-    background-position: center;
     height: 100%;
     width: 100%;
+    background-color: blanchedalmond;
     background-size: cover;
     position: fixed;
   }
@@ -188,8 +120,9 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 120px auto;
-    width: 450px;
-    height: 300px;
+    margin-top: 200px;
+    width: 350px;
+    height: 350px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -198,8 +131,9 @@
   }
 
   .login_container .submit {
-    width: 40%;
-    border: none
+    width: 35%;
+    border: 1px;
+    margin-top: 20px;
   }
 
   .login_title {
@@ -218,9 +152,8 @@
   }
 
   .tip {
-    margin-top: 60px;
+    margin-top: 30px;
     font-size: 15px;
-    margin-left: 300px;
-
+    
   }
 </style>

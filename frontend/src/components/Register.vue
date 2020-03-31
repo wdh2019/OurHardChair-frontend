@@ -8,15 +8,16 @@
 
         <el-form-item prop="username" class="item">
           <el-input ref="username" v-model="ruleForm.username" placeholder="用户名" type="text" auto-complete="off">
+            <i slot="suffix" class="el-icon-warning-outline" title="只能包含字母,数字或两种特殊字符(-_),只能以字母或-开头,长度为5-32个字符"></i>
           </el-input>
         </el-form-item>
         <el-form-item prop="password" class="item">
-          <el-input v-model="ruleForm.password" placeholder="密码" type="password" auto-complete="off">
+          <el-input v-model="ruleForm.password" placeholder="密码" type="password" auto-complete="off" show-password>
+          <i slot="suffix" class="el-icon-warning-outline" title="至少包含字母,数字或特殊字符(-_)中的两种,长度6-32个字符,不能包含账号"></i>
           </el-input>
         </el-form-item>
         <el-form-item prop="ensure_password" class="item">
-          <el-input v-model="ruleForm.ensure_password" placeholder="确认密码" type="password"
-                    auot-complete="off">
+          <el-input v-model="ruleForm.ensure_password" placeholder="确认密码" type="password" auot-complete="off" show-password>
           </el-input>
         </el-form-item>
         <el-form-item prop="email" class="item">
@@ -24,14 +25,11 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="country" class="item">
-          <el-select v-model="ruleForm.country" placeholder="区域地区">
-            <el-option label="Asia" value="Asia"></el-option>
-            <el-option label="Europe" value="Europe"></el-option>
-            <el-option label="North American" value="North American"></el-option>
-            <el-option label="South American" value="South American"></el-option>
-            <el-option label="Africa" value="Africa"></el-option>
-            <el-option label="Oceania" value="Oceania"></el-option>
-            <el-option label="Antarctica" value="Antarctica"></el-option>
+          <el-select v-model="ruleForm.country" placeholder="区域地区" filterable>
+            <el-option v-for="country in countries" :key="country.value" :value="country.value" :label="country.label">
+              <span style="float: left">{{ country.label }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ country.value }}</span>
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="company" class="item">
@@ -40,11 +38,11 @@
         </el-form-item>
 
         <el-form-item class="item">
-          <el-button type="success" round @click="submitForm('ruleForm')" class="middle_button">注册</el-button>
-          <el-button type='danger' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
+          <el-button type="primary" round @click="submitForm('ruleForm')" class="middle_button">注册</el-button>
+          <el-button type='info' round @click="resetForm('ruleForm')" class="middle_button">重置</el-button>
         </el-form-item>
-        <p class="tip">已有账号!
-          <router-link to="/" class="router_link_active">
+        <p class="tip">已有账号?
+          <router-link to="/login" class="router_link_active">
             登录
           </router-link>
         </p>
@@ -90,6 +88,21 @@
         return callback()
       };
       return {
+        countries: [{value: 'China', label:'中国'},
+        {value: 'United States', label:'美国'},
+        {value: 'United Kingdom', label:'英国'},
+        {value: 'Russia', label:'俄罗斯'},
+        {value: 'Japan', label: '日本'},
+        {value: 'Others', label: '其他区域'}
+          //label="Asia" value="Asia"
+          //label="Europe" value="Europe"
+          //label="North American" value="North American"
+          //"South American" value="South American"
+          //label="Africa" value="Africa"
+          //label="Oceania" value="Oceania"
+          //label="Antarctica" value="Antarctica"
+        ],
+        value:'China',
         ruleForm: {
           username: '',
           password: '',
@@ -124,7 +137,7 @@
             {required: true, message: '单位不能为空', trigger: 'blur'}
           ],
         },
-        loading: false
+        loading: false,
       };
     },
     methods: {
@@ -186,8 +199,7 @@
 
 <style scoped>
   #base_register {
-    background: url("../assets/background/checkerboard-cross.png") repeat;
-    background-position: center;
+    background-color: blanchedalmond;
     height: 100%;
     width: 100%;
     background-size: cover;
@@ -198,7 +210,8 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 40px auto;
-    width: 500px;
+    margin-top: 80px;
+    width: 350px;
     height: 580px;
     padding: 35px 35px 15px 35px;
     background: #fff;
@@ -218,6 +231,7 @@
 
   .register_container .item .middle_button {
     width: 30%;
+    margin-top: 20px;
     border: none
   }
 
@@ -232,9 +246,14 @@
   }
 
   .tip {
-    margin-top: 40px;
+    margin-top: 30px;
     font-size: 15px;
-    margin-left: 300px;
-
+  }
+  .el-icon-warning-outline{
+    font-size: 16px;
+  }
+  .el-icon-warning-outline:hover{
+    font-size: 18px;
+    cursor: pointer;
   }
 </style>
