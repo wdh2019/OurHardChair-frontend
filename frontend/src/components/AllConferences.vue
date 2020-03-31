@@ -1,10 +1,10 @@
 <template>
-    <h2>预留接口后续实现</h2>
+    <h1>所有会议如下所列</h1>
 </template>
 
 <script>
     export default {
-        name: "PageTwo"
+        name: "AllConferences"
     }
 </script>
 

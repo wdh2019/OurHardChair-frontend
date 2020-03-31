@@ -1,15 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 import HomePage from '../components/HomePage'
-import UserPage from '@/components/UserPage'
-import ApplyConference from '@/components/ApplyConference'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
-import store from '../store'
-import PageOne from "../components/PageOne"
-import PageTwo from "../components/PageTwo"
-import PageThree from "../components/PageThree"
-import InfoPage from "../components/InfoPage"
+import UserPage from '@/components/UserPage'
+import ApplyConference from '@/components/ApplyConference'
+import AllConferences from "../components/AllConferences"
+import ConferenceForChair from "../components/ConferenceForChair"
+import ConferenceForPCmember from "../components/ConferenceForPCmember"
+import ConferenceForAuthor from "../components/ConferenceForAuthor"
+import NewsCenter from "../components/NewsCenter"
+import InvitePCmember from "../components/InvitePCmember"
+import CheckPapers from "../components/CheckPapers"
+import SubmitPapers from "../components/SubmitPapers"
+import ApproveConference from "../components/ApproveConference"
 import UserInfo from "../components/UserInfo"
 
 Vue.use(Router)
@@ -21,16 +26,29 @@ export const router = new Router({
 	    path: '/UserPage',
 	    name: '操作中心',
 	    component: UserPage,
-      redirect:'/ApplyConference',
+      redirect:'/AllConferences',
       meta:{
         //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[{
+      children:[
+      {
         path: '/ApplyConference',
         name: '会议申请',
         component: ApplyConference,
-      }]
+      },
+      { 
+        path: '/AllConferences',
+        name: '我要投稿',
+        component: AllConferences,
+      },
+      {
+        path: '/ApproveConference',
+        name: '审批会议(管理员专用)',
+        component: ApproveConference,
+      }
+      ]
 	  },
+
     {
       path: '/UserPage',
       name: '我的工作台',
@@ -39,19 +57,12 @@ export const router = new Router({
        // requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children:[{
-        path: '/PageOne',
-        name: '选项一',
-        component: PageOne,
-      },{
-        path: '/PageTwo',
-        name: '选项二',
-        component: PageTwo,
-      },{
-        path: '/PageThree',
-        name: '选项三',
-        component: PageThree,
+        path:"/AllConferences",
+        name:'所有会议',
+        component: AllConferences,
       }]
     },
+
     {
       path: '/UserPage',
       name: '消息中心',
@@ -59,12 +70,24 @@ export const router = new Router({
       meta:{
         //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[{
-        path: '/InfoPage',
-        name: '待处理会议',
-        component: InfoPage,
-      }]
+      children:[
+      {
+        path: '/ConferenceForChair',
+        name: '我主持的会议',
+        component: ConferenceForChair,
+      },
+      { path: '/ConferenceForPCmember',
+        name: '我审稿的会议',
+        component: ConferenceForPCmember,
+      },
+      {
+        path:'/ConferenceForAuthor',
+        name: '我投稿的会议',
+        component: ConferenceForAuthor,
+      },
+      ]
     },
+
     {
       path: '/UserPage',
       name: '设置',
@@ -78,6 +101,45 @@ export const router = new Router({
         component: UserInfo,
       }]
     },
+    {
+      path: '/UserPage',
+      name: '最新消息',
+      component: UserPage,
+      meta:{
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
+      children:[{
+        path: '/NewsCenter',
+        name: '通知中心',
+        component: NewsCenter,
+      }]
+    },
+    {
+      path:'/UserPage',
+      name: '其他功能',
+      component: UserPage,
+      meta:{
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
+      children:[
+        {
+          path: '/InvitePCmember',
+          name: '邀请PC成员',
+          component: InvitePCmember,
+        },
+        {
+          path: '/CheckPapers',
+          name: '审稿',
+          component: CheckPapers,
+        },
+        {
+          path: '/SubmitPapers',
+          name: '投稿',
+          component: SubmitPapers,
+        }
+      ]
+    },
+
     {
       path: '/',
       name: 'HomePage',

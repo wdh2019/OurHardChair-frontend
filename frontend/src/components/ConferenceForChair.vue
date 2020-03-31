@@ -1,10 +1,10 @@
 <template>
-    <h1>后续功能中实现</h1>
+    <h1>我主持的会议</h1>
 </template>
 
 <script>
     export default {
-        name: "InfoPage"
+        name: "ConferenceForChair"
     }
 </script>
 
