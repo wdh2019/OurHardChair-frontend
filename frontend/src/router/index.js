@@ -36,22 +36,17 @@ export const router = new Router({
         name: '会议申请',
         component: ApplyConference,
       },
-      { 
+      {
         path: '/AllConferences',
         name: '我要投稿',
         component: AllConferences,
       },
-      {
-        path: '/ApproveConference',
-        name: '审批会议(管理员专用)',
-        component: ApproveConference,
-      }
       ]
 	  },
 
     {
       path: '/UserPage',
-      name: '我的工作台',
+      name: '会议总览',
       component: UserPage,
       meta:{
        // requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
@@ -65,7 +60,7 @@ export const router = new Router({
 
     {
       path: '/UserPage',
-      name: '消息中心',
+      name: '我的会议',
       component: UserPage,
       meta:{
         //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
@@ -87,7 +82,19 @@ export const router = new Router({
       },
       ]
     },
-
+    {
+      path: '/UserPage',
+      name: '操作中心之管理员特权',
+      component: UserPage,
+      meta:{
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
+      children:[{
+          path: '/ApproveConference',
+          name: '审批会议',
+          component: ApproveConference,
+      }],
+    },
     {
       path: '/UserPage',
       name: '设置',

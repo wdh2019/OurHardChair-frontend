@@ -8,7 +8,7 @@
       <div class="userinfo_form">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  label-position="left">
         <h3 class="userinfo_title">账户信息</h3>
-        <p class="id"><span class="id_bold">ID:</span>{{$store.state.token}}</p>
+        <p class="id"><span class="id_bold">ID:</span>{{$store.state.id}}</p>
 
         <div class="inline_block display_username_field">
            <el-form-item prop="username" class="item" label="用户名" disabled>
@@ -111,13 +111,6 @@
         {value: 'Russia', label:'俄罗斯'},
         {value: 'Japan', label: '日本'},
         {value: 'Others', label: '其他区域'}
-        /*<el-option label="Asia" value="Asia"></el-option>
-        <el-option label="Europe" value="Europe"></el-option>
-        <el-option label="North American" value="North American"></el-option>
-        <el-option label="South American" value="South American"></el-option>
-        <el-option label="Africa" value="Africa"></el-option>
-        <el-option label="Oceania" value="Oceania"></el-option>
-        <el-option label="Antarctica" value="Antarctica"></el-option>*/
         ],
         userData: [{
           username: this.$store.state.username,
@@ -191,8 +184,6 @@
                     message: "修改成功",
                     type:'success'
                   });
-                  // 修改成功后，修改表单隐藏
-                  this.form_visible = false;
                   this.$router.push('/UserPage').catch(err=>err)
                 } else {
                   this.$message({

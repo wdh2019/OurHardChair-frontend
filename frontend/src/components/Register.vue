@@ -12,7 +12,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="fullName" class="item">
-          <el-input v-model="ruleForm.fullName" placeholder="您的姓名" type="text" auto-complete="off">
+          <el-input v-model="ruleForm.fullName" placeholder="真实姓名" type="text" auto-complete="off">
           </el-input>
         </el-form-item>
         <el-form-item prop="password" class="item">
@@ -122,7 +122,7 @@
             {validator: checkUserName, trigger: 'blur'}
           ],
           fullName: [
-            {required: true, message: '姓名不能为空', trigger: 'blur'},
+            {required: true, message: '真实姓名不能为空', trigger: 'blur'},
           ],
           password: [
             {required: true, message: '密码不能为空', trigger: 'blur'},

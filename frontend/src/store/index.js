@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('token') || null,
+	  id: localStorage.getItem('id')|| null,
     username: localStorage.getItem('username') || null,
 	  fullName: localStorage.getItem('fullName')|| null,
     email: localStorage.getItem('email') || null,
@@ -14,19 +15,21 @@ export default new Vuex.Store({
 
   },
   mutations: {
-    login(state, data) {
+      login(state, data) {
       localStorage.setItem('token', data.token);
+	    localStorage.setItem('id', data.id);
       localStorage.setItem('username', data.username);
 	    localStorage.setItem('fullName',data.fullName);
       localStorage.setItem('email', data.email);
       localStorage.setItem('country', data.country);
       localStorage.setItem('institution', data.institution);
+      state.token = data.token
+	    state.id = data.id;
       state.username = data.username;
 	    state.fullName = data.fullName;
       state.email = data.email;
       state.country = data.country;
       state.institution = data.institution;
-      state.token = data.token
     },
     logout(state) {
       // 移除token
