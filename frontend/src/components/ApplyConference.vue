@@ -49,7 +49,6 @@
 
 <script>
   export default {
-
     name: 'ConferenceApplication',
     data() {
       let checkDeadLine = (rule, value, callback) => {
