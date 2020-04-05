@@ -27,7 +27,7 @@
       <el-submenu index="user" style="float:right">
         <template slot="title"><i class="el-icon-user" style="color: white" ></i>{{$store.state.fullName}}</template>
         <el-menu-item index="UserInfo">用户信息</el-menu-item>
-        <el-menu-item @click="quit" index="quit">注销</el-menu-item>
+        <el-menu-item @click="quit" index="UserPage">注销</el-menu-item>
       </el-submenu>
     </el-menu>
     <el-main>
@@ -41,8 +41,23 @@
     name: 'UserPage',
     methods:{
       quit:function () {
-        this.$store.commit('logout');
-        this.$router.push("/").catch(err=>err);
+        this.$confirm('真的要注销账户吗？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message:'注销成功'
+          });
+          this.$store.commit('logout');
+          this.$router.push("/").catch(err=>err);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消注销'
+          });
+        });
       }
 
     }
