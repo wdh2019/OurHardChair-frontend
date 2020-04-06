@@ -44,8 +44,8 @@
       handleApprove(index,row,type){
         console.log(type);
         console.log(index,row);
-        this.$axios.post('ApproveConference',{
-          fullName: row.fullname,
+        this.$axios.post('/ApproveConference',{
+          fullName: row.fullName,
           type: type,
         })
         .then(resp => {
@@ -74,18 +74,18 @@
       },
     },
     created(){
-      const _this = this;
+      const _this = this
       //一开始就向后端请求已申请的会议
       this.$axios.post('/ReviewConference')
       .then(resp => {
         if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferencesForApproval=resp.data.meetings;
         }else {
-          alert(resp.data.hasOwnProperty("token"))
           this.$message({
             showClose: true,
             message: resp.data.message,
             type:'warning'
+        
           });
         }
       })
