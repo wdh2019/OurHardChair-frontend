@@ -50,7 +50,6 @@
       },
       created(){
        //一开始就向后端请求已申请的会议
-
        const _this = this;
        this.$axios.post('/ConferenceForChair')
        .then(resp => {
@@ -72,7 +71,6 @@
            type:'warning'
          });
        })
-
       }
     }
 </script>
