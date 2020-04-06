@@ -7,7 +7,7 @@
       </div>
       <el-table :data="allConferences.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))">
         <el-table-column prop="abbreviation" label="会议简称" width="150px"></el-table-column>
-        <el-table-column prop="fullName" label="会议全称">
+        <el-table-column prop="fullName" label="会议全称" width>
         <template slot="header" slot-scope="scope">
           <label class="label">会议全称</label>
           <el-input class="search_input"
@@ -18,10 +18,14 @@
         </template>
         </el-table-column>
         <el-table-column prop="holdingPlace" label="举办地点"></el-table-column>
-        <el-table-column prop="holdingTime" label="开始时间" width="180px"></el-table-column>
-        <el-table-column prop="submissionDeadline" label="截止时间" width="180px"></el-table-column>
-        <el-table-column prop="reviewReleaseDate" label="发布时间" width="180px"></el-table-column>
-        <el-table-column prop="isOpenSubmission" label="会议状态" width="100px"></el-table-column>
+        <el-table-column prop="holdingTime" label="开始时间" width="200px"></el-table-column>
+        <el-table-column prop="submissionDeadline" label="截止时间" width="200px"></el-table-column>
+        <el-table-column prop="reviewReleaseDate" label="发布时间" width="200px"></el-table-column>
+        <el-table-column prop="isOpenSubmission" label="会议状态" width="100px">
+          <template slot-scope="scope">
+            {{conferenceStatus(scope.row)}}
+          </template>
+        </el-table-column>
         <el-table-column prop="action" label="操作" width="250px">
           <template slot-scope="scope">
             <el-button
@@ -35,6 +39,7 @@
             <el-button
                 size="mini"
                 type="danger"
+                v-show="submit"
                 v-on:click="handleAction(scope.$index, scope.row, 'author')">投稿</el-button>
           </template>
         </el-table-column>
@@ -48,11 +53,39 @@
       name: "AllConferences",
       data(){
         return{
-          allConferences:[],
+         allConferences:[],
          search:'',
+         submit:true,
         }
       },
       methods:{
+         conferenceStatus(row){
+           let _this=this;
+           let holdingTime=new Date(row.holdingTime);
+           let submissionDeadline=new Date(row.submissionDeadline);
+           let reviewReleaseDate=new Date(reviewReleaseDate);
+           let currentDate=new Date();
+           //会议未开始
+           if(currentDate<holdingTime){
+             return "会议未开始";
+           }
+           else{
+             //未开放投稿
+             if(row.isOpenSubmission==1){
+               return "未开放投稿";
+             }
+             //已开放投稿
+             else{
+               //已截止投稿,隐藏投稿按钮
+               if(currentDate>submissionDeadline){
+                 _this.submit=false;
+                 return "投稿截止";
+               }
+               return "开放投稿";
+             }
+           }
+
+         },
          handleAction(index,row,type){
            console.log(type);
            console.log(index,row);
@@ -85,9 +118,9 @@
            })
          }
       },
-      created(){
+      /*created(){
         //一开始就向后端请求所有会议
-        
+
         const _this = this;
         this.$axios.post('/AllConferences')
         .then(resp => {
@@ -109,8 +142,8 @@
             type:'warning'
           });
         })
-        
-      }
+
+      }*/
     }
 </script>
 
@@ -119,7 +152,7 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 1600px;
+    width: 1700px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
