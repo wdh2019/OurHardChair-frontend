@@ -6,12 +6,12 @@
       <p class="description">作为管理员，在此审批用户提出的会议申请</p>
       </div>
       <el-table :data="conferencesForApproval">
-        <el-table-column prop="shortname" label="会议简称"></el-table-column>
-        <el-table-column prop="fullname" label="会议全称"></el-table-column>
-        <el-table-column prop="place" label="举办地点"></el-table-column>
-        <el-table-column prop="start_date" label="开始时间"></el-table-column>
-        <el-table-column prop="deadline_date" label="截止时间"></el-table-column>
-        <el-table-column prop="release_date" label="发布时间"></el-table-column>
+        <el-table-column prop="abbreviation" label="会议简称"></el-table-column>
+        <el-table-column prop="fullName" label="会议全称"></el-table-column>
+        <el-table-column prop="holdingPlace" label="举办地点"></el-table-column>
+        <el-table-column prop="holdingTime" label="开始时间"></el-table-column>
+        <el-table-column prop="submissionDeadline" label="截止时间"></el-table-column>
+        <el-table-column prop="reviewReleaseDate" label="发布时间"></el-table-column>
         <el-table-column prop="action" label="操作">
           <template slot-scope="scope">
             <el-button
@@ -35,45 +35,7 @@
       return{
         conferencesForApproval:[
           {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-          },
-          {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-          },
-          {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-          },
-          {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-          },
-          {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-          },
+          }
         ],
       }
     },
@@ -112,16 +74,19 @@
       },
     },
     created(){
+      const _this = this
       //一开始就向后端请求已申请的会议
-      /*this.$axios.post('/ApproveConference')
+      this.$axios.post('/ReviewConference')
       .then(resp => {
         if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-            data.conferencesForApproval=resp.data;
+            _this.conferencesForApproval=resp.data.meetings;
         }else {
+          alert(resp.data.hasOwnProperty("token"))
           this.$message({
             showClose: true,
             message: resp.data.message,
             type:'warning'
+        
           });
         }
       })
@@ -132,7 +97,7 @@
           message: '请求已申请会议失败',
           type:'warning'
         });
-      })*/
+      })
     }
   }
 
