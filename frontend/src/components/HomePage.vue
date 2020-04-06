@@ -8,7 +8,7 @@
             <div class="welcome">
             <p class="welcome1">欢迎使用</p>
             <p class="welcome2">Gysw 会议系统</p></div>
-            <img ref='img' :src="item.imageUrl" height="100%" width="100%"/>
+            <img ref='img' :src="item.imageUrl" height="100%" width="100%">
             <router-link to="/login" class="button login">
               加入我们
             </router-link>

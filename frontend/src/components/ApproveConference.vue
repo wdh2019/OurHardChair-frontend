@@ -74,7 +74,7 @@
       },
     },
     created(){
-      const _this = this
+      const _this = this;
       //一开始就向后端请求已申请的会议
       this.$axios.post('/ReviewConference')
       .then(resp => {
@@ -86,7 +86,6 @@
             showClose: true,
             message: resp.data.message,
             type:'warning'
-        
           });
         }
       })

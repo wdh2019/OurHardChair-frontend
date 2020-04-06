@@ -43,10 +43,12 @@
     },
     created(){
       //一开始就向后端请求消息
-      /*this.$axios.post('/NewsCenter')
+    /*
+	  const _this = this;
+	  this.$axios.post('/NewsCenter')
       .then(resp => {
         if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-            data.news = resp.data;
+            _this.news = resp.data.news;
         }else {
           this.$message({
             showClose: true,
@@ -62,7 +64,8 @@
           message: '请求我主持的会议失败',
           type:'warning'
         });
-      })*/
+      })
+      */
     }
 	}
 </script>

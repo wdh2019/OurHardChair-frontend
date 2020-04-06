@@ -102,7 +102,7 @@
            console.log(index,row);
            this.$axios.post('AllConferences',{
              fullName: row.fullname,
-             id: $store.state.id,
+             id: this.$store.state.id,
              type: type,
            })
            .then(resp => {
@@ -131,10 +131,12 @@
       },
       created(){
         //一开始就向后端请求所有会议
-        /*this.$axios.post('/AllConferences')
+        /*
+        const _this = this;
+        this.$axios.post('/AllConferences')
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              data.allConferences=resp.data;
+              _this.allConferences=resp.data.meetings;
           }else {
             this.$message({
               showClose: true,
@@ -150,7 +152,8 @@
             message: '请求所有会议失败',
             type:'warning'
           });
-        })*/
+        })
+        */
       }
     }
 </script>

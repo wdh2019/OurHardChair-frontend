@@ -6,7 +6,7 @@
         <p class="description">在此查看已申请的会议</p>
       </div>
       <!--会议单元-->
-      <div class="conference_cell" v-for="conference in confereces" v-bind:key="conference.id">
+      <div class="conference_cell" v-for="conference in confereces" v-bind:key="conference.index">
         <div class="title_section" v-bind:class="changeColor(conference.status)">
           <h3>{{conference.shortname}}</h3>
         </div>
@@ -30,7 +30,6 @@
       data(){
         return{
           confereces:[{
-            id:1,
             shortname:"第一",
             fullname:"第一个会议",
             place:"翻斗大街翻斗花园二号楼1001室",
@@ -39,7 +38,6 @@
             release_date: '2020/4/4 14:30',
             status: '审核中'
           },{
-            id:2,
             shortname:"第二",
             fullname:"第二个会议",
             place:"翻斗大街翻斗花园二号楼1001室",
@@ -49,7 +47,6 @@
             status: '已通过',
           },
           {
-            id:3,
             shortname:"第三",
             fullname:"第三个会议",
             place:"翻斗大街翻斗花园二号楼1001室",
@@ -79,10 +76,12 @@
       },
       created(){
        //一开始就向后端请求已申请的会议
-       /*this.$axios.post('/ConferenceForChair')
+       /*
+       const _this = this;
+       this.$axios.post('/ConferenceForChair')
        .then(resp => {
          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-             data.conferences = resp.data;
+             _this.conferences = resp.data.meetings;
          }else {
            this.$message({
              showClose: true,
@@ -98,7 +97,8 @@
            message: '请求我主持的会议失败',
            type:'warning'
          });
-       })*/
+       })
+       */
       }
     }
 </script>
