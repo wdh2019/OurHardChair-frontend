@@ -5,9 +5,9 @@
       <h3 class="title">所有会议</h3>
       <p class="description">在如下列表中，你可以查询到当前所有审核通过会议</p>
       </div>
-      <el-table :data="allConferences.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase()))">
-        <el-table-column prop="shortname" label="会议简称" width="150px"></el-table-column>
-        <el-table-column prop="fullname" label="会议全称">
+      <el-table :data="allConferences.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))">
+        <el-table-column prop="abbreviation" label="会议简称" width="150px"></el-table-column>
+        <el-table-column prop="fullName" label="会议全称">
         <template slot="header" slot-scope="scope">
           <label class="label">会议全称</label>
           <el-input class="search_input"
@@ -17,11 +17,11 @@
           </el-input>
         </template>
         </el-table-column>
-        <el-table-column prop="place" label="举办地点"></el-table-column>
-        <el-table-column prop="start_date" label="开始时间" width="180px"></el-table-column>
-        <el-table-column prop="deadline_date" label="截止时间" width="180px"></el-table-column>
-        <el-table-column prop="release_date" label="发布时间" width="180px"></el-table-column>
-        <el-table-column prop="state" label="会议状态" width="100px"></el-table-column>
+        <el-table-column prop="holdingPlace" label="举办地点"></el-table-column>
+        <el-table-column prop="holdingTime" label="开始时间" width="180px"></el-table-column>
+        <el-table-column prop="submissionDeadline" label="截止时间" width="180px"></el-table-column>
+        <el-table-column prop="reviewReleaseDate" label="发布时间" width="180px"></el-table-column>
+        <el-table-column prop="isOpenSubmission" label="会议状态" width="100px"></el-table-column>
         <el-table-column prop="action" label="操作" width="250px">
           <template slot-scope="scope">
             <el-button
@@ -48,51 +48,7 @@
       name: "AllConferences",
       data(){
         return{
-          allConferences:[{
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-            state: '已截止',
-          },
-          {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-            state: '已截止',
-          },
-          {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-            state: '已截止',
-          },
-          {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-            state: '已截止',
-          },
-          {
-            shortname: '简称1',
-            fullname: '会议全称1',
-            place: '家',
-            start_date: '2020/4/4 9:32',
-            deadline_date: '2020/4/4 10:10',
-            release_date: '2020/4/4 10:30',
-            state: '已截止',
-          },],
+          allConferences:[],
          search:'',
         }
       },
@@ -100,8 +56,8 @@
          handleAction(index,row,type){
            console.log(type);
            console.log(index,row);
-           this.$axios.post('AllConferences',{
-             fullName: row.fullname,
+           this.$axios.post('/AllConferences',{
+             fullName: row.fullName,
              id: this.$store.state.id,
              type: type,
            })
@@ -131,7 +87,7 @@
       },
       created(){
         //一开始就向后端请求所有会议
-        /*
+        
         const _this = this;
         this.$axios.post('/AllConferences')
         .then(resp => {
@@ -153,7 +109,7 @@
             type:'warning'
           });
         })
-        */
+        
       }
     }
 </script>
