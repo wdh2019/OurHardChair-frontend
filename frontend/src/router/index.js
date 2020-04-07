@@ -36,11 +36,11 @@ export const router = new Router({
         name: '会议申请',
         component: ApplyConference,
       },
-      {
-        path: '/AllConferences',
-        name: '我要投稿',
-        component: AllConferences,
-      },
+      // {
+      //   path: '/AllConferences',
+      //   name: '我要投稿',
+      //   component: AllConferences,
+      // },
       ]
 	  },
 
