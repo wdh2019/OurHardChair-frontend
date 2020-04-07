@@ -9,21 +9,17 @@
       active-text-color="#1EAEFF" router>
       <el-submenu index="0">
         <template slot="title">操作中心</template>
-        <el-menu-item v-for="(child) in $router.options.routes[0].children" :index="child.path" :key="child.path"
-                      v-show="$store.state.username!='admin'">{{child.name}}
-        </el-menu-item>
-        <el-menu-item v-show="$store.state.username!='admin'" ><router-link to="AllConferences" class="router">我要投稿</router-link></el-menu-item>
-        <el-menu-item index="/ApproveConference" v-show="$store.state.username=='admin'">会议审批</el-menu-item>
+        <el-menu-item v-for="(child) in $router.options.routes[0].children" :index="child.path" :key="child.path" v-show="$store.state.id!=1">{{child.name}}</el-menu-item>
+        <el-menu-item index="ApproveConference" v-show="$store.state.id==1">会议审批</el-menu-item>
       </el-submenu>
 
-      <el-submenu v-for="(item,index) in $router.options.routes" :key="index+''" :index="index+''"
-                  v-if="index<3&&index>0" v-show="$store.state.username!='admin'">
+      <el-submenu v-for="(item,index) in $router.options.routes" :key="index+''" :index="index+''" v-if="index<3&&index>0" v-show="$store.state.id!=1">
         <template slot="title">{{item.name}}</template>
         <el-menu-item v-for="(item2) in item.children" :index="item2.path" :key="item2.path">{{item2.name}}
         </el-menu-item>
       </el-submenu>
 
-      <el-submenu index="news" style="float:right" v-show="$store.state.username!='admin'">
+      <el-submenu index="news" style="float:right" v-show="$store.state.id!=1">
         <template slot="title">最新消息</template>
         <el-menu-item index="/NewsCenter">更多</el-menu-item>
       </el-submenu>

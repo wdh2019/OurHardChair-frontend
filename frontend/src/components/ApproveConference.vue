@@ -33,10 +33,7 @@
   export default{
     data(){
       return{
-        conferencesForApproval:[
-          {
-          }
-        ],
+        conferencesForApproval:[],
       }
     },
     methods:{

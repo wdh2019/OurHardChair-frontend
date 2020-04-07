@@ -29,8 +29,7 @@
       name: "ConferenceForChair",
       data(){
         return{
-          conferences:[
-          ]
+          conferences:[],
         }
       },
       methods:{
@@ -72,7 +71,6 @@
            type:'warning'
          });
        })
-       
       }
     }
 </script>
