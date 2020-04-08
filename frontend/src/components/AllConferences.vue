@@ -120,7 +120,6 @@
       },
       created(){
         //一开始就向后端请求所有会议
-
         const _this = this;
         this.$axios.post('/AllConferences')
         .then(resp => {

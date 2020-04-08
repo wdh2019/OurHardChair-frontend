@@ -83,6 +83,7 @@
                     type: 'success'
                   });
                   this.$store.commit('login', resp.data);
+                  console.log(this.$store.state.username);
                   this.$router.push("/UserPage").catch(err => err);
                 } else {
                   this.$message({
