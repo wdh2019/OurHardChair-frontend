@@ -64,9 +64,24 @@
            .then(resp => {
              if (resp.status === 200 && resp.data.hasOwnProperty("token")){
                //不同的权限转到不同的页面，后面加会议id作为queryString
-                if(type=="chair") this.$router.push('/InvitePCmember?meetingid='+resp.data.meetingid).catch(err=>err);
-                if(type=="PC member") this.$router.push('/CheckPapers?meetingid='+resp.data.meetingid).catch(err=>err);
-                if(type=="author") this.$router.push('/SubmitPapers?meetingid='+resp.data.meetingid).catch(err=>err)
+                if(type=="chair") this.$router.push({
+                  name:'/InvitePCmember',
+                  query:{
+                    conferenceId:resp.data.meetings.id,
+                  }
+                }).catch(err=>err);
+                if(type=="PC member") this.$router.push({
+                  name:'/CheckPapers',
+                  query:{
+                    conferenceId:resp.data.meetings.id,
+                  }
+                }).catch(err=>err);
+                if(type=="author") this.$router.push({
+                  name:'/SubmitPapers',
+                  query:{
+                    conferenceId:resp.data.meetings.id,
+                  }
+                }).catch(err=>err)
              }else {
                this.$message({
                  showClose:true,
