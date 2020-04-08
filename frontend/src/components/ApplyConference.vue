@@ -116,7 +116,7 @@
                     message: '会议申请成功',
                     type:"success"
                   });
-                  this.$router.push('/UserPage').catch(err=>err)
+                  this.$router.push('/ConferenceForChair').catch(err=>err)
                 } else {
                   this.$message({
                     showClose: true,
@@ -172,8 +172,8 @@
   .conference_container {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 100px auto;
-    width: 400px;
+    margin: 20px auto;
+    width: 480px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;

@@ -83,7 +83,7 @@
                     type: 'success'
                   });
                   this.$store.commit('login', resp.data);
-                  console.log(this.$store.state.username);
+                  console.log(resp);
                   this.$router.push("/UserPage").catch(err => err);
                 } else {
                   this.$message({
@@ -120,9 +120,8 @@
   .login_container {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 120px auto;
-    margin-top: 200px;
-    width: 350px;
+    margin: 125px auto;
+    width:400px;
     height: 350px;
     padding: 35px 35px 15px 35px;
     background: #fff;

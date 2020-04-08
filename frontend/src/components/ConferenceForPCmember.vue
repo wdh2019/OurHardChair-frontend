@@ -48,30 +48,30 @@
             if(status=="未通过") return 'danger';
         }
       },
-      created(){
-       //一开始就向后端请求已申请的会议
-       const _this = this;
-       this.$axios.post('/ConferenceForPCmember')
-       .then(resp => {
-         if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-             _this.conferences = resp.data.meetings;
-         }else {
-           this.$message({
-             showClose: true,
-             message: resp.data.message,
-             type:'warning'
-           });
-         }
-       })
-       .catch(error => {
-         console.log(error);
-         this.$message({
-           showClose: true,
-           message: '请求我审稿的会议失败',
-           type:'warning'
-         });
-       })
-      }
+      // created(){
+      //  //一开始就向后端请求已申请的会议
+      //  const _this = this;
+      //  this.$axios.post('/ConferenceForPCmember')
+      //  .then(resp => {
+      //    if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+      //        _this.conferences = resp.data.meetings;
+      //    }else {
+      //      this.$message({
+      //        showClose: true,
+      //        message: resp.data.message,
+      //        type:'warning'
+      //      });
+      //    }
+      //  })
+      //  .catch(error => {
+      //    console.log(error);
+      //    this.$message({
+      //      showClose: true,
+      //      message: '请求我审稿的会议失败',
+      //      type:'warning'
+      //    });
+      //  })
+      // }
     }
 </script>
 

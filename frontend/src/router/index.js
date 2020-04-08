@@ -11,7 +11,7 @@ import ConferenceForChair from "../components/ConferenceForChair"
 import ConferenceForPCmember from "../components/ConferenceForPCmember"
 import ConferenceForAuthor from "../components/ConferenceForAuthor"
 import NewsCenter from "../components/NewsCenter"
-import InvitePCmember from "../components/InvitePCmember"
+import InvitePCmember from "../components/InvitePCMember"
 import CheckPapers from "../components/CheckPapers"
 import SubmitPapers from "../components/SubmitPapers"
 import ApproveConference from "../components/ApproveConference"
@@ -26,7 +26,7 @@ export const router = new Router({
 	    path: '/UserPage',
 	    name: '操作中心',
 	    component: UserPage,
-      redirect:'/AllConferences',
+      redirect:'/UserInfo',
       meta:{
         //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
@@ -130,7 +130,7 @@ export const router = new Router({
       },
       children:[
         {
-          path: '/InvitePCmember',
+          path: '/InvitePCMember',
           name: '邀请PC成员',
           component: InvitePCmember,
         },

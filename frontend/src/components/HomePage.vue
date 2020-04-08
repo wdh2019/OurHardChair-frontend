@@ -1,14 +1,13 @@
 <template>
-  <div>
     <transition name="el-zoom-in-center">
-      <el-carousel indicator-position="inside" height="940px">
+      <el-carousel indicator-position="inside" height="754px">
         <el-carousel-item v-for="(item,index) in imgUrls" :key="index">
           <div class="demo1">
-            <p class="welcome logo">Gysw.co</p>
+            <p class="logo">Gysw.co</p>
             <div class="welcome">
-            <p class="welcome1">欢迎使用</p>
-            <p class="welcome2">Gysw 会议系统</p></div>
-            <img ref='img' :src="item.imageUrl" height="100%" width="100%">
+              <p class="welcome1">欢迎使用</p>
+              <p class="welcome2">Gysw 会议系统</p></div>
+            <img ref='img' :src="item.imageUrl">
             <router-link to="/login" class="button login">
               加入我们
             </router-link>
@@ -16,14 +15,13 @@
         </el-carousel-item>
       </el-carousel>
     </transition>
-  </div>
 </template>
 
 <script>
   export default {
     name: 'HomePage',
     data() {
-      return{
+      return {
         imgUrls: [],
       }
 
@@ -59,34 +57,42 @@
 </script>
 
 <style scoped>
-  p{
+  p {
     cursor: default;
-    font-family:Brutal, sans-serif,arial;
+    font-family: Brutal, sans-serif, arial;
   }
+
   .demo1 {
     position: relative;
   }
-  .welcome{
+
+  .logo {
     position: absolute;
     z-index: 10;
-    left: 41.3%;
-    top:  18%;
-    font-size: 50px;
     color: white;
-
-  }
-  .logo{
     top: -2%;
     left: 2%;
     font-size: 32px;
   }
-  .welcome1{
+
+  .welcome {
+    position: absolute;
+    z-index: 10;
+    left: 39.5%;
+    top: 12%;
+    font-size: 50px;
+    color: white;
+  }
+
+  .welcome1 {
     margin-bottom: 20px;
   }
-  .welcome2{
+
+  .welcome2 {
     margin-top: 0;
   }
-  .button{
+
+  .button {
     padding: 0.75em 2em;
     border-radius: 2em;
     transition: all 0.15s ease;
@@ -94,11 +100,12 @@
     border: 1px solid white;
     text-decoration: none;
   }
+
   .login {
     position: absolute;
     z-index: 10;
-    left: 45.7%;
-    top: 55%;
+    left: 45%;
+    top: 40%;
     font-size: 1.3em;
     font-weight: 600;
     background-color: transparent;

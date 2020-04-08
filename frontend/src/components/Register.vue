@@ -218,8 +218,7 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 40px auto;
-    margin-top: 80px;
-    width: 350px;
+    width: 480px;
     height: 620px;
     padding: 35px 35px 15px 35px;
     background: #fff;
