@@ -52,13 +52,13 @@
     name: 'ConferenceApplication',
     data() {
       let checkDeadLine = (rule, value, callback) => {
-        if(value<this.ruleForm.start_date){
-         return callback(new Error("截止时间不能早于开始时间"))
+        if (value < this.ruleForm.start_date) {
+          return callback(new Error("截止时间不能早于开始时间"))
         }
         return callback();
       };
-      let checkSubmitTime=(rule,value,callback)=>{
-        if(value<this.ruleForm.deadline_date){
+      let checkSubmitTime = (rule, value, callback) => {
+        if (value < this.ruleForm.deadline_date) {
           return callback(new Error("公布时间不能早于截止时间"))
         }
         return callback();
@@ -79,17 +79,21 @@
           start_date: [{type: 'date', required: true, message: "开始日期不为空", trigger: 'blur'}],
           deadline_date: [
             {type: 'date', required: true, message: "截止日期不为空", trigger: 'blur'},
-            {validator:checkDeadLine}
+            {validator: checkDeadLine}
           ],
           release_date: [
             {type: 'date', required: true, message: "公布日期不为空", trigger: 'blur'},
-            {validator:checkSubmitTime}
+            {validator: checkSubmitTime}
           ],
         },
         loading: false
       }
     },
+
     methods: {
+      fix(num, length) {
+        return ('' + num).length < length ? ((new Array(length + 1)).join('0') + num).slice(-length) : '' + num;
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           var startTime = this.formatTime(new Date(this.ruleForm.start_date));
@@ -114,14 +118,14 @@
                   this.$message({
                     showClose: true,
                     message: '会议申请成功',
-                    type:"success"
+                    type: "success"
                   });
-                  this.$router.push('/ConferenceForChair').catch(err=>err)
+                  this.$router.push('/ConferenceForChair').catch(err => err)
                 } else {
                   this.$message({
                     showClose: true,
                     message: resp.data.message,
-                    type:'warning'
+                    type: 'warning'
                   });
                 }
               })
@@ -130,14 +134,14 @@
                 this.$message({
                   showClose: true,
                   message: '申请失败',
-                  type:'warning'
+                  type: 'warning'
                 });
               })
           } else {
             this.$message({
               showClose: true,
               message: '请按要求填写会议内容',
-              type:'warning'
+              type: 'warning'
             });
           }
         });
@@ -146,7 +150,9 @@
         this.$refs[formName].resetFields();
       },
       formatTime(date) {
-        return (date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate()) + " " + (date.getHours()) + ":" + (date.getMinutes()) + ":" + (date.getSeconds()));
+        let final = (date.getFullYear() + "-" + this.fix(date.getMonth() + 1, 2) + "-" + this.fix(date.getDate(), 2) + " " + this.fix(date.getHours(), 2) + ":" + this.fix(date.getMinutes(), 2) + ":" + this.fix(date.getSeconds(), 2));
+        console.log(final);
+        return final;
       }
     },
   }
@@ -194,7 +200,7 @@
   .conference_container .item .middle_button {
     width: 30%;
     border: none;
-    margin-top:40px;
+    margin-top: 40px;
   }
 
   .middle_button {

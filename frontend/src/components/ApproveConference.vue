@@ -17,12 +17,12 @@
             <el-button
               size="mini"
               type="success"
-              v-on:click="handleApprove(scope.$index, scope.row, 'approve')">通过
+              v-on:click="handleApprove(scope.$index, scope.row)">通过
             </el-button>
             <el-button
               size="mini"
               type="danger"
-              v-on:click="handleApprove(scope.$index, scope.row, 'disapprove')">不通过
+              v-on:click="handleDisapprove(scope.$index, scope.row)">不通过
             </el-button>
           </template>
         </el-table-column>
@@ -40,29 +40,27 @@
     },
     methods: {
       //审批通过
-      handleTest(index){
-        var arr = ['a'];
-        arr.splice(0,1);
-        console.log(arr);
-        console.log(this.conferencesForApproval);
-        console.log(index);
+      // handleTest(index){
+      //   var arr = ['a'];
+      //   arr.splice(0,1);
+      //   console.log(arr);
+      //   console.log(this.conferencesForApproval);
+      //   console.log(index);
+      //   console.log(this.conferencesForApproval);
+      // },
 
-        console.log(this.conferencesForApproval);
-      },
-
-      handleApprove(index, row, type) {
+      handleApprove(index, row) {
         // console.log(type);
         console.log(index);
-        const _this=this;
+        const _this = this;
         this.$axios.post('/ApproveConference', {
           fullName: row.fullName,
-          type: type,
         })
           .then(resp => {
             console.log(resp);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              _this.conferencesForApproval.splice(index,1);
-              console.log(123+this.conferencesForApproval);
+              console.log("批准会议");
+              _this.conferencesForApproval.splice(index, 1);
               this.$message({
                 showClose: true,
                 message: '处理成功',
@@ -70,6 +68,43 @@
               });
 
             } else {
+              console.log("后端无法批准");
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: "warning",
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            this.$message({
+              showClose: true,
+              message: '处理失败',
+              type: 'warning',
+            });
+          })
+      },
+      handleDisapprove(index, row) {
+        // console.log(type);
+        console.log(index);
+        const _this = this;
+        this.$axios.post('/DisapproveConference', {
+          fullName: row.fullName,
+        })
+          .then(resp => {
+            console.log(resp);
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              console.log("拒绝批准");
+              _this.conferencesForApproval.splice(index, 1);
+              this.$message({
+                showClose: true,
+                message: '处理成功',
+                type: "success"
+              });
+
+            } else {
+              console.log("出现问题");
               this.$message({
                 showClose: true,
                 message: resp.data.message,

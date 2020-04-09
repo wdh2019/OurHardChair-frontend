@@ -5,7 +5,8 @@
       <h3 class="title">所有会议</h3>
       <p class="description">在如下列表中，你可以查询到当前所有审核通过会议</p>
       </div>
-      <el-table :data="allConferences.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))">
+      <el-table
+        :data="allConferences.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))">
         <el-table-column prop="abbreviation" label="会议简称" width="150px"></el-table-column>
         <el-table-column prop="fullName" label="会议全称">
         <template slot="header" slot-scope="scope">
@@ -18,9 +19,9 @@
         </template>
         </el-table-column>
         <el-table-column prop="holdingPlace" label="举办地点"></el-table-column>
-        <el-table-column prop="holdingTime" label="开始时间" width="180px"></el-table-column>
-        <el-table-column prop="submissionDeadline" label="截止时间" width="180px"></el-table-column>
-        <el-table-column prop="reviewReleaseDate" label="发布时间" width="180px"></el-table-column>
+        <el-table-column prop="holdingTime" label="开始时间" width="180px" sortable></el-table-column>
+        <el-table-column prop="submissionDeadline" label="截止时间" width="180px" sortable></el-table-column>
+        <el-table-column prop="reviewReleaseDate" label="发布时间" width="180px" sortable></el-table-column>
         <el-table-column prop="isOpenSubmission" label="会议状态" width="100px"></el-table-column>
         <el-table-column prop="action" label="操作" width="250px">
           <template slot-scope="scope">
