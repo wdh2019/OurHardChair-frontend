@@ -19,7 +19,6 @@
           <el-tag v-bind:type="changeColor1(conference.status)">{{conference.status}}</el-tag>
         </div>
       </div>
-
   </div>
   </div>
 </template>
