@@ -5,7 +5,27 @@
       <h3 class="title">所有会议</h3>
       <p class="description">在如下列表中，你可以查询到当前所有审核通过会议</p>
       </div>
-      <el-table :data="allConferences.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))">
+      <el-table :data="allConferences.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
+        <el-table-column prop="action" label="操作" width="50px" type="expand">
+          <template slot-scope="scope">
+            <el-button
+                size="mini"
+                type="primary"
+                v-on:click="handleAction(scope.$index, scope.row, 'chair')">以chair身份进入</el-button>
+            <el-button
+                size="mini"
+                type="success"
+                v-on:click="handleAction(scope.$index, scope.row, 'PC member')">以PCmember身份进入</el-button>
+            <el-button
+                size="mini"
+                type="warning"
+                v-on:click="handleAction(scope.$index, scope.row, 'author')">以author身份进入</el-button>
+            <el-button
+                size="mini"
+                type="danger"
+                v-on:click="handleAction(scope.$index, scope.row, 'none')">投稿</el-button>
+          </template>
+        </el-table-column>
         <el-table-column prop="abbreviation" label="会议简称" width="150px"></el-table-column>
         <el-table-column prop="fullName" label="会议全称">
         <template slot="header" slot-scope="scope">
@@ -18,27 +38,24 @@
         </template>
         </el-table-column>
         <el-table-column prop="holdingPlace" label="举办地点"></el-table-column>
-        <el-table-column prop="holdingTime" label="开始时间" width="180px"></el-table-column>
-        <el-table-column prop="submissionDeadline" label="截止时间" width="180px"></el-table-column>
-        <el-table-column prop="reviewReleaseDate" label="发布时间" width="180px"></el-table-column>
-        <el-table-column prop="isOpenSubmission" label="会议状态" width="100px"></el-table-column>
-        <el-table-column prop="action" label="操作" width="250px">
+        <el-table-column prop="holdingTime" label="开始时间" width="200px"></el-table-column>
+        <el-table-column prop="submissionDeadline" label="截止时间" width="200px"></el-table-column>
+        <el-table-column prop="reviewReleaseDate" label="发布时间" width="200px"></el-table-column>
+        <el-table-column prop="isOpenSubmission" label="会议状态" width="120px">
           <template slot-scope="scope">
-            <el-button
-                size="mini"
-                type="primary"
-                v-on:click="handleAction(scope.$index, scope.row, 'chair')">管理</el-button>
-            <el-button
-                size="mini"
-                type="success"
-                v-on:click="handleAction(scope.$index, scope.row, 'PC member')">审稿</el-button>
-            <el-button
-                size="mini"
-                type="danger"
-                v-on:click="handleAction(scope.$index, scope.row, 'author')">投稿</el-button>
+            <el-tag type="danger" v-show="scope.row.isOpenSubmission==1">未开放投稿</el-tag>
+            <el-tag type="success" v-show="scope.row.isOpenSubmission!=1">已开放投稿</el-tag>
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+          :current-page.sync="curPage"
+          :page-size="pagesize"
+          :pager-count="7"
+          :total="allConferences.length"
+          background
+          layout="total, prev, pager, next, jumper">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -48,14 +65,25 @@
       name: "AllConferences",
       data(){
         return{
-          allConferences:[],
+          pagesize: 10,
+          curPage: 1,
+          allConferences:[
+            {
+              abbreviation:"简称1",
+              fullName:"全称1",
+              holdingPlace:"翻斗乐园",
+              holdingTime:"2020-4-9 23:59:59",
+              submissionDeadline:"2020-4-10 23:58:58",
+              reviewReleaseDate:"2020-4-11 23:57:57",
+              isOpenSubmission:1,
+            }
+          ],
           search:'',
         }
       },
       methods:{
          handleAction(index,row,type){
-           console.log(type);
-           console.log(index,row);
+           //console.log(type);
            this.$axios.post('/AllConferences',{
              fullName: row.fullName,
              id: this.$store.state.id,
@@ -63,23 +91,29 @@
            })
            .then(resp => {
              if (resp.status === 200 && resp.data.hasOwnProperty("token")){
-               //不同的权限转到不同的页面，后面加会议id作为queryString
+               //不同的权限转到不同的页面，后面加会议名作为queryString
                 if(type=="chair") this.$router.push({
-                  name:'/InvitePCmember',
+                  name:'/InvitePCMember',
                   query:{
-                    conferenceId:resp.data.meetings.id,
+                    conference:row.fullName,
                   }
                 }).catch(err=>err);
                 if(type=="PC member") this.$router.push({
                   name:'/CheckPapers',
                   query:{
-                    conferenceId:resp.data.meetings.id,
+                    conference:row.fullName,
                   }
                 }).catch(err=>err);
-                if(type=="author") this.$router.push({
+                if(type=="none") this.$router.push({
+                  name:'/ViewSubmission',
+                  query:{
+                    conference:row.fullName,
+                  }
+                }).catch(err=>err);
+                if(type=="none") this.$router.push({
                   name:'/SubmitPapers',
                   query:{
-                    conferenceId:resp.data.meetings.id,
+                    conference:row.fullName,
                   }
                 }).catch(err=>err)
              }else {
@@ -100,7 +134,7 @@
            })
          }
       },
-      created(){
+      /*created(){
         //一开始就向后端请求所有会议
         const _this = this;
         this.$axios.post('/AllConferences')
@@ -123,7 +157,7 @@
             type:'warning'
           });
         })
-      }
+      }*/
     }
 </script>
 
