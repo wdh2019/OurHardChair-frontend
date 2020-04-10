@@ -11,6 +11,7 @@
                 @selection-change="handleSelectionChange">
          <el-table-column
                type="selection"
+               :selectable="checkInvitable"
                width="55">
          </el-table-column>
          <el-table-column prop="fullName">
@@ -27,6 +28,13 @@
          <el-table-column prop="email" label="邮箱"></el-table-column>
          <el-table-column prop="institution" label="所属单位"></el-table-column>
          <el-table-column prop="country" label="所在区域"></el-table-column>
+         <el-table-column prop="status" label="邀请状态" width="150px">
+           <template slot-scope="scope">
+             <el-tag type="success" v-show="scope.row.status=='可邀请'">可邀请</el-tag>
+             <el-tag type="warning" v-show="scope.row.status=='已邀请未回复'">已邀请未回复</el-tag>
+             <el-tag type="danger" v-show="scope.row.status=='已邀请'">已邀请</el-tag>
+           </template>
+         </el-table-column>
       </el-table>
       <el-pagination
           :current-page.sync="curPage"
@@ -52,19 +60,13 @@
       return{
         pagesize: 10,
         curPage: 1,
-        allUsers:[{
+        availableUsers:[{
             fullName:"胡图图",
             username:"htt2020",
             email:"htt2020@jiaotong.edu.cn",
             institution:"脚痛大学",
             country:"China",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
+            status:"可邀请"
             },
             {
                fullName:"胡英俊",
@@ -72,90 +74,106 @@
                email:"hyj2020@jiaotong.edu.cn",
                institution:"社会大学",
                country:"Others",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
-            },
-            {
-               fullName:"胡图图",
-               username:"htt2021",
-               email:"htt2021@jiaotong.edu.cn",
-               institution:"复旦大学",
-               country:"US",
+               status:"可邀请"
             },
          ],
+         invitingUsers:[
+           {
+              fullName:"胡图图",
+              username:"123",
+              email:"123@fudan.com",
+              institution:"复旦大学",
+              country:"China",
+              status:"已邀请未回复"
+           },
+           {
+              fullName:"胡英俊",
+              username:"321",
+              email:"321@shehui.edu.cn",
+              institution:"社会大学",
+              country:"Others",
+              status:"已邀请未回复"
+           },
+         ],
+         invitedUsers:[
+           {
+              fullName:"胡图图",
+              username:"12345",
+              email:"12345@fudan.edu.cn",
+              institution:"复旦大学",
+              country:"China",
+              status:"已邀请"
+           },
+           {
+              fullName:"胡英俊",
+              username:"54321",
+              email:"54321@jiaotong.edu.cn",
+              institution:"脚痛大学",
+              country:"US",
+              status:"已邀请"
+           },
+         ],
+         //前端展示所有用户，由三个用户数组合并
+         allUsers:[
+              {
+                  fullName:"胡图图",
+                  username:"htt2020",
+                  email:"htt2020@jiaotong.edu.cn",
+                  institution:"脚痛大学",
+                  country:"China",
+                  status:"可邀请"
+                  },
+              {
+                  fullName:"胡英俊",
+                  username:"hyj2020",
+                  email:"hyj2020@jiaotong.edu.cn",
+                  institution:"社会大学",
+                  country:"Others",
+                  status:"可邀请"
+              },
+              {
+                  fullName:"胡图图",
+                  username:"123",
+                  email:"123@fudan.com",
+                  institution:"复旦大学",
+                  country:"China",
+                  status:"已邀请未回复"
+              },
+              {
+                  fullName:"胡英俊",
+                  username:"321",
+                  email:"321@shehui.edu.cn",
+                  institution:"社会大学",
+                  country:"Others",
+                  status:"已邀请未回复"
+              },
+              {
+                  fullName:"胡图图",
+                  username:"12345",
+                  email:"12345@fudan.edu.cn",
+                  institution:"复旦大学",
+                  country:"China",
+                  status:"已邀请"
+              },
+              {
+                  fullName:"胡英俊",
+                  username:"54321",
+                  email:"54321@jiaotong.edu.cn",
+                  institution:"脚痛大学",
+                  country:"US",
+                  status:"已邀请"
+              },
+         ],
          search:'',
+         //选中的用户，用于返回给后端
          users:[],
       }
     },
     methods:{
+      checkInvitable(row,index){
+        if(row.status=="可邀请") return true;
+        else return false;
+      },
       toggleSelection() {
           this.users=[];
           this.$refs.userTable.clearSelection();
@@ -201,13 +219,29 @@
            })
       }
     },
-    /*created(){
-      const _this=this;
+    created(){
+      /*const _this=this;
         //请求所有用户
         this.$axios.post('')
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-               _this.allUsers=resp.data.users;
+               //添加状态字段，以便前端显示状态
+               let list1=resp.data.availableUsers;
+               _this.availableUsers=list1.map(i=>{
+                    this.$set(i, 'status', '可邀请')
+                         return i
+               });
+               let list2=resp.data.invitingUsers;
+               _this.invitingUsers=list2.map(i=>{
+                    this.$set(i, 'status', '已邀请未回复')
+                         return i
+               });
+               let list3=resp.data.invitedUsers;
+               _this.invitedUsers=list3.map(i=>{
+                    this.$set(i, 'status', '已邀请')
+                         return i
+               });
+               _this.allUsers=availableUsers.concat(invitingUsers).concat(invitedUsers);
           }else{
             this.$message({
               showClose: true,
@@ -222,8 +256,8 @@
             message: resp.data.message,
             type:'error',
           });
-        })
-    }*/
+        })*/
+    }
   }
 </script>
 
@@ -232,7 +266,7 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 1500px;
+    width: 90%;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
