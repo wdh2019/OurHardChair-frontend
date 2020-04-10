@@ -34,34 +34,52 @@
                 <label class="label">发布时间</label>
                 <span>{{ scope.row.release_date }}</span>
               </el-form-item>
-              <div v-show="getStatus(scope.row.start_date,scope.row.deadline_date,scope.row.release_date)===1">
+              <div v-show="scope.row.status==1">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>审核未通过</span>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==3">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>审核中</span>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==1">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议尚未开始</span>
                 </el-form-item>
               </div>
-              <div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==2">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>会议进行中</span>
+                  <span>会议进行中,投稿尚未开始</span>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary">进入会议</el-button>
                 </el-form-item>
               </div>
-              <div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==3">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>会议已结束，投稿尚在继续</span>
+                  <span>投稿开始</span>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary">进入会议</el-button>
                 </el-form-item>
               </div>
-              <div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==4">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>投稿已经结束</span>
+                  <span>投稿已经结束，等待评审结果</span>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==5">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>评审结束，结果已发布</span>
                 </el-form-item>
               </div>
             </el-form>
@@ -86,10 +104,30 @@
         <el-table-column prop="deadline_date" label="截止时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="release_date" label="发布时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="status" label="会议状态" width="120px">
+        <el-table-column prop="status" label="审核状态" width="120px">
           <template slot-scope="scope">
-            <el-tag type="danger" v-show="scope.row.status==='未通过'">{{scope.row.status}}</el-tag>
-            <el-tag type="success" v-show="scope.row.status==='已通过'">{{scope.row.status}}</el-tag>
+            <el-tag type="danger" v-show="scope.row.status===1">未通过</el-tag>
+            <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
+            <el-tag type="warning" v-show="scope.row.status===3">审核中</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="isOpenSubmission" label="投稿状态">
+          <template slot-scope="scope">
+          <el-switch
+            ref="switch"
+            v-bind:disabled="scope.row.status!=2||scope.row.isOpenSubmission==2||
+            getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)!=2"
+            v-bind:value="scope.row.isOpenSubmission"
+            active-text="开启投稿"
+            inactive-text="未开启投稿"
+            :active-value='2'
+            :inactive-value='1'
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            @change="changeSubmissionStatus($event,scope.row)"
+            >
+            <label>{{scope.row.isOpenSubmission}}</label>
+          </el-switch>
           </template>
         </el-table-column>
       </el-table>
@@ -112,7 +150,37 @@
       return {
         pagesize: 10,
         curPage: 1,
-        conferences: [],
+        conferences: [{
+          shortname:'1',
+          fullname:'全称',
+          place:"我家",
+          start_date:'2020-4-10 0:0:0',
+          deadline_date:'2020-4-10 0:0:1',
+          release_date:'2020-4-10 0:0:2',
+          status:1,//1未通过，2已通过，3审核中
+          isOpenSubmission:1, //1未开放，2已开放投稿
+        },
+        {
+          shortname:'2',
+          fullname:'全称',
+          place:"我家",
+          start_date:'2020-4-10 0:0:0',
+          deadline_date:'2020-4-10 0:0:1',
+          release_date:'2020-5-10 0:0:2',
+          status:2,
+          isOpenSubmission:1,
+        },
+        {
+          shortname:'3',
+          fullname:'全称',
+          place:"我家",
+          start_date:'2020-4-10 0:0:0',
+          deadline_date:'2020-5-10 0:0:1',
+          release_date:'2020-5-10 0:0:2',
+          status:2,
+          isOpenSubmission:1,
+        }
+        ],
         search: '',
       }
     },
@@ -181,24 +249,55 @@
 
       },
       //"会议尚未开始" 1
-      //"会议进行中"  2
-      //"会议已经结束，投稿尚在进行中" 3
-      //”投稿结束“  4
-      getStatus(startDate, deadlineDate, submissonDate) {
+      //"会议进行中，尚未开始投稿"  2
+      //"开始投稿" 3
+      //"投稿截止" 4
+      //"评审结束" 5
+      getStatus(startDate, isOpenSubmission,deadlineDate, releaseDate) {
         let start = this.getTime(startDate);
         let deadline = this.getTime(deadlineDate);
-        let submission = this.getTime(submissonDate);
+        let release = this.getTime(releaseDate);
         if (!this.compareDate(start)) {
           return 1
-        } else if (this.compareDate(start) && !this.compareDate(deadline)) {
+        } else if (this.compareDate(start) && isOpenSubmission==1 && !this.compareDate(deadline)) {
           return 2
-        } else if (this.compareDate(deadline) && !this.compareDate(submisson)) {
+        } else if(this.compareDate(start) && isOpenSubmission!=1 && !this.compareDate(deadline)){
           return 3
-        } else
+        }else if (this.compareDate(deadline) && !this.compareDate(release)) {
           return 4
+        } else
+          return 5
+      },
+      //根据投稿按钮的开关，发送给后端投稿状态
+      changeSubmissionStatus(status,row){
+        row.isOpenSubmission=row.isOpenSubmission==1?2:1;
+        if(status==2){
+          /*this.$axios.post('',{
+              fullName: row.fullname,
+          }).then(resp => {
+            this.$message({
+              showClose: true,
+              message:resp.data.message,
+              type:'success'
+            });
+          }).catch(error =>{
+            this.$message({
+              showClose: true,
+              message:resp.data.message,
+              type:'danger'
+            });
+          })*/
+        }
+        else{
+          this.$message({
+            showClose: true,
+            message:"错误地将投稿关闭",
+            type:'danger'
+          });
+        }
       }
     },
-    created() {
+    /*created() {
       //一开始就向后端请求已申请的会议
       const _this = this;
       this.$axios.post('/ConferenceForChair')
@@ -221,7 +320,7 @@
             type: 'warning'
           });
         })
-    }
+    }*/
   }
 </script>
 
@@ -250,7 +349,7 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 100%;
+    width: 90%;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -298,4 +397,5 @@
   .green {
     color: green;
   }
+
 </style>
