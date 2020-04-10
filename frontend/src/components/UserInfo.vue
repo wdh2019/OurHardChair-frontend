@@ -57,8 +57,8 @@
         </el-form-item>
         </div>
         <el-form-item class="item">
-          <el-button type="primary"  @click="submitForm('ruleForm')" class="middle_button">保存变更</el-button>
-          <el-button type='info'  @click="resetForm('ruleForm')" class="middle_button">放弃变更</el-button>
+          <el-button type="primary"  @click="submitForm('ruleForm')" size="medium">保存变更</el-button>
+          <el-button type='info'  @click="resetForm('ruleForm')" size="medium">放弃变更</el-button>
         </el-form-item>
       </el-form>
       </div>
@@ -227,14 +227,13 @@
     height: 100%;
     width: 100%;
     background-size: cover;
-    position: fixed;
   }
 
   .userinfo_container {
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 750px;
+    width: 65%;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;

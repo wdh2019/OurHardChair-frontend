@@ -130,18 +130,21 @@ export const router = new Router({
       },
       children:[
         {
+          //邀请PCMember
           path: '/InvitePCMember',
-          name: '邀请PC成员',
+          name: '/InvitePCMember',
           component: InvitePCmember,
         },
         {
+          //审稿
           path: '/CheckPapers',
-          name: '审稿',
+          name: '/CheckPapers',
           component: CheckPapers,
         },
         {
-          path: '/SubmitPapers',
-          name: '投稿',
+          //投稿
+          path: '/SubmitPapers/:row',
+          name: '/SubmitPapers',
           component: SubmitPapers,
         }
       ]

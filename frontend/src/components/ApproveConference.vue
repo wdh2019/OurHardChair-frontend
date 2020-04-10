@@ -50,8 +50,6 @@
       // },
 
       handleApprove(index, row) {
-        // console.log(type);
-        console.log(index);
         const _this = this;
         this.$axios.post('/ApproveConference', {
           fullName: row.fullName,
@@ -59,7 +57,6 @@
           .then(resp => {
             console.log(resp);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              console.log("批准会议");
               _this.conferencesForApproval.splice(index, 1);
               this.$message({
                 showClose: true,
@@ -68,7 +65,6 @@
               });
 
             } else {
-              console.log("后端无法批准");
               this.$message({
                 showClose: true,
                 message: resp.data.message,
@@ -86,8 +82,6 @@
           })
       },
       handleDisapprove(index, row) {
-        // console.log(type);
-        console.log(index);
         const _this = this;
         this.$axios.post('/DisapproveConference', {
           fullName: row.fullName,
@@ -95,7 +89,6 @@
           .then(resp => {
             console.log(resp);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              console.log("拒绝批准");
               _this.conferencesForApproval.splice(index, 1);
               this.$message({
                 showClose: true,
@@ -104,7 +97,6 @@
               });
 
             } else {
-              console.log("出现问题");
               this.$message({
                 showClose: true,
                 message: resp.data.message,

@@ -5,24 +5,73 @@
         <h3 class="title">我主持的会议</h3>
         <p class="description">在此查看已申请的会议</p>
       </div>
-      <!--会议单元-->
-      <!--<div class="conference_cell" v-for="conference in conferences" v-bind:key="conference.index">-->
-      <!--<div class="title_section" v-bind:class="changeColor(conference.status)">-->
-      <!--<h3>{{conference.shortname}}</h3>-->
-      <!--</div>-->
-      <!--<div class="body_section">-->
-      <!--<p><span>会议简称：</span>{{conference.fullname}}</p>-->
-      <!--<p><span>举办地点：</span>{{conference.place}}</p>-->
-      <!--<p><span>举办日期：</span>{{conference.start_date}}</p>-->
-      <!--<p><span>截止日期：</span>{{conference.deadline_date}}</p>-->
-      <!--<p><span>发布日期：</span>{{conference.release_date}}</p>-->
-      <!--<el-tag v-bind:type="changeColor1(conference.status)">{{conference.status}}</el-tag>-->
-      <!--</div>-->
-      <!--</div>-->
       <el-table
-        :data="conferences.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))">
-        <el-table-column prop="shortname" label="会议简称" width="150px"></el-table-column>
-        <el-table-column prop="fullname" label="会议全称">
+        :data="conferences.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
+        <el-table-column prop="action" label="操作" width="50px" type="expand">
+          <template slot-scope="scope">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item class="el-form-item">
+                <label class="label">会议简称</label>
+                <span>{{ scope.row.shortname }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">开始时间</label>
+                <span>{{ scope.row.start_date }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">会议全称</label>
+                <span>{{ scope.row.fullname }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">结束时间</label>
+                <span>{{scope.row.deadline_date }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">举办地点</label>
+                <span>{{ scope.row.place }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">发布时间</label>
+                <span>{{ scope.row.release_date }}</span>
+              </el-form-item>
+              <div v-show="getStatus(scope.row.start_date,scope.row.deadline_date,scope.row.release_date)===1">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>会议尚未开始</span>
+                </el-form-item>
+              </div>
+              <div>
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>会议进行中</span>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary">进入会议</el-button>
+                </el-form-item>
+              </div>
+              <div>
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>会议已结束，投稿尚在继续</span>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary">进入会议</el-button>
+                </el-form-item>
+              </div>
+              <div>
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>投稿已经结束</span>
+                </el-form-item>
+              </div>
+            </el-form>
+            <div>
+
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="shortname" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="fullname" label="会议全称" width="300px" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -32,31 +81,26 @@
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="place" label="举办地点"></el-table-column>
-        <el-table-column prop="start_date" label="开始时间" width="180px" sortable></el-table-column>
-        <el-table-column prop="deadline_date" label="截止时间" width="180px" sortable></el-table-column>
-        <el-table-column prop="release_date" label="发布时间" width="180px" sortable></el-table-column>
-        <el-table-column prop="status" label="会议状态" width="100px"></el-table-column>
-        <el-table-column prop="action" label="操作" width="250px">
+        <el-table-column prop="place" label="举办地点" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="start_date" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="deadline_date" label="截止时间" width="200px"
+                         :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="release_date" label="发布时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="status" label="会议状态" width="120px">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              v-on:click="handleAction(scope.$index, scope.row, 'chair')">管理
-            </el-button>
-            <el-button
-              size="mini"
-              type="success"
-              v-on:click="handleAction(scope.$index, scope.row, 'PC member')">审稿
-            </el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              v-on:click="handleAction(scope.$index, scope.row, 'author')">投稿
-            </el-button>
+            <el-tag type="danger" v-show="scope.row.status==='未通过'">{{scope.row.status}}</el-tag>
+            <el-tag type="success" v-show="scope.row.status==='已通过'">{{scope.row.status}}</el-tag>
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        :current-page.sync="curPage"
+        :page-size="pagesize"
+        :pager-count="7"
+        :total="conferences.length"
+        background
+        layout="total, prev, pager, next, jumper">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -66,23 +110,92 @@
     name: "ConferenceForChair",
     data() {
       return {
+        pagesize: 10,
+        curPage: 1,
         conferences: [],
+        search: '',
       }
     },
     methods: {
-      //为标题背景换色
-      changeColor: function (status) {
+      getTime(time) {
+        //2015-05-06 00:00:00
+        let year = parseInt(time.slice(0, 4));
+        let month = parseInt(time.slice(5, 7));
+        let day = parseInt(time.slice(8, 10));
+        let hour = parseInt(time.slice(11, 13));
+        let minute = parseInt(time.slice(14, 16));
+        let second = parseInt(time.slice(17, 19));
         return {
-          success: status == "已通过",
-          primary: status == "审核中",
-          danger: status == "未通过",
+          year: year,
+          month: month,
+          day: day,
+          hour: hour,
+          minute: minute,
+          second: second
         }
       },
-      //为状态tag换色
-      changeColor1: function (status) {
-        if (status == "已通过") return 'success';
-        if (status == "审核中") return 'primary';
-        if (status == "未通过") return 'danger';
+      //如果当前时间在参数时间之后返回true
+      compareDate(date) {
+        let now = new Date();
+        let now_year = now.getFullYear();
+        let now_month = now.getMonth() + 1;
+        let now_day = now.getDate();
+        let now_hour = now.getHours();
+        let now_minute = now.getMinutes();
+        let now_second = now.getSeconds();
+        if (now_year < date.year)
+          return false;
+        else if (now_year > date.year)
+          return true;
+        else {
+          if (now_month < date.month)
+            return false;
+          else if (now_month > date.month)
+            return true;
+          else {
+            if (now_day < date.day)
+              return false;
+            else if (now_day > date.day)
+              return true;
+            else {
+              if (now_hour < date.hour)
+                return false;
+              else if (now_hour > date.hour)
+                return true;
+              else {
+                if (now_minute < date.minute)
+                  return false;
+                else if (now_minute > date.minute)
+                  return true;
+                else {
+                  if (now_second < date.second)
+                    return false;
+                  else
+                    return true;
+                }
+              }
+            }
+          }
+
+        }
+
+      },
+      //"会议尚未开始" 1
+      //"会议进行中"  2
+      //"会议已经结束，投稿尚在进行中" 3
+      //”投稿结束“  4
+      getStatus(startDate, deadlineDate, submissonDate) {
+        let start = this.getTime(startDate);
+        let deadline = this.getTime(deadlineDate);
+        let submission = this.getTime(submissonDate);
+        if (!this.compareDate(start)) {
+          return 1
+        } else if (this.compareDate(start) && !this.compareDate(deadline)) {
+          return 2
+        } else if (this.compareDate(deadline) && !this.compareDate(submisson)) {
+          return 3
+        } else
+          return 4
       }
     },
     created() {
@@ -104,7 +217,7 @@
           console.log(error);
           this.$message({
             showClose: true,
-            message: '请求我主持的会议失败',
+            message: '请求相关会议失败',
             type: 'warning'
           });
         })
@@ -113,26 +226,48 @@
 </script>
 
 <style scoped>
+  .demo-table-expand {
+    font-size: 0;
+  }
+
+  .demo-table-expand .label {
+    width: 90px;
+    color: #99a9bf;
+    font-weight: bold;
+  }
+
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+
+  .base_conference {
+    width: 100%;
+  }
+
   .conference_container {
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 1600px;
+    width: 100%;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
     clear: left;
   }
+
   .title {
     margin: 20px auto;
     padding-left: 20px;
     text-align: left;
     color: #494e8f;
-    font-size:24px;
+    font-size: 24px;
     font-weight: normal;
   }
-  p.description{
+
+  p.description {
     text-align: left;
     padding-top: 10px;
     padding-left: 20px;
@@ -140,16 +275,27 @@
     line-height: 1.4285;
     font-size: 14px;
   }
-  .conference_container .el-table{
+
+  .conference_container .el-table {
     text-align: center;
     margin: 30px auto;
   }
-  .label{
-    float:left;
+
+  .label {
+    float: left;
   }
-  .search_input{
-    float:right;
-    width:150px;
-    margin-right:30px;
+
+  .search_input {
+    float: right;
+    width: 150px;
+    margin-right: 30px;
+  }
+
+  .red {
+    color: red;
+  }
+
+  .green {
+    color: green;
   }
 </style>
