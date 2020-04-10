@@ -76,11 +76,9 @@
       handleExceed(files, fileList) {
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
-      //阻止upload组件的固有submit方法，并
+      //上传前，先把文件COPY一份到ruleForm.file里
       beforeUpload(file){
         this.ruleForm.file=file;
-        console.log(this.ruleForm.file);
-        this.$refs.upload.abort(file);
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${ file.name }？`);
@@ -90,13 +88,14 @@
           if (valid) {
             //虚晃upload一下，submit以后触发beforeUpload
             this.$refs.upload.submit();
-            console.log("after");
             //正常的post
             this.$axios.post('/upload',{
-              //文章标题
+              //会议id需要传进来！！！！！
+              conferenceID:
+              AuthorID:this.$store.state.id,
+              filename:this.ruleForm.file.name,
               title:this.ruleForm.title,
               articleAbstract:this.ruleForm.articleAbstract,
-              file:this.ruleForm.file,
             }).then(resp => {
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")){
                   this.$message({
