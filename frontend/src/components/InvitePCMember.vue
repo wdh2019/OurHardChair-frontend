@@ -169,7 +169,7 @@
       submitUsers(){
           this.$axios.post('/invitePCMember',{
             //会议全称
-            fullName:this.$router.query.conference,
+            fullName:this.$route.query.conference,
             //发送者id
             sender:this.$store.state.id,
             //邀请接受者数组

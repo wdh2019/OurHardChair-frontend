@@ -2,8 +2,8 @@
   <div id="base">
     <div class="container">
       <div>
-        <h3 class="title">{{this.$route.params.row.fullName}}欢迎您的投稿</h3>
-        <p class="description">请你填写下面信息</p>
+        <h3 class="title"><!--{{this.$route.params.row.fullName}}-->欢迎您的投稿</h3>
+        <p class="description">请您填写以下信息</p>
       </div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item prop="title" class="item" label="文章标题">
@@ -12,20 +12,28 @@
         <el-form-item prop="articleAbstract" class="item" label="文章摘要">
           <el-input v-model="ruleForm.articleAbstract" placeholder="文章摘要" type="textarea" :rows="8"></el-input>
         </el-form-item>
+        <el-form-item label="文件上传" style="text-align: left;">
         <el-upload
+          ref="upload"
+          style="float:left"
           class="upload-demo"
-          action=""
+          action="/upload"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
+          :before-upload="beforeUpload"
           :before-remove="beforeRemove"
-          multiple
-          :limit="3"
+          :auto-upload="false"
+          accept=".pdf"
+          :limit="1"
           :on-exceed="handleExceed"
         >
-          <el-button size="small" type="primary">点击上传</el-button>
+          <el-button  size="small" type="primary">选择文件</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件</div>
         </el-upload>
+          <el-button size="small" type="info" @click="clearFiles">清空文件列表</el-button>
+        </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">确认</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -42,20 +50,14 @@
           title: '',
           filename: '',
           articleAbstract: '',
-          fileList: [{
-            name: 'food.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }, {
-            name: 'food2.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }]
+          file: '',
         },
         rules: {
           title: [
             {required: true, message: '请填写文章标题', trigger: 'blur'},
             {min: 1, max: 50, message: '标题不得超过50个字符', trigger: 'blur'}
           ],
-          file: [
+          filename: [
             {required: true, message: '请填写文件名', trigger: 'change'}
           ],
           articleAbstract: [
@@ -72,7 +74,13 @@
         console.log(file.name);
       },
       handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      //阻止upload组件的固有submit方法，并
+      beforeUpload(file){
+        this.ruleForm.file=file;
+        console.log(this.ruleForm.file);
+        this.$refs.upload.abort(file);
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${ file.name }？`);
@@ -80,15 +88,54 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            //虚晃upload一下，submit以后触发beforeUpload
+            this.$refs.upload.submit();
+            console.log("after");
+            //正常的post
+            this.$axios.post('/upload',{
+              //文章标题
+              title:this.ruleForm.title,
+              articleAbstract:this.ruleForm.articleAbstract,
+              file:this.ruleForm.file,
+            }).then(resp => {
+                if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+                  this.$message({
+                    showClose:true,
+                    message: "投稿成功",
+                    type:"success",
+                  });
+                  this.$router.push('/AllConferences');
+                }else {
+                  this.$message({
+                    showClose: true,
+                    message: resp.data.message,
+                    type:'warning'
+                  });
+                }
+            }).catch(error => {
+                console.log(error);
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,
+                  type:'danger'
+                });
+              })
           } else {
-            console.log('error submit!!');
+            this.$message({
+              showClose: true,
+              message: "请按要求填写投稿信息",
+              type:'warning'
+            });
             return false;
           }
         });
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+        this.$refs.upload.clearFiles();
+      },
+      clearFiles(){
+        this.$refs.upload.clearFiles();
       }
     }
   }

@@ -143,7 +143,8 @@ export const router = new Router({
         },
         {
           //投稿
-          path: '/SubmitPapers/:row',
+          path: '/SubmitPapers',
+          //path: '/SubmitPapers/:row',
           name: '/SubmitPapers',
           component: SubmitPapers,
         }
