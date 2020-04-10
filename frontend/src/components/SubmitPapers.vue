@@ -91,7 +91,7 @@
             //正常的post
             this.$axios.post('/upload',{
               //会议id需要传进来！！！！！
-              conferenceID:
+              conferenceID:'',
               AuthorID:this.$store.state.id,
               filename:this.ruleForm.file.name,
               title:this.ruleForm.title,
