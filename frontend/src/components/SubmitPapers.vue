@@ -44,7 +44,7 @@
           ref="upload"
           style="float:left"
           class="upload-demo"
-          action="/upload"
+          action=""
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-upload="beforeUpload"
@@ -108,6 +108,7 @@
       //上传前，先把文件COPY一份到ruleForm.file里
       beforeUpload(file){
         this.ruleForm.file=file;
+        return false;
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${ file.name }？`);
@@ -117,8 +118,33 @@
           if (valid) {
             //虚晃upload一下，submit以后触发beforeUpload
             this.$refs.upload.submit();
+            var formData=new FormData();
+            formData.append('file',this.ruleForm.file);
+            console.log(formData);
+            this.instance.post('/upload',formData).then(resp =>{
+                if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+                  this.$message({
+                    showClose:true,
+                    message: "上传成功",
+                    type:"success",
+                  });
+                }else{
+                  this.$message({
+                    showClose:true,
+                    message: resp.data.message,
+                    type:"warning",
+                  });
+                }
+            }).catch(error=>{
+                console.log(error);
+                this.$message({
+                  showClose: true,
+                  message: "上传文件失败",
+                  type:'danger'
+                });
+              })
             //正常的post
-            this.$axios.post('/upload',{
+            this.$axios.post('/contribute',{
               //会议id需要传进来！！！！！
               conferenceID:this.$route.query.conference_id,
               AuthorID:this.$store.state.id,
@@ -144,7 +170,7 @@
                 console.log(error);
                 this.$message({
                   showClose: true,
-                  message: resp.data.message,
+                  message: "上传投稿信息失败",
                   type:'danger'
                 });
               })

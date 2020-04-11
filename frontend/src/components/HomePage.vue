@@ -1,13 +1,13 @@
 <template>
     <transition name="el-zoom-in-center">
-      <el-carousel indicator-position="inside" height="754px">
+      <el-carousel indicator-position="inside" :height="height">
         <el-carousel-item v-for="(item,index) in imgUrls" :key="index">
           <div class="demo1">
             <p class="logo">Gysw.co</p>
             <div class="welcome">
               <p class="welcome1">欢迎使用</p>
               <p class="welcome2">Gysw 会议系统</p></div>
-            <img ref='img' :src="item.imageUrl">
+            <img class="img" ref='img' :src="item.imageUrl">
             <router-link to="/login" class="button login">
               加入我们
             </router-link>
@@ -23,11 +23,16 @@
     data() {
       return {
         imgUrls: [],
+        height:'',
       }
 
     },
     mounted() {
+      this.height=window.innerHeight+"px";
       this.getImages();
+      window.addEventListener("resize",()=>{
+        this.height= window.innerHeight+"px";
+      });
     },
     methods: {
       getImages() {
@@ -52,7 +57,7 @@
           }, 200);
         })
       },
-    }
+    },
   }
 </script>
 
@@ -78,7 +83,7 @@
   .welcome {
     position: absolute;
     z-index: 10;
-    left: 39.5%;
+    left: 40.8%;
     top: 12%;
     font-size: 50px;
     color: white;
@@ -104,8 +109,8 @@
   .login {
     position: absolute;
     z-index: 10;
-    left: 45%;
-    top: 40%;
+    left: 45.5%;
+    top: 50%;
     font-size: 1.3em;
     font-weight: 600;
     background-color: transparent;
@@ -115,5 +120,12 @@
 
   .login:hover {
     opacity: 0.6;
+  }
+
+  .img{
+    width:100%;
+    height:100%;
+    max-width: 100%;
+    max-height: 100%;
   }
 </style>
