@@ -18,7 +18,7 @@
       </el-header>
       <el-main v-show="(show===1)">
         <el-table
-          :data="allInfo"
+          :data="notReadInfo"
           style="width: 100%">
           <el-table-column
             label="发送者"
@@ -110,24 +110,6 @@
         <el-table
           :data="hasReadInfo"
           style="width: 100%">
-          <el-table-column type="expand">
-            <template slot-scope="scope">
-              <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="具体内容">
-                  <span>{{ scope.row.message}}</span>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="发送时间"
-            width="180"
-            prop="sendTime">
-            <template slot-scope="scope">
-              <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.sendTime}}</span>
-            </template>
-          </el-table-column>
           <el-table-column
             label="发送者"
             width="180"
@@ -144,6 +126,7 @@
               <el-tag size="medium" effect="plain" type="info">{{ scope.row.relatedConferenceName }}</el-tag>
             </template>
           </el-table-column>
+
           <el-table-column
             label="消息类型"
             width="180"
@@ -177,6 +160,14 @@
               </el-tag>
             </template>
           </el-table-column>
+          <el-table-column
+            label="具体内容"
+            width="400px"
+            prop="message">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.message}}</span>
+            </template>
+          </el-table-column>
         </el-table>
       </el-main>
     </el-container>
@@ -199,9 +190,9 @@
     methods: {
       //将信息标为已读,向/markRead接口发送消息
       markRead(index, row) {
-        const _this=this;
+        const _this = this;
         this.$axios.post("/markRead", {
-          senderName:row.senderName,
+          senderName: row.senderName,
           receiverName: row.receiverName,
           relatedConferenceName: row.relatedConferenceName,
           messageCategory: row.messageCategory,
@@ -213,7 +204,7 @@
               _this.hasReadInfo.push(Info);
               this.$message({
                 showClose: true,
-                message: resp.data.message,
+                message: "标为已读",
                 type: 'success'
               });
 
@@ -234,14 +225,12 @@
             })
           })
       },
-      //接受PCNumber邀请,向/approvePCNumberInvitation接口发送消息
+      //接受PCNumber邀请,向/approvePCMemberInvitation接口发送消息
       approveInvitation(index, row) {
-        // console.log(index);
-        // console.log(row);
         const _this = this;
-        this.$axios.post("/approvePCNumberInvitation", {
-          senderName: row.senderName,
-          receiverName: this.$store.state.username,
+        this.$axios.post("/approvePCMemberInvitation", {
+          senderName: row.reciverName,
+          receiverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
         })
           .then(resp => {
@@ -272,9 +261,9 @@
       },
       disapproveInvitation(index, row) {
         console.log(row);
-        this.$axios.post("/disapprovePCNumberInvitation", {
-          senderName: row.senderName,
-          reciverName: row.receiverName,
+        this.$axios.post("/disapprovePCMemberInvitation", {
+          senderName: row.reciverName,
+          reciverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
         }).then(resp => {
           console.log(resp);
@@ -330,6 +319,7 @@
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allInfo = resp.data.messages;
+            console.log(_this.allInfo);
             for (let i = 0; i < _this.allInfo.length; i++) {
               if (_this.allInfo[i].isRead === 1) {
                 this.notReadInfo.push(_this.allInfo[i]);
