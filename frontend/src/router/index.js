@@ -24,38 +24,38 @@ Vue.use(Router)
 export const router = new Router({
   //通过路由转到的页面
   routes: [
-	  {
-	    path: '/UserPage',
-	    name: '操作中心',
-	    component: UserPage,
-      redirect:'/UserInfo',
-      meta:{
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+    {
+      path: '/UserPage',
+      name: '操作中心',
+      component: UserPage,
+      redirect: '/UserInfo',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[
-      {
-        path: '/ApplyConference',
-        name: '会议申请',
-        component: ApplyConference,
-      },
-      // {
-      //   path: '/AllConferences',
-      //   name: '我要投稿',
-      //   component: AllConferences,
-      // },
+      children: [
+        {
+          path: '/ApplyConference',
+          name: '会议申请',
+          component: ApplyConference,
+        },
+        // {
+        //   path: '/AllConferences',
+        //   name: '我要投稿',
+        //   component: AllConferences,
+        // },
       ]
-	  },
+    },
 
     {
       path: '/UserPage',
       name: '会议总览',
       component: UserPage,
-      meta:{
-       // requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[{
-        path:"/AllConferences",
-        name:'所有会议',
+      children: [{
+        path: "/AllConferences",
+        name: '所有会议',
         component: AllConferences,
       }]
     },
@@ -64,47 +64,48 @@ export const router = new Router({
       path: '/UserPage',
       name: '我的会议',
       component: UserPage,
-      meta:{
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[
-      {
-        path: '/ConferenceForChair',
-        name: '我主持的会议',
-        component: ConferenceForChair,
-      },
-      { path: '/ConferenceForPCmember',
-        name: '作为PCMember的会议',
-        component: ConferenceForPCmember,
-      },
-      {
-        path:'/ConferenceForAuthor',
-        name: '我投稿的会议',
-        component: ConferenceForAuthor,
-      },
+      children: [
+        {
+          path: '/ConferenceForChair',
+          name: '我主持的会议',
+          component: ConferenceForChair,
+        },
+        {
+          path: '/ConferenceForPCmember',
+          name: '作为PCMember的会议',
+          component: ConferenceForPCmember,
+        },
+        {
+          path: '/ConferenceForAuthor',
+          name: '我投稿的会议',
+          component: ConferenceForAuthor,
+        },
       ]
     },
     {
       path: '/UserPage',
       name: '操作中心之管理员特权',
       component: UserPage,
-      meta:{
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[{
-          path: '/ApproveConference',
-          name: '审批会议',
-          component: ApproveConference,
+      children: [{
+        path: '/ApproveConference',
+        name: '审批会议',
+        component: ApproveConference,
       }],
     },
     {
       path: '/UserPage',
       name: '设置',
       component: UserPage,
-      meta:{
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[{
+      children: [{
         path: '/UserInfo',
         name: '用户信息',
         component: UserInfo,
@@ -114,23 +115,23 @@ export const router = new Router({
       path: '/UserPage',
       name: '最新消息',
       component: UserPage,
-      meta:{
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[{
+      children: [{
         path: '/NewsCenter',
         name: '通知中心',
         component: NewsCenter,
       }]
     },
     {
-      path:'/UserPage',
+      path: '/UserPage',
       name: '其他功能',
       component: UserPage,
-      meta:{
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
-      children:[
+      children: [
         {
           //邀请PCMember
           path: '/InvitePCMember',
@@ -178,7 +179,7 @@ export const router = new Router({
 })
 
 // 前端登录拦截
-router.beforeEach(function (to, from ,next) {
+router.beforeEach(function (to, from, next) {
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (store.state.token) {
       next()
@@ -191,13 +192,40 @@ router.beforeEach(function (to, from ,next) {
   } else {
     next()
   }
-  if(to.fullPath == "/" ||to.fullPath == "/login" || to.fullPath=='/register'){
-    if(localStorage.getItem('token')){
+  if (to.fullPath === "/" || to.fullPath === "/login" || to.fullPath === '/register') {
+    if (localStorage.getItem('token')) {
       next({
-        path:from.fullPath
+        path: from.fullPath
       });
-    }else {
+    } else {
       next();
     }
   }
-})
+  if (localStorage.username !== 'admin') {
+    if (to.fullPath === "/ApproveConference") {
+      next({
+        path: from.fullPath
+      })
+    } else {
+      next();
+    }
+  }
+  if (localStorage.username === "admin") {
+    if (to.fullPath === "/ApproveConference" || to.fullPath === "/UserInfo" || to.fullPath==="/UserPage") {
+      next()
+    } else {
+      next({
+        path: from.fullPath
+      });
+    }
+  }
+  // if(to.fullPath==="/ApproveConference"){
+  //   if(localStorage.username!=='admin'){
+  //     next({
+  //       path:from.fullPath
+  //     })
+  //   }else{
+  //     next();
+  //   }
+  // }
+});

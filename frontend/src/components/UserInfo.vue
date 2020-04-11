@@ -52,7 +52,7 @@
         </div>
         <div class="inline_block display_company_field">
         <el-form-item prop="company" class="item" label="所属单位">
-          <el-input v-model="ruleForm.company" :placeholder="$store.state.company" type="text" auto-complete="off">
+          <el-input v-model="ruleForm.company" :placeholder="$store.state.institution" type="text" auto-complete="off">
           </el-input>
         </el-form-item>
         </div>

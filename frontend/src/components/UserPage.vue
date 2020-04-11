@@ -12,7 +12,7 @@
         <el-menu-item v-for="(child) in $router.options.routes[0].children" :index="child.path" :key="child.path"
                       v-show="$store.state.username!=='admin'">{{child.name}}
         </el-menu-item>
-        <el-menu-item index="ApproveConference" v-show="$store.state.username==='admin'">会议审批</el-menu-item>
+        <el-menu-item index="/ApproveConference" v-show="$store.state.username==='admin'">会议审批</el-menu-item>
       </el-submenu>
 
       <el-submenu v-for="(item,index) in $router.options.routes" :key="index+''" :index="index+''"
