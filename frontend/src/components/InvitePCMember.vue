@@ -35,7 +35,7 @@
       </el-collapse>
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="搜索相关用户">
-          <el-input v-model="formInline.search_key" placeholder="用户名"></el-input>
+          <el-input v-model="formInline.search_key" placeholder="用户姓名"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -97,58 +97,10 @@
         curPage: 1,
         formInline: {
           search_key: '',
+          full_name: this.$route.query.full_name,
         },
         //前端展示所有用户，由三个用户数组合并
-        allUsers: [
-          {
-            fullName: "胡图图",
-            username: "htt2020",
-            email: "htt2020@jiaotong.edu.cn",
-            institution: "脚痛大学",
-            country: "China",
-            status: 1// 1 可邀请 2 邀请未回复 3 已邀请
-          },
-          {
-            fullName: "胡英俊",
-            username: "hyj2020",
-            email: "hyj2020@jiaotong.edu.cn",
-            institution: "社会大学",
-            country: "Others",
-            status: 1
-          },
-          {
-            fullName: "胡图图",
-            username: "123",
-            email: "123@fudan.com",
-            institution: "复旦大学",
-            country: "China",
-            status: 2
-          },
-          {
-            fullName: "胡英俊",
-            username: "321",
-            email: "321@shehui.edu.cn",
-            institution: "社会大学",
-            country: "Others",
-            status: 2
-          },
-          {
-            fullName: "胡图图",
-            username: "12345",
-            email: "12345@fudan.edu.cn",
-            institution: "复旦大学",
-            country: "China",
-            status: 3
-          },
-          {
-            fullName: "胡英俊",
-            username: "54321",
-            email: "54321@jiaotong.edu.cn",
-            institution: "脚痛大学",
-            country: "US",
-            status: 3
-          },
-        ],
+        allUsers: [],
         //allUsers: [],
         search: '',
         //选中的用户，用于返回给后端
@@ -160,9 +112,10 @@
       onSubmit() {
         const _this = this;
         console.log(this.formInline.search_key);
+        console.log(this.formInline.full_name);
         this.$axios.post('/search', {
           search_key: this.formInline.search_key,
-          full_name: this.$route.query.full_name
+          full_name: this.$route.query.full_name,
         }).then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allUsers = resp.data.users;
@@ -206,11 +159,12 @@
         console.log(this.allUsers);
       },
       submitUsers() {
+        console.log(this.$route.query.full_name);
+        console.log(this.$store.state.id);
+        console.log(this.users);
         this.$axios.post('/invitePCMember', {
           //会议全称
-          fullName: this.$route.query.conference,
-          //发送者id
-          sender: this.$store.state.id,
+          fullName: this.$route.query.full_name,
           //邀请接受者数组
           users: this.users,
         })
@@ -274,45 +228,7 @@
           })
       }
     },
-    created() {
-      /*const _this=this;
-        //请求所有用户
-        this.$axios.post('')
-        .then(resp => {
-          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-               //添加状态字段，以便前端显示状态
-               let list1=resp.data.availableUsers;
-               _this.availableUsers=list1.map(i=>{
-                    this.$set(i, 'status', '可邀请')
-                         return i
-               });
-               let list2=resp.data.invitingUsers;
-               _this.invitingUsers=list2.map(i=>{
-                    this.$set(i, 'status', '已邀请未回复')
-                         return i
-               });
-               let list3=resp.data.invitedUsers;
-               _this.invitedUsers=list3.map(i=>{
-                    this.$set(i, 'status', '已邀请')
-                         return i
-               });
-               _this.allUsers=availableUsers.concat(invitingUsers).concat(invitedUsers);
-          }else{
-            this.$message({
-              showClose: true,
-              message: resp.data.message,
-              type:'warning'
-            });
-          }
-        })
-        .catch(error => {
-          this.$message({
-            showClose: true,
-            message: resp.data.message,
-            type:'error',
-          });
-        })*/
-    }
+
   }
 </script>
 
