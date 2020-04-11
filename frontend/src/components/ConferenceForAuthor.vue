@@ -36,27 +36,27 @@
                 <span>{{ scope.row.release_date }}</span>
               </el-form-item>
               <div v-show="scope.row.status===1">
-                <el-form-item>
+                <el-form-item class="el-form-item">
                   <label class="label">会议状态</label>
                   <span>审核未通过</span>
                 </el-form-item>
               </div>
               <div v-show="scope.row.status===3">
-                <el-form-item>
+                <el-form-item class="el-form-item">
                   <label class="label">会议状态</label>
                   <span>审核中</span>
                 </el-form-item>
               </div>
               <div
                 v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.is_open_submission,scope.row.deadline_date,scope.row.release_date)===1">
-                <el-form-item>
+                <el-form-item class="el-form-item">
                   <label class="label">会议状态</label>
                   <span>会议尚未开始</span>
                 </el-form-item>
               </div>
               <div
                 v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
-                <el-form-item>
+                <el-form-item class="el-form-item">
                   <label class="label">会议状态</label>
                   <span>会议进行中,投稿尚未开始</span>
                 </el-form-item>
@@ -66,9 +66,9 @@
               </div>
               <div
                 v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
-                <el-form-item>
+                <el-form-item class="el-form-item">
                   <label class="label">会议状态</label>
-                  <span>投稿开始</span>
+                  <span>会议进行中,投稿进行中</span>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
@@ -80,6 +80,9 @@
                   <label class="label">会议状态</label>
                   <span>投稿已经结束，等待评审结果</span>
                 </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                </el-form-item>
               </div>
               <div
                 v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===5">
@@ -87,13 +90,16 @@
                   <label class="label">会议状态</label>
                   <span>评审结束，结果已发布</span>
                 </el-form-item>
-              </div>
-              <!--测试按键-->
-              <div>
                 <el-form-item>
-                  <el-button type="primary" @click="TestEnterMeeting(scope.row)">进入会议</el-button>
+                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
                 </el-form-item>
               </div>
+              <!--测试按键-->
+              <!--<div>-->
+              <!--<el-form-item>-->
+              <!--<el-button type="primary" @click="TestEnterMeeting(scope.row)">进入会议</el-button>-->
+              <!--</el-form-item>-->
+              <!--</div>-->
             </el-form>
             <div>
 
@@ -143,40 +149,7 @@
       return {
         pagesize: 10,
         curPage: 1,
-        conferences: [{
-          short_name: '1',
-          full_name: '全称',
-          place: "我家",
-          chair_name:"Test",
-          start_date: '2020-4-10 0:0:0',
-          deadline_date: '2020-4-10 0:0:1',
-          release_date: '2020-4-10 0:0:2',
-          status: 1,//1未通过，2已通过，3审核中
-          is_open_submission: 1, //1未开放，2已开放投稿
-        },
-          {
-            short_name: '2',
-            full_name: '全称',
-            place: "我家",
-            chair_name:"Test",
-            start_date: '2020-4-10 0:0:0',
-            deadline_date: '2020-4-10 0:0:1',
-            release_date: '2020-5-10 0:0:2',
-            status: 2,
-            is_open_submission: 1,
-          },
-          {
-            short_name: '3',
-            full_name: '全称',
-            place: "我家",
-            chair_name:"Test",
-            start_date: '2020-4-10 0:0:0',
-            deadline_date: '2020-5-10 0:0:1',
-            release_date: '2020-5-10 0:0:2',
-            status: 2,
-            is_open_submission: 1,
-          }
-        ],
+        conferences: [],
         search: '',
       }
     },
@@ -274,9 +247,9 @@
         let release = this.getTime(releaseDate);
         if (!this.compareDate(start)) {
           return 1
-        } else if (this.compareDate(start) && is_open_submission == 1 && !this.compareDate(deadline)) {
+        } else if (this.compareDate(start) && is_open_submission === 1 && !this.compareDate(deadline)) {
           return 2
-        } else if (this.compareDate(start) && is_open_submission != 1 && !this.compareDate(deadline)) {
+        } else if (this.compareDate(start) && is_open_submission !== 1 && !this.compareDate(deadline)) {
           return 3
         } else if (this.compareDate(deadline) && !this.compareDate(release)) {
           return 4

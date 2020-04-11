@@ -6,14 +6,94 @@
         <p class="description">在如下列表中，你可以查询到当前所有审核通过会议</p>
       </div>
       <el-table
-        :data="allConferences.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
+        :data="allConferences.filter(data => !search || data.full_name.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
         <el-table-column prop="action" label="操作" width="50px" type="expand">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="danger"
-              v-on:click="enterSubmitPapers(scope.row)">投稿
-            </el-button>
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item class="el-form-item">
+                <label class="label">会议简称</label>
+                <span>{{ scope.row.short_name }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">开始时间</label>
+                <span>{{ scope.row.start_date }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">会议全称</label>
+                <span>{{ scope.row.full_name }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">结束时间</label>
+                <span>{{scope.row.deadline_date }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">举办地点</label>
+                <span>{{ scope.row.place }}</span>
+              </el-form-item>
+
+              <el-form-item class="el-form-item">
+                <label class="label">发布时间</label>
+                <span>{{ scope.row.release_date }}</span>
+              </el-form-item>
+              <div v-show="scope.row.status===1">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>审核未通过</span>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status===3">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>审核中</span>
+                </el-form-item>
+              </div>
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.is_open_submission,scope.row.deadline_date,scope.row.release_date)===1">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>会议尚未开始</span>
+                </el-form-item>
+              </div>
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>会议进行中,投稿尚未开始</span>
+                </el-form-item>
+              </div>
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>投稿开始</span>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                </el-form-item>
+              </div>
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>投稿已经结束，等待评审结果</span>
+                </el-form-item>
+              </div>
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===5">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>评审结束，结果已发布</span>
+                </el-form-item>
+              </div>
+              <el-form-item class="el-form-item">
+                <label class="label">操作</label>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  v-on:click="enterSubmitPapers(scope.row)">投稿
+                </el-button>
+              </el-form-item>
+            </el-form>
           </template>
         </el-table-column>
         <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
@@ -33,7 +113,7 @@
                          :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="release_date" label="发布时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="is_open_submission" label="会议状态" width="120px">
+        <el-table-column prop="is_open_submission" label="投稿权限" width="120px">
           <template slot-scope="scope" width="50px">
             <el-tag type="danger" v-show="scope.row.is_open_submission===1">未开放投稿</el-tag>
             <el-tag type="success" v-show="scope.row.is_open_submission===2">已开放投稿</el-tag>
@@ -64,6 +144,89 @@
       }
     },
     methods: {
+      getTime(time) {
+        //2015-05-06 00:00:00
+        let year = parseInt(time.slice(0, 4));
+        let month = parseInt(time.slice(5, 7));
+        let day = parseInt(time.slice(8, 10));
+        let hour = parseInt(time.slice(11, 13));
+        let minute = parseInt(time.slice(14, 16));
+        let second = parseInt(time.slice(17, 19));
+        return {
+          year: year,
+          month: month,
+          day: day,
+          hour: hour,
+          minute: minute,
+          second: second
+        }
+      },
+      //如果当前时间在参数时间之后返回true
+      compareDate(date) {
+        let now = new Date();
+        let now_year = now.getFullYear();
+        let now_month = now.getMonth() + 1;
+        let now_day = now.getDate();
+        let now_hour = now.getHours();
+        let now_minute = now.getMinutes();
+        let now_second = now.getSeconds();
+        if (now_year < date.year)
+          return false;
+        else if (now_year > date.year)
+          return true;
+        else {
+          if (now_month < date.month)
+            return false;
+          else if (now_month > date.month)
+            return true;
+          else {
+            if (now_day < date.day)
+              return false;
+            else if (now_day > date.day)
+              return true;
+            else {
+              if (now_hour < date.hour)
+                return false;
+              else if (now_hour > date.hour)
+                return true;
+              else {
+                if (now_minute < date.minute)
+                  return false;
+                else if (now_minute > date.minute)
+                  return true;
+                else {
+                  if (now_second < date.second)
+                    return false;
+                  else
+                    return true;
+                }
+              }
+            }
+          }
+
+        }
+
+      },
+      //"会议尚未开始" 1
+      //"会议进行中，尚未开始投稿"  2
+      //"开始投稿" 3
+      //"投稿截止" 4
+      //"评审结束" 5
+      getStatus(startDate, is_open_submission, deadlineDate, releaseDate) {
+        let start = this.getTime(startDate);
+        let deadline = this.getTime(deadlineDate);
+        let release = this.getTime(releaseDate);
+        if (!this.compareDate(start)) {
+          return 1
+        } else if (this.compareDate(start) && is_open_submission == 1 && !this.compareDate(deadline)) {
+          return 2
+        } else if (this.compareDate(start) && is_open_submission != 1 && !this.compareDate(deadline)) {
+          return 3
+        } else if (this.compareDate(deadline) && !this.compareDate(release)) {
+          return 4
+        } else
+          return 5
+      },
       enterSubmitPapers(row) {
         console.log(row);
         if (row.is_open_submission === 1) {
@@ -76,7 +239,7 @@
           this.$router.push({
             name: '/SubmitPapers',
             query: {
-              conference_id:row.conference_id,
+              conference_id: row.conference_id,
               chair_name: row.chair_name,
               short_name: row.short_name,
               full_name: row.full_name,
@@ -107,6 +270,7 @@
       },
     },
 
+
     created() {
       //一开始就向后端请求所有会议
       const _this = this;
@@ -136,6 +300,22 @@
 </script>
 
 <style scoped>
+  .demo-table-expand {
+    font-size: 0;
+  }
+
+  .demo-table-expand .label {
+    width: 90px;
+    color: #99a9bf;
+    font-weight: bold;
+  }
+
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+
   .base_conference {
     width: 100%;
   }

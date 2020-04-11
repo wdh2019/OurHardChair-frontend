@@ -229,7 +229,7 @@
       approveInvitation(index, row) {
         const _this = this;
         this.$axios.post("/approvePCMemberInvitation", {
-          senderName: row.reciverName,
+          senderName: row.receiverName,
           receiverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
         })
@@ -262,7 +262,7 @@
       disapproveInvitation(index, row) {
         console.log(row);
         this.$axios.post("/disapprovePCMemberInvitation", {
-          senderName: row.reciverName,
+          senderName: row.receiverName,
           reciverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
         }).then(resp => {
