@@ -16,6 +16,8 @@ import CheckPapers from "../components/CheckPapers"
 import SubmitPapers from "../components/SubmitPapers"
 import ApproveConference from "../components/ApproveConference"
 import UserInfo from "../components/UserInfo"
+import ViewSubmissionTRecord from "../components/ViewSubmissionRecord"
+
 
 Vue.use(Router)
 
@@ -147,6 +149,12 @@ export const router = new Router({
           //path: '/SubmitPapers/:row',
           name: '/SubmitPapers',
           component: SubmitPapers,
+        },
+        {
+          path: '/ViewSubmissionRecord',
+          //path: '/SubmitPapers/:row',
+          name: '/ViewSubmissionRecord',
+          component: ViewSubmissionTRecord,
         }
       ]
     },

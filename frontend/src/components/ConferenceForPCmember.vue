@@ -1,139 +1,3 @@
-<!--<template>-->
-  <!--<div class="base_conference">-->
-    <!--<div class="conference_container">-->
-      <!--<div class="title_section">-->
-        <!--<h3 class="title">我审稿的会议</h3>-->
-        <!--<p class="description">在此查看被邀请作为PCmember参与的会议</p>-->
-      <!--</div>-->
-      <!--&lt;!&ndash;会议单元&ndash;&gt;-->
-      <!--<div class="conference_cell" v-for="conference in conferences" v-bind:key="conference.index">-->
-        <!--<div class="title_section" v-bind:class="changeColor(conference.status)">-->
-          <!--<h3>{{conference.shortname}}</h3>-->
-        <!--</div>-->
-        <!--<div class="body_section">-->
-          <!--<p><span>会议简称：</span>{{conference.fullname}}</p>-->
-          <!--<p><span>举办地点：</span>{{conference.place}}</p>-->
-          <!--<p><span>举办日期：</span>{{conference.start_date}}</p>-->
-          <!--<p><span>截止日期：</span>{{conference.deadline_date}}</p>-->
-          <!--<p><span>发布日期：</span>{{conference.release_date}}</p>-->
-          <!--<el-tag v-bind:type="changeColor1(conference.status)">{{conference.status}}</el-tag>-->
-        <!--</div>-->
-      <!--</div>-->
-
-  <!--</div>-->
-  <!--</div>-->
-<!--</template>-->
-
-<!--<script>-->
-    <!--export default {-->
-      <!--name: "ConferenceForPCmember",-->
-      <!--data(){-->
-        <!--return{-->
-          <!--conferences:[],-->
-        <!--}-->
-      <!--},-->
-      <!--methods:{-->
-        <!--//为标题背景换色-->
-        <!--changeColor:function(status){-->
-             <!--return{-->
-              <!--success:status=="已通过",-->
-              <!--primary:status=="审核中",-->
-              <!--danger:status=="未通过",-->
-            <!--}-->
-        <!--},-->
-        <!--//为状态tag换色-->
-        <!--changeColor1:function(status){-->
-            <!--if(status=="已通过") return 'success';-->
-            <!--if(status=="审核中") return 'primary';-->
-            <!--if(status=="未通过") return 'danger';-->
-        <!--}-->
-      <!--},-->
-      <!--// created(){-->
-      <!--//  //一开始就向后端请求已申请的会议-->
-      <!--//  const _this = this;-->
-      <!--//  this.$axios.post('/ConferenceForPCmember')-->
-      <!--//  .then(resp => {-->
-      <!--//    if (resp.status === 200 && resp.data.hasOwnProperty("token")) {-->
-      <!--//        _this.conferences = resp.data.meetings;-->
-      <!--//    }else {-->
-      <!--//      this.$message({-->
-      <!--//        showClose: true,-->
-      <!--//        message: resp.data.message,-->
-      <!--//        type:'warning'-->
-      <!--//      });-->
-      <!--//    }-->
-      <!--//  })-->
-      <!--//  .catch(error => {-->
-      <!--//    console.log(error);-->
-      <!--//    this.$message({-->
-      <!--//      showClose: true,-->
-      <!--//      message: '请求我审稿的会议失败',-->
-      <!--//      type:'warning'-->
-      <!--//    });-->
-      <!--//  })-->
-      <!--// }-->
-    <!--}-->
-<!--</script>-->
-
-<!--<style scoped>-->
-  <!--.conference_container {-->
-    <!--border-radius: 15px;-->
-    <!--background-clip: padding-box;-->
-    <!--margin: 10px auto;-->
-    <!--width: 1500px;-->
-    <!--padding: 35px 35px 15px 35px;-->
-    <!--background: #fff;-->
-    <!--border: 1px solid #eaeaea;-->
-    <!--box-shadow: 0 0 25px #cac6c6;-->
-    <!--clear: left;-->
-  <!--}-->
-  <!--.title {-->
-    <!--margin: 20px auto;-->
-    <!--padding-left: 20px;-->
-    <!--text-align: left;-->
-    <!--color: #494e8f;-->
-    <!--font-size:24px;-->
-    <!--font-weight: normal;-->
-  <!--}-->
-  <!--p.description{-->
-    <!--text-align: left;-->
-    <!--padding-top: 10px;-->
-    <!--padding-left: 20px;-->
-    <!--color: #999;-->
-    <!--line-height: 1.4285;-->
-    <!--font-size: 14px;-->
-  <!--}-->
-  <!--.conference_cell{-->
-    <!--display:inline-block;-->
-    <!--margin:30px 20px 30px 20px;-->
-    <!--width:25%;-->
-    <!--text-align: left;-->
-    <!--border: 1px solid #eaeaea;-->
-    <!--box-shadow: 0 0 25px #cac6c6;-->
-  <!--}-->
-  <!--.conference_cell .title_section.success{-->
-    <!--background-color: #67C23A;-->
-  <!--}-->
-  <!--.conference_cell .title_section.primary{-->
-    <!--background-color: #409EFF;-->
-  <!--}-->
-  <!--.conference_cell .title_section.danger{-->
-    <!--background-color: #F56C6C;-->
-    <!--color: white;-->
-  <!--}-->
-  <!--.conference_cell .title_section h3{-->
-    <!--margin:0;-->
-    <!--padding:15px 0 15px 20px;-->
-  <!--}-->
-  <!--.conference_cell .body_section{-->
-    <!--padding:10px 10px 10px 15px-->
-  <!--}-->
-  <!--.conference_cell .body_section p span{-->
-    <!--font-family:Avenir, Helvetica, Arial, sans-serif;-->
-    <!--font-size:1em;-->
-    <!--font-weight: bold;-->
-  <!--}-->
-<!--</style>-->
 <template>
   <div class="base_conference">
     <div class="conference_container">
@@ -141,6 +5,7 @@
         <h3 class="title">我审稿的会议</h3>
         <p class="description">在此查看作为审稿人参与的会议</p>
       </div>
+
       <el-table
         :data="conferences.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
         <el-table-column prop="action" label="操作" width="50px" type="expand">
@@ -171,6 +36,54 @@
                 <label class="label">发布时间</label>
                 <span>{{ scope.row.release_date }}</span>
               </el-form-item>
+              <div v-show="scope.row.status==1">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>审核未通过</span>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==3">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>审核中</span>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==1">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>会议尚未开始</span>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==2">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>会议进行中,投稿尚未开始</span>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary">进入会议</el-button>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==3">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>投稿开始</span>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==4">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>投稿已经结束，等待评审结果</span>
+                </el-form-item>
+              </div>
+              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==5">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>评审结束，结果已发布</span>
+                </el-form-item>
+              </div>
             </el-form>
             <div>
 
@@ -195,8 +108,9 @@
         <el-table-column prop="release_date" label="发布时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="status" label="会议状态" width="120px">
           <template slot-scope="scope">
-            <el-tag type="danger" v-show="scope.row.status==='未通过'">{{scope.row.status}}</el-tag>
-            <el-tag type="success" v-show="scope.row.status==='已通过'">{{scope.row.status}}</el-tag>
+            <el-tag type="danger" v-show="scope.row.status===1">未通过</el-tag>
+            <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
+            <el-tag type="warning" v-show="scope.row.status===3">审核中</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -219,34 +133,149 @@
       return {
         pagesize: 10,
         curPage: 1,
-        conferences: [],
+        conferences: [{
+          shortname:'1',
+          fullname:'全称',
+          place:"我家",
+          start_date:'2020-4-10 0:0:0',
+          deadline_date:'2020-4-10 0:0:1',
+          release_date:'2020-4-10 0:0:2',
+          status:1,//1未通过，2已通过，3审核中
+          isOpenSubmission:1, //1未开放，2已开放投稿
+        },
+          {
+            shortname:'2',
+            fullname:'全称',
+            place:"我家",
+            start_date:'2020-4-10 0:0:0',
+            deadline_date:'2020-4-10 0:0:1',
+            release_date:'2020-5-10 0:0:2',
+            status:2,
+            isOpenSubmission:1,
+          },
+          {
+            shortname:'3',
+            fullname:'全称',
+            place:"我家",
+            start_date:'2020-4-10 0:0:0',
+            deadline_date:'2020-5-10 0:0:1',
+            release_date:'2020-5-10 0:0:2',
+            status:2,
+            isOpenSubmission:1,
+          }
+        ],
         search: '',
       }
     },
-    created() {
-      //一开始就向后端请求已申请的会议
-      const _this = this;
-      this.$axios.post('/ConferenceForPCMember')
-        .then(resp => {
-          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-            _this.conferences = resp.data.meetings;
-          } else {
-            this.$message({
-              showClose: true,
-              message: resp.data.message,
-              type: 'warning'
-            });
+    methods:{
+      getTime(time) {
+        //2015-05-06 00:00:00
+        let year = parseInt(time.slice(0, 4));
+        let month = parseInt(time.slice(5, 7));
+        let day = parseInt(time.slice(8, 10));
+        let hour = parseInt(time.slice(11, 13));
+        let minute = parseInt(time.slice(14, 16));
+        let second = parseInt(time.slice(17, 19));
+        return {
+          year: year,
+          month: month,
+          day: day,
+          hour: hour,
+          minute: minute,
+          second: second
+        }
+      },
+      //如果当前时间在参数时间之后返回true
+      compareDate(date) {
+        let now = new Date();
+        let now_year = now.getFullYear();
+        let now_month = now.getMonth() + 1;
+        let now_day = now.getDate();
+        let now_hour = now.getHours();
+        let now_minute = now.getMinutes();
+        let now_second = now.getSeconds();
+        if (now_year < date.year)
+          return false;
+        else if (now_year > date.year)
+          return true;
+        else {
+          if (now_month < date.month)
+            return false;
+          else if (now_month > date.month)
+            return true;
+          else {
+            if (now_day < date.day)
+              return false;
+            else if (now_day > date.day)
+              return true;
+            else {
+              if (now_hour < date.hour)
+                return false;
+              else if (now_hour > date.hour)
+                return true;
+              else {
+                if (now_minute < date.minute)
+                  return false;
+                else if (now_minute > date.minute)
+                  return true;
+                else {
+                  if (now_second < date.second)
+                    return false;
+                  else
+                    return true;
+                }
+              }
+            }
           }
-        })
-        .catch(error => {
-          console.log(error);
-          this.$message({
-            showClose: true,
-            message: '请求相关会议失败',
-            type: 'warning'
-          });
-        })
-    }
+
+        }
+
+      },
+      //"会议尚未开始" 1
+      //"会议进行中，尚未开始投稿"  2
+      //"开始投稿" 3
+      //"投稿截止" 4
+      //"评审结束" 5
+      getStatus(startDate, isOpenSubmission,deadlineDate, releaseDate) {
+        let start = this.getTime(startDate);
+        let deadline = this.getTime(deadlineDate);
+        let release = this.getTime(releaseDate);
+        if (!this.compareDate(start)) {
+          return 1
+        } else if (this.compareDate(start) && isOpenSubmission==1 && !this.compareDate(deadline)) {
+          return 2
+        } else if(this.compareDate(start) && isOpenSubmission!=1 && !this.compareDate(deadline)){
+          return 3
+        }else if (this.compareDate(deadline) && !this.compareDate(release)) {
+          return 4
+        } else
+          return 5
+      },
+    },
+    // created() {
+    //   //一开始就向后端请求已申请的会议
+    //   const _this = this;
+    //   this.$axios.post('/ConferenceForPCMember')
+    //     .then(resp => {
+    //       if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+    //         _this.conferences = resp.data.meetings;
+    //       } else {
+    //         this.$message({
+    //           showClose: true,
+    //           message: resp.data.message,
+    //           type: 'warning'
+    //         });
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //       this.$message({
+    //         showClose: true,
+    //         message: '请求相关会议失败',
+    //         type: 'warning'
+    //       });
+    //     })
+    // }
   }
 </script>
 
