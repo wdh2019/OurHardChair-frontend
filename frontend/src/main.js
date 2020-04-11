@@ -13,23 +13,36 @@ Vue.use(ElementUI);
 
 
 //axios 配置
-var axios = require('axios');
+var axios = require('axios')
 // Axios挂载到prototype，全局可以使用this.$axios访问
-Vue.prototype.$axios = axios;
-axios.defaults.baseURL = '/api';
-axios.defaults.withCredentials = true;
-axios.defaults.headers.post['Content-Type'] = "application/json;charset=UTF-8";
+Vue.prototype.$axios = axios
+axios.defaults.baseURL = '/api'
+axios.defaults.withCredentials = true
+axios.defaults.headers.post['Content-Type'] = "application/json;charset=UTF-8"
 
-Vue.config.productionTip = false;
-
+Vue.config.productionTip = false
 
 //自定义axios 配置，用于上传文件
 var instance = axios.create({
   headers:{"Content-Type":"multipart/form-data"},
-});
-instance.defaults.baseURL='/api';
-instance.defaults.withCredentials = true;
-Vue.prototype.instance=instance;
+})
+instance.defaults.baseURL='/api'
+instance.defaults.withCredentials = true
+Vue.prototype.instance=instance
+
+// 给自定义的家伙也搞上http request 拦截器
+instance.interceptors.request.use(
+  config => {
+    if (store.state.token) {
+      // 判断是否有token，若存在，每个http header加上token
+      config.headers.Authorization = `Bearer ${store.state.token}`;
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
 
 // http request 拦截器
 axios.interceptors.request.use(

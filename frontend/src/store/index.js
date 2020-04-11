@@ -34,19 +34,18 @@ export default new Vuex.Store({
     logout(state) {
       // 移除token
       localStorage.removeItem('token');
-      localStorage.removeItem('id');
+	    localStorage.removeItem('id');
       localStorage.removeItem('username');
-      localStorage.removeItem('fullName');
+	    localStorage.removeItem('fullName');
       localStorage.removeItem('email');
       localStorage.removeItem('country');
       localStorage.removeItem('institution');
       state.username = null;
-      state.fullName = null;
+	    state.fullName = null;
       state.email = null;
       state.country = null;
       state.institution = null;
       state.token = null;
-      ;
       state.id = null;
     }
   },
