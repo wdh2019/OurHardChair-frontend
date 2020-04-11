@@ -50,7 +50,7 @@
         <el-table-column prop="reviewReleaseDate" label="发布时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="isOpenSubmission" label="会议状态" width="120px">
-          <template slot-scope="scope">
+          <template slot-scope="scope" width="50px">
             <el-tag type="danger" v-show="scope.row.isOpenSubmission==1">未开放投稿</el-tag>
             <el-tag type="success" v-show="scope.row.isOpenSubmission!=1">已开放投稿</el-tag>
           </template>
