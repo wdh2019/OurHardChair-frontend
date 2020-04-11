@@ -42,7 +42,7 @@
             prop="messageCategory">
             <template slot-scope="scope">
               <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='PCNumberInvitationRequest'"
+                      v-show="scope.row.messageCategory==='PCMemberInvitationRequest'"
                       type="success">
                 审稿人邀请
               </el-tag>
@@ -57,7 +57,7 @@
                 会议申请反馈
               </el-tag>
               <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='PCNumberInvitationResponse'"
+                      v-show="scope.row.messageCategory==='PCMemberInvitationResponse'"
                       type="success">
                 审稿人邀请反馈
               </el-tag>
@@ -79,21 +79,21 @@
           <el-table-column label="操作">
             <!--标为已读，对接于/markRead 对应于markRead函数-->
             <template slot-scope="scope">
-              <div v-show="scope.row.messageCategory!=='PCNumberInvitationRequest'">
+              <div v-show="scope.row.messageCategory!=='PCMemberInvitationRequest'">
                 <el-button
                   size="mini"
                   type="danger"
                   @click="markRead(scope.$index,scope.row)">标为已读
                 </el-button>
               </div>
-              <div v-show="scope.row.messageCategory==='PCNumberInvitationRequest'">
-                <!--接受PCMember邀请，对应于"/approvePCNumberInvitation"，对应于approveInvitation()函数-->
+              <div v-show="scope.row.messageCategory==='PCMemberInvitationRequest'">
+                <!--接受PCMember邀请，对应于"/approvePCMemberInvitation"，对应于approveInvitation()函数-->
                 <el-button
                   size="mini"
                   type="success"
                   @click="approveInvitation(scope.$index,scope.row)">同意
                 </el-button>
-                <!--拒绝PCMember邀请，对应于"/disapprovePCNumberInvitation"，对应于disapproveInvitation()函数-->
+                <!--拒绝PCMember邀请，对应于"/disapprovePCMemberInvitation"，对应于disapproveInvitation()函数-->
                 <el-button
                   size="mini"
                   type="danger"
@@ -134,7 +134,7 @@
             <template slot-scope="scope">
 
               <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='PCNumberInvitationRequest'"
+                      v-show="scope.row.messageCategory==='PCMemberInvitationRequest'"
                       type="success">
                 审稿人邀请
               </el-tag>
@@ -149,7 +149,7 @@
                 会议申请反馈
               </el-tag>
               <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='PCNumberInvitationResponse'"
+                      v-show="scope.row.messageCategory==='PCMemberInvitationResponse'"
                       type="success">
                 审稿人邀请反馈
               </el-tag>
@@ -225,7 +225,7 @@
             })
           })
       },
-      //接受PCNumber邀请,向/approvePCMemberInvitation接口发送消息
+      //接受PCMember邀请,向/approvePCMemberInvitation接口发送消息
       approveInvitation(index, row) {
         const _this = this;
         this.$axios.post("/approvePCMemberInvitation", {
