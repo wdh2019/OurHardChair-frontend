@@ -88,11 +88,11 @@
                 </el-form-item>
               </div>
               <!--测试按键-->
-              <div>
-                <el-form-item>
-                  <el-button type="primary" @click="TestEnterMeeting(scope.row)">进入会议</el-button>
-                </el-form-item>
-              </div>
+              <!--<div>-->
+                <!--<el-form-item>-->
+                  <!--<el-button type="primary" @click="TestEnterMeeting(scope.row)">进入会议</el-button>-->
+                <!--</el-form-item>-->
+              <!--</div>-->
             </el-form>
             <div>
 

@@ -48,46 +48,49 @@
                   <span>审核中</span>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.is_open_submission,scope.row.deadline_date,scope.row.release_date)===1">
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.is_open_submission,scope.row.deadline_date,scope.row.release_date)===1">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议尚未开始</span>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议进行中,投稿尚未开始</span>
+                </el-form-item>
+
+              </div>
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>投稿开始</span>
+                </el-form-item>
+                <!--<el-form-item>-->
+                <!--<el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>-->
+                <!--</el-form-item>-->
+              </div>
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>投稿已经结束，等待评审结果</span>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary">进入会议</el-button>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>投稿开始</span>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
-                </el-form-item>
-              </div>
-              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>投稿已经结束，等待评审结果</span>
-                </el-form-item>
-              </div>
-              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===5">
+              <div
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===5">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>评审结束，结果已发布</span>
                 </el-form-item>
               </div>
             </el-form>
-            <div>
-
-            </div>
           </template>
         </el-table-column>
         <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
@@ -133,41 +136,42 @@
       return {
         pagesize: 10,
         curPage: 1,
-        conferences: [{
-          short_name:'1',
-          full_name:'全称',
-          place:"我家",
-          start_date:'2020-4-10 0:0:0',
-          deadline_date:'2020-4-10 0:0:1',
-          release_date:'2020-4-10 0:0:2',
-          status:1,//1未通过，2已通过，3审核中
-          is_open_submission:1, //1未开放，2已开放投稿
-        },
-          {
-            short_name:'2',
-            full_name:'全称',
-            place:"我家",
-            start_date:'2020-4-10 0:0:0',
-            deadline_date:'2020-4-10 0:0:1',
-            release_date:'2020-5-10 0:0:2',
-            status:2,
-            is_open_submission:1,
-          },
-          {
-            short_name:'3',
-            full_name:'全称',
-            place:"我家",
-            start_date:'2020-4-10 0:0:0',
-            deadline_date:'2020-5-10 0:0:1',
-            release_date:'2020-5-10 0:0:2',
-            status:2,
-            is_open_submission:1,
-          }
-        ],
+        // conferences: [{
+        //   short_name: '1',
+        //   full_name: '全称',
+        //   place: "我家",
+        //   start_date: '2020-4-10 0:0:0',
+        //   deadline_date: '2020-4-10 0:0:1',
+        //   release_date: '2020-4-10 0:0:2',
+        //   status: 1,//1未通过，2已通过，3审核中
+        //   is_open_submission: 1, //1未开放，2已开放投稿
+        // },
+        //   {
+        //     short_name: '2',
+        //     full_name: '全称',
+        //     place: "我家",
+        //     start_date: '2020-4-10 0:0:0',
+        //     deadline_date: '2020-4-10 0:0:1',
+        //     release_date: '2020-5-10 0:0:2',
+        //     status: 2,
+        //     is_open_submission: 1,
+        //   },
+        //   {
+        //     short_name: '3',
+        //     full_name: '全称',
+        //     place: "我家",
+        //     start_date: '2020-4-10 0:0:0',
+        //     deadline_date: '2020-5-10 0:0:1',
+        //     release_date: '2020-5-10 0:0:2',
+        //     status: 2,
+        //     is_open_submission: 1,
+        //   }
+        // ],
+        conferences: [],
         search: '',
       }
     },
-    methods:{
+    methods: {
       getTime(time) {
         //2015-05-06 00:00:00
         let year = parseInt(time.slice(0, 4));
@@ -236,46 +240,47 @@
       //"开始投稿" 3
       //"投稿截止" 4
       //"评审结束" 5
-      getStatus(startDate, is_open_submission,deadlineDate, releaseDate) {
+      getStatus(startDate, is_open_submission, deadlineDate, releaseDate) {
         let start = this.getTime(startDate);
         let deadline = this.getTime(deadlineDate);
         let release = this.getTime(releaseDate);
         if (!this.compareDate(start)) {
           return 1
-        } else if (this.compareDate(start) && is_open_submission==1 && !this.compareDate(deadline)) {
+        } else if (this.compareDate(start) && is_open_submission == 1 && !this.compareDate(deadline)) {
           return 2
-        } else if(this.compareDate(start) && is_open_submission!=1 && !this.compareDate(deadline)){
+        } else if (this.compareDate(start) && is_open_submission != 1 && !this.compareDate(deadline)) {
           return 3
-        }else if (this.compareDate(deadline) && !this.compareDate(release)) {
+        } else if (this.compareDate(deadline) && !this.compareDate(release)) {
           return 4
         } else
           return 5
       },
     },
-    // created() {
-    //   //一开始就向后端请求已申请的会议
-    //   const _this = this;
-    //   this.$axios.post('/ConferenceForPCMember')
-    //     .then(resp => {
-    //       if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-    //         _this.conferences = resp.data.meetings;
-    //       } else {
-    //         this.$message({
-    //           showClose: true,
-    //           message: resp.data.message,
-    //           type: 'warning'
-    //         });
-    //       }
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //       this.$message({
-    //         showClose: true,
-    //         message: '请求相关会议失败',
-    //         type: 'warning'
-    //       });
-    //     })
-    // }
+    created() {
+      //一开始就向后端请求已申请的会议
+      const _this = this;
+      this.$axios.post('/ConferenceForPCMember')
+        .then(resp => {
+          console.log(resp);
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            _this.conferences = resp.data.meetings;
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.$message({
+            showClose: true,
+            message: '请求相关会议失败',
+            type: 'warning'
+          });
+        })
+    }
   }
 </script>
 

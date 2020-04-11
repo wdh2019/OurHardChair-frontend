@@ -74,7 +74,7 @@ export const router = new Router({
         component: ConferenceForChair,
       },
       { path: '/ConferenceForPCmember',
-        name: '我审稿的会议',
+        name: '作为PCMember的会议',
         component: ConferenceForPCmember,
       },
       {
