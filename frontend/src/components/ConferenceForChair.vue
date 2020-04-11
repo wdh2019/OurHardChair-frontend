@@ -6,13 +6,13 @@
         <p class="description">在此查看已申请的会议</p>
       </div>
       <el-table
-        :data="conferences.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
+        :data="conferences.filter(data => !search || data.full_name.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
         <el-table-column prop="action" label="操作" width="50px" type="expand">
           <template slot-scope="scope">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item class="el-form-item">
                 <label class="label">会议简称</label>
-                <span>{{ scope.row.shortname }}</span>
+                <span>{{ scope.row.short_name }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
                 <label class="label">开始时间</label>
@@ -20,7 +20,7 @@
               </el-form-item>
               <el-form-item class="el-form-item">
                 <label class="label">会议全称</label>
-                <span>{{ scope.row.fullname }}</span>
+                <span>{{ scope.row.full_name }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
                 <label class="label">结束时间</label>
@@ -34,27 +34,27 @@
                 <label class="label">发布时间</label>
                 <span>{{ scope.row.release_date }}</span>
               </el-form-item>
-              <div v-show="scope.row.status==1">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>审核未通过</span>
-                </el-form-item>
-              </div>
-              <div v-show="scope.row.status==3">
+              <div v-show="scope.row.status===1">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>审核中</span>
                 </el-form-item>
               </div>
+              <div v-show="scope.row.status===3">
+                <el-form-item>
+                  <label class="label">会议状态</label>
+                  <span>审核未通过</span>
+                </el-form-item>
+              </div>
               <div
-                v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==1">
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===1">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议尚未开始</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==2">
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议进行中,投稿尚未开始</span>
@@ -64,7 +64,7 @@
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==3">
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>投稿开始</span>
@@ -74,14 +74,14 @@
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==4">
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>投稿已经结束，等待评审结果</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==5">
+                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===5">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>评审结束，结果已发布</span>
@@ -99,8 +99,8 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="shortname" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="fullname" label="会议全称" width="300px" :show-overflow-tooltip="true">
+        <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="full_name" label="会议全称" width="300px" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -117,18 +117,18 @@
         <el-table-column prop="release_date" label="发布时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="status" label="审核状态" width="120px">
           <template slot-scope="scope">
-            <el-tag type="danger" v-show="scope.row.status===1">未通过</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===1">审核中</el-tag>
             <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
-            <el-tag type="warning" v-show="scope.row.status===3">审核中</el-tag>
+            <el-tag type="danger" v-show="scope.row.status===3">审核未通过</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="isOpenSubmission" label="投稿状态" width="300px">
+        <el-table-column prop="is_open_submission" label="投稿状态" width="300px">
           <template slot-scope="scope">
             <el-switch
               ref="switch"
-              v-bind:disabled="scope.row.status!=2||scope.row.isOpenSubmission==2||
-            getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)!=2"
-              v-bind:value="scope.row.isOpenSubmission"
+              v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission===2||
+            getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)!==2"
+              v-bind:value="scope.row.is_open_submission"
               active-text="开启投稿"
               inactive-text="未开启投稿"
               :active-value='2'
@@ -137,7 +137,7 @@
               inactive-color="#ff4949"
               @change="changeSubmissionStatus($event,scope.row)"
             >
-              <label>{{scope.row.isOpenSubmission}}</label>
+              <label>{{scope.row.is_open_submission}}</label>
             </el-switch>
           </template>
         </el-table-column>
@@ -161,37 +161,41 @@
       return {
         pagesize: 10,
         curPage: 1,
-        conferences: [{
-          shortname: '1',
-          fullname: '全称',
-          place: "我家",
-          start_date: '2020-04-10 00:00:00',
-          deadline_date: '2020-04-10 00:00:10',
-          release_date: '2020-04-10 00:00:20',
-          status: 1,//1未通过，2已通过，3审核中
-          isOpenSubmission: 1, //1未开放，2已开放投稿
-        },
-          {
-            shortname: '2',
-            fullname: '全称',
-            place: "我家",
-            start_date: '2020-04-10 00:00:00',
-            deadline_date: '2020-04-10 00:00:10',
-            release_date: '2020-05-10 00:00:20',
-            status: 2,
-            isOpenSubmission: 1,
-          },
-          {
-            shortname: '3',
-            fullname: '全称',
-            place: "我家",
-            start_date: '2020-04-10 00:00:00',
-            deadline_date: '2020-05-10 00:00:10',
-            release_date: '2020-05-10 00:00:20',
-            status: 2,
-            isOpenSubmission: 1,
-          }
-        ],
+        // conferences: [{
+        //   short_name: '1',
+        //   full_name: '全称',
+        //   place: "我家",
+        //   chair_name:"Test",
+        //   start_date: '2020-04-10 00:00:00',
+        //   deadline_date: '2020-04-10 00:00:10',
+        //   release_date: '2020-04-10 00:00:20',
+        //   status: 1,//1未通过，2已通过，3审核中
+        //   is_open_submission: 1, //1未开放，2已开放投稿
+        // },
+        //   {
+        //     short_name: '2',
+        //     full_name: '全称',
+        //     place: "我家",
+        //     chair_name:"Test",
+        //     start_date: '2020-04-10 00:00:00',
+        //     deadline_date: '2020-04-10 00:00:10',
+        //     release_date: '2020-05-10 00:00:20',
+        //     status: 2,
+        //     is_open_submission: 1,
+        //   },
+        //   {
+        //     short_name: '3',
+        //     full_name: '全称',
+        //     place: "我家",
+        //     chair_name:"Test",
+        //     start_date: '2020-04-10 00:00:00',
+        //     deadline_date: '2020-05-10 00:00:10',
+        //     release_date: '2020-05-10 00:00:20',
+        //     status: 2,
+        //     is_open_submission: 1,
+        //   }
+        // ],
+        conferences: [],
         search: '',
       }
     },
@@ -205,14 +209,14 @@
         this.$router.push({
           name: '/InvitePCMember',
           query: {
-            fullname: row.fullname,
-            shortname: row.shortname,
+            full_name: row.full_name,
+            short_name: row.short_name,
             place: row.place,
             start_date: row.start_date,
             deadline_date: row.deadline_date,
             release_date: row.release_date,
             status: row.status,
-            isOpenSubmisstion:row.isOpenSubmission,
+            isOpenSubmisstion: row.is_open_submission,
           }
         }).catch(err => err);
       },
@@ -284,15 +288,15 @@
       //"开始投稿" 3
       //"投稿截止" 4
       //"评审结束" 5
-      getStatus(startDate, isOpenSubmission, deadlineDate, releaseDate) {
+      getStatus(startDate, is_open_submission, deadlineDate, releaseDate) {
         let start = this.getTime(startDate);
         let deadline = this.getTime(deadlineDate);
         let release = this.getTime(releaseDate);
         if (!this.compareDate(start)) {
           return 1
-        } else if (this.compareDate(start) && isOpenSubmission == 1 && !this.compareDate(deadline)) {
+        } else if (this.compareDate(start) && is_open_submission == 1 && !this.compareDate(deadline)) {
           return 2
-        } else if (this.compareDate(start) && isOpenSubmission != 1 && !this.compareDate(deadline)) {
+        } else if (this.compareDate(start) && is_open_submission != 1 && !this.compareDate(deadline)) {
           return 3
         } else if (this.compareDate(deadline) && !this.compareDate(release)) {
           return 4
@@ -301,10 +305,12 @@
       },
       //根据投稿按钮的开关，发送给后端投稿状态
       changeSubmissionStatus(status, row) {
-        row.isOpenSubmission = row.isOpenSubmission == 1 ? 2 : 1;
-        if (status == 2) {
-          /*this.$axios.post('',{
-              fullName: row.fullname,
+        row.is_open_submission = row.is_open_submission === 1 ? 2 : 1;
+        if (status === 2) {
+          this.$axios.post('/openSubmission',{
+
+              full_name: row.full_name,
+
           }).then(resp => {
             this.$message({
               showClose: true,
@@ -317,7 +323,7 @@
               message:resp.data.message,
               type:'danger'
             });
-          })*/
+          })
         }
         else {
           this.$message({
@@ -328,11 +334,12 @@
         }
       }
     },
-    /*created() {
+    created() {
       //一开始就向后端请求已申请的会议
       const _this = this;
       this.$axios.post('/ConferenceForChair')
         .then(resp => {
+          console.log(resp.data.meetings);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferences = resp.data.meetings;
           } else {
@@ -351,7 +358,7 @@
             type: 'warning'
           });
         })
-    }*/
+    }
   }
 </script>
 

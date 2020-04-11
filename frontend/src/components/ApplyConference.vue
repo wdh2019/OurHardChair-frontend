@@ -7,11 +7,11 @@
       <!--申请提交表单-->
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm"
                label-position="left">
-        <el-form-item prop="shortname" class="item">
-          <el-input v-model="ruleForm.shortname" placeholder="会议简称"></el-input>
+        <el-form-item prop="short_name" class="item">
+          <el-input v-model="ruleForm.short_name" placeholder="会议简称"></el-input>
         </el-form-item>
-        <el-form-item prop="fullname" class="item">
-          <el-input v-model="ruleForm.fullname" placeholder="会议全称"></el-input>
+        <el-form-item prop="full_name" class="item">
+          <el-input v-model="ruleForm.full_name" placeholder="会议全称"></el-input>
         </el-form-item>
         <el-form-item prop="place" class="item">
           <el-input v-model="ruleForm.place" placeholder="举办地点"></el-input>
@@ -65,16 +65,16 @@
       };
       return {
         ruleForm: {
-          shortname: '',
-          fullname: '',
+          short_name: '',
+          full_name: '',
           start_date: '',
           place: '',
           deadline_date: '',
           release_date: '',
         },
         rules: {
-          shortname: [{required: true, message: "会议简称不为空", trigger: 'blur'}],
-          fullname: [{required: true, message: '会议全称不为空', trigger: 'blur'}],
+          short_name: [{required: true, message: "会议简称不为空", trigger: 'blur'}],
+          full_name: [{required: true, message: '会议全称不为空', trigger: 'blur'}],
           place: [{required: true, message: "会议地点不为空", trigger: 'blur'}],
           start_date: [{type: 'date', required: true, message: "开始日期不为空", trigger: 'blur'}],
           deadline_date: [
@@ -102,8 +102,8 @@
           if (valid) {
             //this.$axios.post用来向后台请求数据
             this.$axios.post('/ApplyConference', {
-                abbreviation: this.ruleForm.shortname,
-                fullName: this.ruleForm.fullname,
+                abbreviation: this.ruleForm.short_name,
+                fullName: this.ruleForm.full_name,
                 //注意这里举办时间的拼接
                 holdingPlace: this.ruleForm.place,
                 holdingTime: startTime,

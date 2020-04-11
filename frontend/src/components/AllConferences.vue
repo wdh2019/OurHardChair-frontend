@@ -11,29 +11,13 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              type="primary"
-              v-on:click="handleAction(scope.$index, scope.row, 'chair')">以chair身份进入
-            </el-button>
-            <el-button
-              size="mini"
-              type="success"
-              v-on:click="handleAction(scope.$index, scope.row, 'PC member')">以PCmember身份进入
-            </el-button>
-            <el-button
-              size="mini"
-              type="warning"
-              v-on:click="handleAction(scope.$index, scope.row, 'author')">以author身份进入
-            </el-button>
-            <el-button
-              size="mini"
               type="danger"
-              v-on:click="handleAction(scope.$index, scope.row, 'none')">投稿
+              v-on:click="enterSubmitPapers(scope.row)">投稿
             </el-button>
-            <el-button @click="handleActionTest(scope.row)">投稿页面测试</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="abbreviation" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="fullName" label="会议全称" width="300px" :show-overflow-tooltip="true">
+        <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="full_name" label="会议全称" width="300px" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -43,16 +27,16 @@
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="holdingPlace" label="举办地点" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="holdingTime" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="submissionDeadline" label="截止时间" width="200px"
+        <el-table-column prop="place" label="举办地点" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="start_date" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="deadline_date" label="截止时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="reviewReleaseDate" label="发布时间" width="200px"
+        <el-table-column prop="release_date" label="发布时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="isOpenSubmission" label="会议状态" width="120px">
+        <el-table-column prop="is_open_submission" label="会议状态" width="120px">
           <template slot-scope="scope" width="50px">
-            <el-tag type="danger" v-show="scope.row.isOpenSubmission==1">未开放投稿</el-tag>
-            <el-tag type="success" v-show="scope.row.isOpenSubmission!=1">已开放投稿</el-tag>
+            <el-tag type="danger" v-show="scope.row.is_open_submission===1">未开放投稿</el-tag>
+            <el-tag type="success" v-show="scope.row.is_open_submission===2">已开放投稿</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -80,80 +64,55 @@
       }
     },
     methods: {
+      enterSubmitPapers(row) {
+        console.log(row);
+        if (row.is_open_submission === 1) {
+          this.$message({
+            showClose: true,
+            message: "会议主席暂未开放投稿",
+            type: 'warning'
+          });
+        } else {
+          this.$router.push({
+            name: '/SubmitPapers',
+            query: {
+              conference_id:row.conference_id,
+              chair_name: row.chair_name,
+              short_name: row.short_name,
+              full_name: row.full_name,
+              place: row.place,
+              start_date: row.start_date,
+              deadline_date: row.deadline_date,
+              release_date: row.release_date,
+              is_open_submission: row.is_open_submission,
+            }
+          }).catch(err => err);
+        }
+      },
       handleActionTest(row) {
         console.log(row);
         this.$router.push({
           name: '/SubmitPapers',
           query: {
-            id: row.id,
-            chairId: row.chairId,
-            abbreviation: row.abbreviation,
-            fullName: row.fullName,
-            holdingPlace: row.holdingPlace,
-            holdingTime: row.holdingTime,
-            submissionDeadline: row.submissionDeadline,
-            reviewReleaseDate: row.reviewReleaseDate,
-            isOpenSubmission: row.isOpenSubmission,
+            chair_name: row.chair_name,
+            short_name: row.short_name,
+            full_name: row.full_name,
+            place: row.place,
+            start_date: row.start_date,
+            deadline_date: row.deadline_date,
+            release_date: row.release_date,
+            is_open_submission: row.is_open_submission,
           }
         }).catch(err => err);
       },
-      handleAction(index, row, type) {
-        //console.log(type);
-        this.$axios.post('/AllConferences', {
-          fullName: row.fullName,
-          id: this.$store.state.id,
-          type: type,
-        })
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              //不同的权限转到不同的页面，后面加会议名作为queryString
-              if (type == "chair") this.$router.push({
-                path: '/InvitePCMember',
-                query: {
-                  conference: row.fullName,
-                }
-              }).catch(err => err);
-              if (type == "PC member") this.$router.push({
-                path: '/CheckPapers',
-                query: {
-                  conference: row.fullName,
-                }
-              }).catch(err => err);
-              if (type == "none") this.$router.push({
-                path: '/ViewSubmission',
-                query: {
-                  conference: row.fullName,
-                }
-              }).catch(err => err);
-              if (type == "none") this.$router.push({
-                name: '/SubmitPapers',
-                query: {
-                  conference: row.fullName,
-                }
-              }).catch(err => err)
-            } else {
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: "warning",
-              });
-            }
-          })
-          .catch(error => {
-            console.log(error);
-            this.$message({
-              showClose: true,
-              message: '审批失败',
-              type: 'warning',
-            });
-          })
-      }
     },
+
     created() {
       //一开始就向后端请求所有会议
       const _this = this;
       this.$axios.post('/AllConferences')
         .then(resp => {
+          console.log(resp.data.meetings);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allConferences = resp.data.meetings;
           } else {

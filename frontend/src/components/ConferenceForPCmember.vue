@@ -7,13 +7,13 @@
       </div>
 
       <el-table
-        :data="conferences.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
+        :data="conferences.filter(data => !search || data.full_name.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
         <el-table-column prop="action" label="操作" width="50px" type="expand">
           <template slot-scope="scope">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item class="el-form-item">
                 <label class="label">会议简称</label>
-                <span>{{ scope.row.shortname }}</span>
+                <span>{{ scope.row.short_name }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
                 <label class="label">开始时间</label>
@@ -21,7 +21,7 @@
               </el-form-item>
               <el-form-item class="el-form-item">
                 <label class="label">会议全称</label>
-                <span>{{ scope.row.fullname }}</span>
+                <span>{{ scope.row.full_name }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
                 <label class="label">结束时间</label>
@@ -36,25 +36,25 @@
                 <label class="label">发布时间</label>
                 <span>{{ scope.row.release_date }}</span>
               </el-form-item>
-              <div v-show="scope.row.status==1">
+              <div v-show="scope.row.status===1">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>审核未通过</span>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status==3">
+              <div v-show="scope.row.status===3">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>审核中</span>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==1">
+              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.is_open_submission,scope.row.deadline_date,scope.row.release_date)===1">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议尚未开始</span>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==2">
+              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议进行中,投稿尚未开始</span>
@@ -63,7 +63,7 @@
                   <el-button type="primary">进入会议</el-button>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==3">
+              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>投稿开始</span>
@@ -72,13 +72,13 @@
                   <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==4">
+              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>投稿已经结束，等待评审结果</span>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status==2&&getStatus(scope.row.start_date,scope.row.isOpenSubmission,scope.row.deadline_date,scope.row.release_date)==5">
+              <div v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===5">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>评审结束，结果已发布</span>
@@ -90,8 +90,8 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="shortname" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="fullname" label="会议全称" width="300px" :show-overflow-tooltip="true">
+        <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="full_name" label="会议全称" width="300px" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -108,9 +108,9 @@
         <el-table-column prop="release_date" label="发布时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="status" label="会议状态" width="120px">
           <template slot-scope="scope">
-            <el-tag type="danger" v-show="scope.row.status===1">未通过</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===1">审核中</el-tag>
             <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
-            <el-tag type="warning" v-show="scope.row.status===3">审核中</el-tag>
+            <el-tag type="danger" v-show="scope.row.status===3">审核未通过</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -134,34 +134,34 @@
         pagesize: 10,
         curPage: 1,
         conferences: [{
-          shortname:'1',
-          fullname:'全称',
+          short_name:'1',
+          full_name:'全称',
           place:"我家",
           start_date:'2020-4-10 0:0:0',
           deadline_date:'2020-4-10 0:0:1',
           release_date:'2020-4-10 0:0:2',
           status:1,//1未通过，2已通过，3审核中
-          isOpenSubmission:1, //1未开放，2已开放投稿
+          is_open_submission:1, //1未开放，2已开放投稿
         },
           {
-            shortname:'2',
-            fullname:'全称',
+            short_name:'2',
+            full_name:'全称',
             place:"我家",
             start_date:'2020-4-10 0:0:0',
             deadline_date:'2020-4-10 0:0:1',
             release_date:'2020-5-10 0:0:2',
             status:2,
-            isOpenSubmission:1,
+            is_open_submission:1,
           },
           {
-            shortname:'3',
-            fullname:'全称',
+            short_name:'3',
+            full_name:'全称',
             place:"我家",
             start_date:'2020-4-10 0:0:0',
             deadline_date:'2020-5-10 0:0:1',
             release_date:'2020-5-10 0:0:2',
             status:2,
-            isOpenSubmission:1,
+            is_open_submission:1,
           }
         ],
         search: '',
@@ -236,15 +236,15 @@
       //"开始投稿" 3
       //"投稿截止" 4
       //"评审结束" 5
-      getStatus(startDate, isOpenSubmission,deadlineDate, releaseDate) {
+      getStatus(startDate, is_open_submission,deadlineDate, releaseDate) {
         let start = this.getTime(startDate);
         let deadline = this.getTime(deadlineDate);
         let release = this.getTime(releaseDate);
         if (!this.compareDate(start)) {
           return 1
-        } else if (this.compareDate(start) && isOpenSubmission==1 && !this.compareDate(deadline)) {
+        } else if (this.compareDate(start) && is_open_submission==1 && !this.compareDate(deadline)) {
           return 2
-        } else if(this.compareDate(start) && isOpenSubmission!=1 && !this.compareDate(deadline)){
+        } else if(this.compareDate(start) && is_open_submission!=1 && !this.compareDate(deadline)){
           return 3
         }else if (this.compareDate(deadline) && !this.compareDate(release)) {
           return 4
