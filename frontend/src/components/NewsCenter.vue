@@ -18,29 +18,11 @@
       </el-header>
       <el-main v-show="(show===1)">
         <el-table
-          :data="testNotRead"
+          :data="allInfo"
           style="width: 100%">
-          <el-table-column type="expand">
-            <template slot-scope="scope">
-              <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="具体内容">
-                  <span>{{ scope.row.message}}</span>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="发送时间"
-            width="180"
-            prop="sendTime">
-            <template slot-scope="scope">
-              <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.sendTime}}</span>
-            </template>
-          </el-table-column>
           <el-table-column
             label="发送者"
-            width="180"
+            width="180px"
             prop="senderName">
             <template slot-scope="scope">
               <el-tag size="medium" effect="plain">{{ scope.row.senderName }}</el-tag>
@@ -86,6 +68,14 @@
               </el-tag>
             </template>
           </el-table-column>
+          <el-table-column
+            label="具体内容"
+            width="400px"
+            prop="message">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.message}}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="操作">
             <!--标为已读，对接于/markRead 对应于markRead函数-->
             <template slot-scope="scope">
@@ -118,7 +108,7 @@
       <!--已读页面-->
       <el-main v-show="(show===2)">
         <el-table
-          :data="testHasRead"
+          :data="hasReadInfo"
           style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="scope">
@@ -209,24 +199,17 @@
     methods: {
       //将信息标为已读,向/markRead接口发送消息
       markRead(index, row) {
-        // 简单的测试代码
-        // console.log(row);
-        // console.log(index);
-        // let Info = this.testNotRead.splice(index, 1)[0];
-        // Info.isRead = 1;
-        // this.testHasRead.push(Info);
-        // console.log(Info);
-        // const _this = this;
-        // 真实应用代码
+        const _this=this;
         this.$axios.post("/markRead", {
-          receiverName: this.$store.state.username,
+          senderName:row.senderName,
+          receiverName: row.receiverName,
           relatedConferenceName: row.relatedConferenceName,
-          message: row.messageCategory,
+          messageCategory: row.messageCategory,
         })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               let Info = _this.notReadInfo.splice(index, 1)[0];
-              Info.isRead = 1;
+              Info.isRead = 2;
               _this.hasReadInfo.push(Info);
               this.$message({
                 showClose: true,
@@ -294,6 +277,7 @@
           reciverName: row.receiverName,
           relatedConferenceName: row.relatedConferenceName,
         }).then(resp => {
+          console.log(resp);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.notReadInfo.splice(index, 1);
             this.$message({
@@ -331,92 +315,8 @@
     },
     data() {
       return {
-        //测试样例
-        testNotRead: [{
-          senderName: '王小虎',
-          messageCategory: 'ApplyConferenceResponse',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          messageCategory: 'PCNumberInvitationRequest',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          messageCategory: 'PCNumberInvitationResponse',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          messageCategory: 'ManuscriptSubmissionRequest',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          messageCategory: 'ManuscriptSubmissionResponse',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }
-        ],
-        testHasRead: [{
-          senderName: '王小虎',
-          messageCategory: 'ApplyConferenceResponse',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          messageCategory: 'PCNumberInvitationRequest',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          messageCategory: 'PCNumberInvitationResponse',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          messageCategory: 'ManuscriptSubmissionRequest',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          messageCategory: 'ManuscriptSubmissionResponse',
-          relatedConferenceName: 'FDSM',
-          message: 'xxxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }
-        ],
         //真实数据
-        allInfo: [
-          {
-            date: 1,
-            isRead: true
-          },
-          {
-            date: 2,
-            isRead: false
-          }
-        ],
+        allInfo: [],
         notReadInfo: [],
         hasReadInfo: [],
         show: 1,
@@ -426,27 +326,28 @@
     created: function () {
       //一开始就向后端请求所有会议
       const _this = this;
-      // this.$axios.post('/mailCenter')
-      //     .then(resp => {
-      //         if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-      //             _this.allInfo = resp.data.mail;
-      //         } else {
-      //             // this.$message({
-      //             //     showClose: true,
-      //             //     message: resp.data.message,
-      //             //     type: 'success'
-      //             // });
-      //         }
-      //     })
-      //     .catch(error => {
-      //         console.log(error);
-      //         this.$message({
-      //             showClose: true,
-      //             message: '获取信息失败',
-      //             type: 'warning'
-      //         });
-      //     })
-
+      this.$axios.post('/mailCenter')
+        .then(resp => {
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            _this.allInfo = resp.data.messages;
+            for (let i = 0; i < _this.allInfo.length; i++) {
+              if (_this.allInfo[i].isRead === 1) {
+                this.notReadInfo.push(_this.allInfo[i]);
+              } else {
+                this.hasReadInfo.push(_this.allInfo[i]);
+              }
+            }
+          } else {
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.$message({
+            showClose: true,
+            message: '获取信息失败',
+            type: 'warning'
+          });
+        })
     }
   };
 </script>

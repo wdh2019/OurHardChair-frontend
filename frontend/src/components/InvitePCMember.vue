@@ -41,7 +41,7 @@
           <el-button type="primary" @click="onSubmit">查询</el-button>
         </el-form-item>
       </el-form>
-      <el-table ref="userTable"
+      <el-table ref="allUsers"
                 :data="allUsers.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
                 @selection-change="handleSelectionChange">
         <el-table-column
@@ -66,8 +66,8 @@
         <el-table-column prop="status" label="邀请状态" width="150px">
           <template slot-scope="scope">
             <el-tag type="success" v-show="scope.row.status===1">可邀请</el-tag>
-            <el-tag type="warning" v-show="scope.row.status===2">已邀请未回复</el-tag>
-            <el-tag type="primary" v-show="scope.row.status===3">已为管理员</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===2">已为PCMember</el-tag>
+            <el-tag type="warning" v-show="scope.row.status===3">已邀请未回复</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -138,22 +138,20 @@
 
       },
       checkInvitable(row, index) {
-        // if (row.status === "可邀请")
-        //   return true;
-        // else
-        //   return false;
         return row.status === 1;
       },
       toggleSelection() {
         this.users = [];
-        this.$refs.userTable.clearSelection();
+        this.$refs.allUsers.clearSelection();
       },
       handleSelectionChange(val) {
         this.users = [];
         let count = 0;
         for (let user of val) {
           // console.log(user);
-          this.users = this.users.concat(user.username);
+          if(user.status===1){
+            this.users = this.users.concat(user.username);
+          }
         }
         console.log(this.users);
         console.log(this.allUsers);
@@ -162,81 +160,90 @@
         console.log(this.$route.query.full_name);
         console.log(this.$store.state.id);
         console.log(this.users);
-        this.$axios.post('/invitePCMember', {
-          //会议全称
-          fullName: this.$route.query.full_name,
-          //邀请接受者数组
-          users: this.users,
-        })
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              this.$message({
-                showClose: true,
-                message: "已发送邀请",
-                type: "success",
-              });
-              for (let i = 0; i < this.users.length; i++) {
-                for (let j = 0; j < this.allUsers.length; j++) {
-                  if (this.users[i] === this.allUsers[j].username) {
-                    this.allUsers[j].status = 2;
-                    break;
+        if (this.users.length > 0) {
+          this.$axios.post('/invitePCMember', {
+            //会议全称
+            fullName: this.$route.query.full_name,
+            //邀请接受者数组
+            users: this.users,
+          })
+            .then(resp => {
+              console.log(resp);
+              if (resp.status === 200 && resp.data.message === "success") {
+                this.$message({
+                  showClose: true,
+                  message: "已发送邀请",
+                  type: "success",
+                });
+                for (let i = 0; i < this.users.length; i++) {
+                  for (let j = 0; j < this.allUsers.length; j++) {
+                    if (this.users[i] === this.allUsers[j].username) {
+                      this.allUsers[j].status = 3;
+                      break;
+                    }
                   }
                 }
+                this.toggleSelection();
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,//success
+                  type: "warning",
+                });
               }
-            } else {
+            })
+            .catch(error => {
+              console.log(error);
               this.$message({
                 showClose: true,
                 message: resp.data.message,
-                type: "warning",
+                type: 'error',
               });
-            }
-          })
-          .catch(error => {
-            console.log(error);
-            this.$message({
-              showClose: true,
-              message: resp.data.message,
-              type: 'error',
-            });
-          })
+            })
+        }else{
+          this.$message({
+            showClose: true,
+            message: "请选择邀请对象",
+            type: "warning",
+          });
+        }
       },
-      inviteUsers() {
-        const _this = this;
-        //请求所有用户
-        this.$axios.post('/invitePCMember')
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              this.$message({
-                showClose: true,
-                message: "邀请已经发送",
-                type: 'warning'
-              });
-              for (let i = 0; i < this.users.length; i++) {
-                for (let j = 0; j < this.allUsers.length; j++) {
-                  if (this.users[i] === this.allUsers[j].username) {
-                    this.allUsers[j].status = 2;
-                    break;
-                  }
-                }
-              }
-            } else {
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'warning'
-              });
-            }
-          })
-          .catch(error => {
-            this.$message({
-              showClose: true,
-              message: resp.data.message,
-              type: 'error',
-            });
-          })
-      }
+      //   inviteUsers() {
+      //     const _this = this;
+      //     //请求所有用户
+      //     this.$axios.post('/invitePCMember')
+      //       .then(resp => {
+      //         if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+      //           this.$message({
+      //             showClose: true,
+      //             message: "邀请已经发送",
+      //             type: 'warning'
+      //           });
+      //           for (let i = 0; i < this.users.length; i++) {
+      //             for (let j = 0; j < this.allUsers.length; j++) {
+      //               if (this.users[i] === this.allUsers[j].username) {
+      //                 this.allUsers[j].status = 2;
+      //                 break;
+      //               }
+      //             }
+      //           }
+      //         } else {
+      //           this.$message({
+      //             showClose: true,
+      //             message: resp.data.message,
+      //             type: 'warning'
+      //           });
+      //         }
+      //       })
+      //       .catch(error => {
+      //         this.$message({
+      //           showClose: true,
+      //           message: resp.data.message,
+      //           type: 'error',
+      //         });
+      //       })
+      //   }
     },
-
   }
 </script>
 
