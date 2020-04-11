@@ -13,12 +13,14 @@
       </el-menu>
     </el-aside>
 
+
+    <!--未读页面-->
     <el-container>
       <el-header style="text-align: right; font-size: 20px">
       </el-header>
       <el-main v-show="(show===1)">
         <el-table
-          :data="tableData"
+          :data="testNotRead"
           style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="scope">
@@ -47,17 +49,20 @@
             </template>
           </el-table-column>
           <el-table-column
+            label="相关会议"
+            width="180"
+            prop="relatedConferenceName">
+            <template slot-scope="scope">
+              <el-tag size="medium" effect="plain" type="info">{{ scope.row.relatedConferenceName }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
             label="消息类型"
             width="180"
             prop="messageCategory">
             <template slot-scope="scope">
               <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='ApplyConferenceRequest'"
-                      type="success">
-                会议申请
-              </el-tag>
-              <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='PCMemeberInvitationRequest'"
+                      v-show="scope.row.messageCategory==='PCNumberInvitationRequest'"
                       type="success">
                 审稿人邀请
               </el-tag>
@@ -72,7 +77,7 @@
                 会议申请反馈
               </el-tag>
               <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='PCMemberInvitationResponse'"
+                      v-show="scope.row.messageCategory==='PCNumberInvitationResponse'"
                       type="success">
                 审稿人邀请反馈
               </el-tag>
@@ -84,33 +89,38 @@
             </template>
           </el-table-column>
           <el-table-column label="操作">
+            <!--标为已读，对接于/markRead 对应于markRead函数-->
             <template slot-scope="scope">
-              <div v-show="scope.row.messageCategory!=='PCMemeberInvitationRequest'">
+              <div v-show="scope.row.messageCategory!=='PCNumberInvitationRequest'">
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleEdit(scope.$index, scope.row)">标为已读
+                  @click="markRead(scope.$index,scope.row)">标为已读
                 </el-button>
               </div>
-              <div v-show="scope.row.messageCategory==='PCMemeberInvitationRequest'">
+              <div v-show="scope.row.messageCategory==='PCNumberInvitationRequest'">
+                <!--接受PCMember邀请，对应于"/approvePCNumberInvitation"，对应于approveInvitation()函数-->
                 <el-button
                   size="mini"
                   type="success"
-                  @click="handleEdit(scope.$index, scope.row)">同意
+                  @click="approveInvitation(scope.$index,scope.row)">同意
                 </el-button>
+                <!--拒绝PCMember邀请，对应于"/disapprovePCNumberInvitation"，对应于disapproveInvitation()函数-->
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleEdit(scope.$index, scope.row)">拒绝
+                  @click="disapproveInvitation(scope.$index,scope.row)">拒绝
                 </el-button>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </el-main>
+
+      <!--已读页面-->
       <el-main v-show="(show===2)">
         <el-table
-          :data="tableData"
+          :data="testHasRead"
           style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="scope">
@@ -139,17 +149,21 @@
             </template>
           </el-table-column>
           <el-table-column
+            label="相关会议"
+            width="180"
+            prop="relatedConferenceName">
+            <template slot-scope="scope">
+              <el-tag size="medium" effect="plain" type="info">{{ scope.row.relatedConferenceName }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
             label="消息类型"
             width="180"
             prop="messageCategory">
             <template slot-scope="scope">
+
               <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='ApplyConferenceRequest'"
-                      type="success">
-                会议申请
-              </el-tag>
-              <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='PCMemeberInvitationRequest'"
+                      v-show="scope.row.messageCategory==='PCNumberInvitationRequest'"
                       type="success">
                 审稿人邀请
               </el-tag>
@@ -164,7 +178,7 @@
                 会议申请反馈
               </el-tag>
               <el-tag size="medium" effect="plain"
-                      v-show="scope.row.messageCategory==='PCMemberInvitationResponse'"
+                      v-show="scope.row.messageCategory==='PCNumberInvitationResponse'"
                       type="success">
                 审稿人邀请反馈
               </el-tag>
@@ -173,29 +187,6 @@
                       type="success">
                 投稿反馈
               </el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <div v-show="scope.row.messageCategory!=='PCMemeberInvitationRequest'">
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleEdit(scope.$index, scope.row)">标为已读
-                </el-button>
-              </div>
-              <div v-show="scope.row.messageCategory==='PCMemeberInvitationRequest'">
-                <el-button
-                  size="mini"
-                  type="success"
-                  @click="handleEdit(scope.$index, scope.row)">同意
-                </el-button>
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleEdit(scope.$index, scope.row)">拒绝
-                </el-button>
-              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -218,81 +209,200 @@
 <script>
   export default {
     methods: {
-      //测试的函数
-      handleEdit(index, row) {
-        console.log(index, row);
+      //将信息标为已读,向/markRead接口发送消息
+      markRead(index, row) {
+        // 简单的测试代码
+        // console.log(row);
+        // console.log(index);
+        // let Info = this.testNotRead.splice(index, 1)[0];
+        // Info.isRead = 1;
+        // this.testHasRead.push(Info);
+        // console.log(Info);
+        // const _this = this;
+        // 真实应用代码
+        this.$axios.post("/markRead", {
+          receiverName: this.$store.state.username,
+          relatedConferenceName: row.relatedConferenceName,
+          message: row.messageCategory,
+        })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              let Info = _this.notReadInfo.splice(index, 1)[0];
+              Info.isRead = 1;
+              _this.hasReadInfo.push(Info);
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'success'
+              });
+
+            } else {
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: "warning",
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            this.$message({
+              showClose: true,
+              message: "服务器未响应",
+              type: "danger",
+            })
+          })
       },
-      //测试的函数
-      handleDelete(index, row) {
-        console.log(index, row);
+      //接受PCNumber邀请,向/approvePCNumberInvitation接口发送消息
+      approveInvitation(index, row) {
+        // console.log(index);
+        // console.log(row);
+        const _this = this;
+        this.$axios.post("/approvePCNumberInvitation", {
+          senderName: row.senderName,
+          receiverName: this.$store.state.username,
+          relatedConferenceName: row.relatedConferenceName,
+        })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              _this.notReadInfo.splice(index, 1);
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'success'
+              });
+
+            } else {
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: "warning",
+              });
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            this.$message({
+              showClose: true,
+              message: "服务器未响应",
+              type: "danger",
+            })
+          })
       },
+      disapproveInvitation(index, row) {
+        console.log(row);
+        this.$axios.post("/disapprovePCNumberInvitation", {
+          senderName: row.senderName,
+          reciverName: row.receiverName,
+          relatedConferenceName: row.relatedConferenceName,
+        }).then(resp => {
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            _this.notReadInfo.splice(index, 1);
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'success'
+            });
+
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: "warning",
+            });
+          }
+        })
+          .catch(error => {
+            console.log(error);
+            this.$message({
+              showClose: true,
+              message: "服务器未响应",
+              type: "danger",
+            })
+          })
+
+      },
+      //选择进入未读界面
       not_read: function () {
         this.show = 1;
       },
+      //选择进入已读界面
       has_read: function () {
         this.show = 2;
       },
-      has_deleted: function () {
-        this.show = 3;
-      },
-      number: function () {
-        console.log(this.info.length);
-        let notRead = [];
-        let hasRead = [];
-        for (let i = 0; i < this.info.length; i++) {
-          if (this.info[i].isRead === true)
-            hasRead.push(this.info[i]);
-          else
-            notRead.push(this.info[i]);
-        }
-        console.log("hasRead");
-        console.log(hasRead[0]);
-        console.log("NotRead");
-        console.log(notRead[0]);
-      }
     },
     data() {
       return {
         //测试样例
-        tableData: [{
+        testNotRead: [{
           senderName: '王小虎',
-          receiverName: '杨雲腾',
-          messageCategory: 'ApplyConferenceRequest',
-          message: 'xxxx',
-          sendTime: '2016-05-02',
-          isRead: 0,
-        }, {
-          senderName: '王小虎',
-          receiverName: '杨雲腾',
           messageCategory: 'ApplyConferenceResponse',
+          relatedConferenceName: 'FDSM',
           message: 'xxxx',
           sendTime: '2016-05-02',
           isRead: 0,
         }, {
           senderName: '王小虎',
-          receiverName: '杨雲腾',
-          messageCategory: 'PCMemeberInvitationRequest',
+          messageCategory: 'PCNumberInvitationRequest',
+          relatedConferenceName: 'FDSM',
           message: 'xxxx',
           sendTime: '2016-05-02',
           isRead: 0,
         }, {
           senderName: '王小虎',
-          receiverName: '杨雲腾',
-          messageCategory: 'PCMemberInvitationResponse',
+          messageCategory: 'PCNumberInvitationResponse',
+          relatedConferenceName: 'FDSM',
           message: 'xxxxx',
           sendTime: '2016-05-02',
           isRead: 0,
-        },{
+        }, {
           senderName: '王小虎',
-          receiverName: '杨雲腾',
           messageCategory: 'ManuscriptSubmissionRequest',
+          relatedConferenceName: 'FDSM',
           message: 'xxxxx',
           sendTime: '2016-05-02',
           isRead: 0,
-        },{
+        }, {
           senderName: '王小虎',
-          receiverName: '杨雲腾',
           messageCategory: 'ManuscriptSubmissionResponse',
+          relatedConferenceName: 'FDSM',
+          message: 'xxxxx',
+          sendTime: '2016-05-02',
+          isRead: 0,
+        }
+        ],
+        testHasRead: [{
+          senderName: '王小虎',
+          messageCategory: 'ApplyConferenceResponse',
+          relatedConferenceName: 'FDSM',
+          message: 'xxxx',
+          sendTime: '2016-05-02',
+          isRead: 0,
+        }, {
+          senderName: '王小虎',
+          messageCategory: 'PCNumberInvitationRequest',
+          relatedConferenceName: 'FDSM',
+          message: 'xxxx',
+          sendTime: '2016-05-02',
+          isRead: 0,
+        }, {
+          senderName: '王小虎',
+          messageCategory: 'PCNumberInvitationResponse',
+          relatedConferenceName: 'FDSM',
+          message: 'xxxxx',
+          sendTime: '2016-05-02',
+          isRead: 0,
+        }, {
+          senderName: '王小虎',
+          messageCategory: 'ManuscriptSubmissionRequest',
+          relatedConferenceName: 'FDSM',
+          message: 'xxxxx',
+          sendTime: '2016-05-02',
+          isRead: 0,
+        }, {
+          senderName: '王小虎',
+          messageCategory: 'ManuscriptSubmissionResponse',
+          relatedConferenceName: 'FDSM',
           message: 'xxxxx',
           sendTime: '2016-05-02',
           isRead: 0,

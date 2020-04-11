@@ -24,7 +24,7 @@ Vue.config.productionTip = false
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    if(store.state.token) {
+    if (store.state.token) {
       // 判断是否有token，若存在，每个http header加上token
       config.headers.Authorization = `Bearer ${store.state.token}`;
     }
@@ -42,17 +42,17 @@ axios.interceptors.response.use(
   },
   error => {
     console.log(error.response)
-    if(error) {
-      // 清除token 如果不是首页/register/login, 跳转至首页
-      store.commit('logout')
-	  router.currentRoute.path !== '/'&&
-	  router.currentRoute.path !== '/login'&&
-      router.currentRoute.path !== '/register' &&
-      router.replace({
-        path: '/',
-        query: { redirect: router.currentRoute.path }
-      })
-    }
+    // if (error) {
+    //   // 清除token 如果不是首页/register/login, 跳转至首页
+    //   store.commit('logout')
+    //   router.currentRoute.path !== '/' &&
+    //   router.currentRoute.path !== '/login' &&
+    //   router.currentRoute.path !== '/register' &&
+    //   router.replace({
+    //     path: '/',
+    //     query: {redirect: router.currentRoute.path}
+    //   })
+    // }
     return Promise.reject(error.response.data)
   }
 )
@@ -62,6 +62,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

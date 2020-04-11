@@ -55,7 +55,7 @@
                   <span>会议已结束，投稿尚在继续</span>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary">进入会议</el-button>
+                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
                 </el-form-item>
               </div>
               <div>
@@ -117,6 +117,21 @@
       }
     },
     methods: {
+      enterMeeting(row) {
+        console.log(row);
+        this.$router.push({
+          name: '/SubmitPapers',
+          query: {
+            fullname: row.fullname,
+            shortname: row.shortname,
+            place: row.place,
+            start_date: row.start_date,
+            deadline_date: row.deadline_date,
+            release_date: row.release_date,
+            status: row.status,
+          }
+        }).catch(err => err);
+      },
       getTime(time) {
         //2015-05-06 00:00:00
         let year = parseInt(time.slice(0, 4));

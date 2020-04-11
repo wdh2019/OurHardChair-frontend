@@ -84,7 +84,17 @@
         console.log(row);
         this.$router.push({
           name: '/SubmitPapers',
-          params: {row:row},
+          query: {
+            id: row.id,
+            chairId: row.chairId,
+            abbreviation: row.abbreviation,
+            fullName: row.fullName,
+            holdingPlace: row.holdingPlace,
+            holdingTime: row.holdingTime,
+            submissionDeadline: row.submissionDeadline,
+            reviewReleaseDate: row.reviewReleaseDate,
+            isOpenSubmission: row.isOpenSubmission,
+          }
         }).catch(err => err);
       },
       handleAction(index, row, type) {

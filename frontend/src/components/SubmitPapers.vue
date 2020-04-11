@@ -2,9 +2,36 @@
   <div id="base">
     <div class="container">
       <div>
-        <h3 class="title"><!--{{this.$route.params.row.fullName}}-->欢迎您的投稿</h3>
+        <h3 class="title">{{this.$route.query.fullName}}欢迎您的投稿</h3>
         <p class="description">请您填写以下信息</p>
       </div>
+      <el-collapse class="meeting_introduction" >
+        <el-collapse-item>
+          <span slot="title" class="collapse-title">会议简介</span>
+          <div>
+            <p class="content"><label class="label">会议简称:  </label>{{this.$route.query.abbreviation}}</p>
+          </div>
+          <div>
+            <p class="content"><label class="label">会议全称:  </label>{{this.$route.query.fullName}}</p>
+          </div>
+          <!--需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁-->
+          <div>
+            <p class="content"><label class="label">会议主席:  </label>{{this.$route.query.chairId}}</p>
+          </div>
+          <div>
+            <p class="content"><label class="label">会议地点:  </label>{{this.$route.query.holdingPlace}}</p>
+          </div>
+          <div>
+            <p class="content"><label class="label">会议开始时间:  </label>{{this.$route.query.holdingTime}}</p>
+          </div>
+          <div>
+            <p class="content"><label class="label">会议结束时间:  </label>{{this.$route.query.submissionDeadline}}</p>
+          </div>
+          <div>
+            <p class="content"><label class="label">会议截稿时间:  </label>{{this.$route.query.reviewReleaseDate}}</p>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item prop="title" class="item" label="文章标题">
           <el-input v-model="ruleForm.title" placeholder="文章标题"></el-input>
@@ -58,10 +85,12 @@
             {min: 1, max: 50, message: '标题不得超过50个字符', trigger: 'blur'}
           ],
           filename: [
-            {required: true, message: '请填写文件名', trigger: 'change'}
+            {required: true, message: '请填写文件名', trigger: 'change'},
+
           ],
           articleAbstract: [
-            {required: true, message: '请填写文章摘要', trigger: 'blur'}
+            {required: true, message: '请填写文章摘要', trigger: 'blur'},
+            {min: 1, max: 800, message: '文章摘要不得超过800个字符', trigger: 'blur'}
           ],
         }
       };
@@ -142,12 +171,39 @@
 </script>
 
 <style scoped>
+
+  .collapse-title {
+    flex: 1 0 90%;
+    order: 1;
+  }
+
+  .el-collapse-item__header {
+    flex: 1 0 auto;
+    order: -1;
+  }
+  .meeting_introduction{
+
+    text-align: left;
+    margin-left:35px;
+    margin-top:30px;
+    margin-bottom:30px ;
+  }
+
+  .meeting_introduction .content{
+    font-size:15px;
+  }
+  .meeting_introduction .label{
+    color: #99a9bf;
+    font-weight: bold;
+  }
+
   #userinfo {
     height: 100%;
     width: 100%;
     background-size: cover;
     position: fixed;
   }
+
 
   .container {
     border-radius: 15px;
