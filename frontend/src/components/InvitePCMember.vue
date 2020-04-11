@@ -67,7 +67,7 @@
           <template slot-scope="scope">
             <el-tag type="success" v-show="scope.row.status===1">可邀请</el-tag>
             <el-tag type="warning" v-show="scope.row.status===2">已邀请未回复</el-tag>
-            <el-tag type="danger" v-show="scope.row.status===3">已邀请</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===3">已为管理员</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -172,9 +172,17 @@
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               this.$message({
                 showClose: true,
-                message: resp.data.message,
+                message: "已发送邀请",
                 type: "success",
               });
+              for (let i = 0; i < this.users.length; i++) {
+                for (let j = 0; j < this.allUsers.length; j++) {
+                  if (this.users[i] === this.allUsers[j].username) {
+                    this.allUsers[j].status = 2;
+                    break;
+                  }
+                }
+              }
             } else {
               this.$message({
                 showClose: true,
