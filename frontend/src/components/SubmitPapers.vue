@@ -44,7 +44,8 @@
           ref="upload"
           style="float:left"
           class="upload-demo"
-          action=""
+          action="api/upload"
+          :http-request="myUpload"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-upload="beforeUpload"
@@ -108,46 +109,47 @@
       //上传前，先把文件COPY一份到ruleForm.file里
       beforeUpload(file){
         this.ruleForm.file=file;
-        return false;
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${ file.name }？`);
+      },
+      myUpload(content){
+        var formData=new FormData();
+        console.log(this.ruleForm.file);
+        formData.append('file',this.ruleForm.file);
+        this.instance.post('/upload',formData).then(resp =>{
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+              this.$message({
+                showClose:true,
+                message: "上传成功",
+                type:"success",
+              });
+            }else{
+              this.$message({
+                showClose:true,
+                message: resp.data.message,
+                type:"warning",
+              });
+            }
+        }).catch(error=>{
+            console.log(error);
+            this.$message({
+              showClose: true,
+              message: "上传文件失败",
+              type:'danger'
+            });
+          });
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             //虚晃upload一下，submit以后触发beforeUpload
             this.$refs.upload.submit();
-            var formData=new FormData();
-            formData.append('file',this.ruleForm.file);
-            console.log(formData);
-            this.instance.post('/upload',formData).then(resp =>{
-                if (resp.status === 200 && resp.data.hasOwnProperty("token")){
-                  this.$message({
-                    showClose:true,
-                    message: "上传成功",
-                    type:"success",
-                  });
-                }else{
-                  this.$message({
-                    showClose:true,
-                    message: resp.data.message,
-                    type:"warning",
-                  });
-                }
-            }).catch(error=>{
-                console.log(error);
-                this.$message({
-                  showClose: true,
-                  message: "上传文件失败",
-                  type:'danger'
-                });
-              })
             //正常的post
             this.$axios.post('/contribute',{
               //会议id需要传进来！！！！！
               conferenceID:this.$route.query.conference_id,
-              AuthorID:this.$store.state.id,
+              authorID:this.$store.state.id,
               filename:this.ruleForm.file.name,
               title:this.ruleForm.title,
               articleAbstract:this.ruleForm.articleAbstract,
@@ -180,7 +182,7 @@
               message: "请按要求填写投稿信息",
               type:'warning'
             });
-            return false;
+
           }
         });
       },
