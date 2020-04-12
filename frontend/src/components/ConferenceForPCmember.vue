@@ -2,8 +2,8 @@
   <div class="base_conference">
     <div class="conference_container">
       <div class="title_section">
-        <h3 class="title">我审稿的会议</h3>
-        <p class="description">在此查看作为审稿人参与的会议</p>
+        <h3 class="title">作为PCmember的会议</h3>
+        <p class="description">在此查看作为PCmember参与的会议</p>
       </div>
 
       <el-table
@@ -94,7 +94,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="full_name" label="会议全称" width="300px" :show-overflow-tooltip="true">
+        <el-table-column prop="full_name" label="会议全称" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -104,18 +104,11 @@
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="place" label="举办地点" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="start_date" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="deadline_date" label="截止时间" width="200px"
+        <el-table-column prop="place" label="举办地点" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="start_date" label="开始时间" width="250px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="deadline_date" label="截止时间" width="250px"
                          :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="release_date" label="发布时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="status" label="会议状态" width="120px">
-          <template slot-scope="scope">
-            <el-tag type="primary" v-show="scope.row.status===1">审核中</el-tag>
-            <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
-            <el-tag type="danger" v-show="scope.row.status===3">审核未通过</el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column prop="release_date" label="发布时间" width="250px" :show-overflow-tooltip="true"></el-table-column>
       </el-table>
       <el-pagination
         :current-page.sync="curPage"
@@ -136,37 +129,6 @@
       return {
         pagesize: 10,
         curPage: 1,
-        // conferences: [{
-        //   short_name: '1',
-        //   full_name: '全称',
-        //   place: "我家",
-        //   start_date: '2020-4-10 0:0:0',
-        //   deadline_date: '2020-4-10 0:0:1',
-        //   release_date: '2020-4-10 0:0:2',
-        //   status: 1,//1未通过，2已通过，3审核中
-        //   is_open_submission: 1, //1未开放，2已开放投稿
-        // },
-        //   {
-        //     short_name: '2',
-        //     full_name: '全称',
-        //     place: "我家",
-        //     start_date: '2020-4-10 0:0:0',
-        //     deadline_date: '2020-4-10 0:0:1',
-        //     release_date: '2020-5-10 0:0:2',
-        //     status: 2,
-        //     is_open_submission: 1,
-        //   },
-        //   {
-        //     short_name: '3',
-        //     full_name: '全称',
-        //     place: "我家",
-        //     start_date: '2020-4-10 0:0:0',
-        //     deadline_date: '2020-5-10 0:0:1',
-        //     release_date: '2020-5-10 0:0:2',
-        //     status: 2,
-        //     is_open_submission: 1,
-        //   }
-        // ],
         conferences: [],
         search: '',
       }
@@ -257,7 +219,7 @@
       },
     },
     created() {
-      //一开始就向后端请求已申请的会议
+      //一开始就向后端请求会议
       const _this = this;
       this.$axios.post('/ConferenceForPCMember')
         .then(resp => {
@@ -306,10 +268,10 @@
   }
 
   .conference_container {
+    width:85%;
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 100%;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;

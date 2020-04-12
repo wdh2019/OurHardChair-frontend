@@ -67,9 +67,6 @@
                   <label class="label">会议状态</label>
                   <span>投稿开始</span>
                 </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
-                </el-form-item>
               </div>
               <div
                 v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
@@ -85,7 +82,7 @@
                   <span>评审结束，结果已发布</span>
                 </el-form-item>
               </div>
-              <el-form-item class="el-form-item">
+              <el-form-item class="el-form-item" v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
                 <label class="label">操作</label>
                 <el-button
                   size="mini"
@@ -96,8 +93,8 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="full_name" label="会议全称" width="300px" :show-overflow-tooltip="true">
+        <el-table-column prop="short_name" label="会议简称" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="full_name" label="会议全称" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -107,13 +104,13 @@
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="place" label="举办地点" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="place" label="举办地点" width="300px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="start_date" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="deadline_date" label="截止时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="release_date" label="发布时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="is_open_submission" label="投稿权限" width="120px">
+        <el-table-column prop="is_open_submission" label="投稿状态" width="120px">
           <template slot-scope="scope" width="50px">
             <el-tag type="danger" v-show="scope.row.is_open_submission===1">未开放投稿</el-tag>
             <el-tag type="success" v-show="scope.row.is_open_submission===2">已开放投稿</el-tag>
@@ -324,7 +321,7 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 100%;
+    width: 90%;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -360,8 +357,13 @@
   }
 
   .search_input {
-    float: right;
+    float: left;
     width: 150px;
+    margin-left: 10px;
     margin-right: 30px;
+  }
+
+  .el-pagination{
+    width:100%;
   }
 </style>

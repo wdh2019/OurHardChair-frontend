@@ -2,7 +2,7 @@
   <div id="base">
     <div class="container">
       <div>
-        <h3 class="title">{{this.$route.query.fullName}}欢迎您的投稿</h3>
+        <h3 class="title">{{this.$store.state.fullName}},欢迎您的投稿</h3>
         <p class="description">请您填写以下信息</p>
       </div>
       <el-collapse class="meeting_introduction" >
@@ -56,9 +56,8 @@
           :on-exceed="handleExceed"
         >
           <el-button  size="small" type="primary">选择文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件</div>
+          <div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件,文件大小不能超过1M</div>
         </el-upload>
-          <el-button size="small" type="info" @click="clearFiles">清空文件列表</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">确认</el-button>
@@ -74,6 +73,8 @@
     name: "SubmitPapers",
     data() {
       return {
+        fileSelected:false,
+        fileValid:false,
         ruleForm: {
           title: '',
           filename: '',
@@ -98,20 +99,24 @@
     },
     methods: {
       handleRemove(file, fileList) {
-        console.log(file, fileList);
+        //console.log(file, fileList);
       },
       handlePreview(file) {
-        console.log(file.name);
+        //console.log(file.name);
       },
       handleExceed(files, fileList) {
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
       //上传前，先把文件COPY一份到ruleForm.file里
       beforeUpload(file){
+        this.fileSelected=false;
         this.ruleForm.file=file;
+        const  file_size= file.size /1024 /1024 ;
+        if(file_size>=1){ this.$message.warning('文件大小不能超过1M');this.fileSelected=true ;return false; }
+        else{ this.fileValid=true;this.fileSelected=true; }
       },
       beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
+        //return this.$confirm(`确定移除 ${ file.name }？`);
       },
       myUpload(content){
         var formData=new FormData();
@@ -145,36 +150,38 @@
             //虚晃upload一下，submit以后触发beforeUpload
             this.$refs.upload.submit();
             //正常的post
-            this.$axios.post('/contribute',{
-              //会议id需要传进来！！！！！
-              conferenceID:this.$route.query.conference_id,
-              authorID:this.$store.state.id,
-              filename:this.ruleForm.file.name,
-              title:this.ruleForm.title,
-              articleAbstract:this.ruleForm.articleAbstract,
-            }).then(resp => {
-                if (resp.status === 200 && resp.data.hasOwnProperty("token")){
-                  this.$message({
-                    showClose:true,
-                    message: "投稿成功",
-                    type:"success",
-                  });
-                  this.$router.push('/AllConferences');
-                }else {
+            if(this.fileValid&&this.fileSelected){
+              this.$axios.post('/contribute',{
+                //会议id需要传进来！！！！！
+                conferenceID:this.$route.query.conference_id,
+                authorID:this.$store.state.id,
+                filename:this.ruleForm.file.name,
+                title:this.ruleForm.title,
+                articleAbstract:this.ruleForm.articleAbstract,
+              }).then(resp => {
+                  if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+                    this.$message({
+                      showClose:true,
+                      message: "投稿成功",
+                      type:"success",
+                    });
+                    this.$router.push('/AllConferences');
+                  }else {
+                    this.$message({
+                      showClose: true,
+                      message: resp.data.message,
+                      type:'warning'
+                    });
+                  }
+              }).catch(error => {
+                  console.log(error);
                   this.$message({
                     showClose: true,
-                    message: resp.data.message,
-                    type:'warning'
+                    message: "上传投稿信息失败",
+                    type:'danger'
                   });
-                }
-            }).catch(error => {
-                console.log(error);
-                this.$message({
-                  showClose: true,
-                  message: "上传投稿信息失败",
-                  type:'danger'
-                });
-              })
+                })
+            }else if(!this.fileSelected) this.$message.warning("请选择上传文件");
           } else {
             this.$message({
               showClose: true,
@@ -189,9 +196,6 @@
         this.$refs[formName].resetFields();
         this.$refs.upload.clearFiles();
       },
-      clearFiles(){
-        this.$refs.upload.clearFiles();
-      }
     }
   }
 </script>

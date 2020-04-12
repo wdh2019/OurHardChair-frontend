@@ -2,7 +2,7 @@
   <div class="base_conference">
     <div class="conference_container">
       <div class="title_section">
-        <h3 class="title">我主持的会议</h3>
+        <h3 class="title">作为Chair的会议</h3>
         <p class="description">在此查看已申请的会议</p>
       </div>
       <el-table
@@ -52,6 +52,9 @@
                   <label class="label">会议状态</label>
                   <span>会议尚未开始</span>
                 </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                </el-form-item>
               </div>
               <div
                 v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
@@ -60,7 +63,7 @@
                   <span>会议进行中,投稿尚未开始</span>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary">进入会议</el-button>
+                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
                 </el-form-item>
               </div>
               <div
@@ -87,20 +90,17 @@
                   <span>评审结束，结果已发布</span>
                 </el-form-item>
               </div>
-              <!--测试按键-->
-              <!--<div>-->
-                <!--<el-form-item>-->
-                  <!--<el-button type="primary" @click="TestEnterMeeting(scope.row)">进入会议</el-button>-->
-                <!--</el-form-item>-->
-              <!--</div>-->
+              <!--测试按键
+              <div>
+                <el-form-item>
+                  <el-button type="primary" @click="TestEnterMeeting(scope.row)">进入会议</el-button>
+                </el-form-item>
+              </div>-->
             </el-form>
-            <div>
-
-            </div>
           </template>
         </el-table-column>
         <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="full_name" label="会议全称" width="300px" :show-overflow-tooltip="true">
+        <el-table-column prop="full_name" label="会议全称"  width="300px" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -110,7 +110,7 @@
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="place" label="举办地点" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="place" label="举办地点" width="300px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="start_date" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="deadline_date" label="截止时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
@@ -122,7 +122,7 @@
             <el-tag type="danger" v-show="scope.row.status===3">审核未通过</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="is_open_submission" label="投稿状态" width="300px">
+        <el-table-column prop="is_open_submission" label="投稿状态" width="250px">
           <template slot-scope="scope">
             <el-switch
               ref="switch"
@@ -135,8 +135,7 @@
               :inactive-value='1'
               active-color="#13ce66"
               inactive-color="#ff4949"
-              @change="changeSubmissionStatus($event,scope.row)"
-            >
+              @change="changeSubmissionStatus($event,scope.row)">
               <label>{{scope.row.is_open_submission}}</label>
             </el-switch>
           </template>
@@ -161,51 +160,16 @@
       return {
         pagesize: 10,
         curPage: 1,
-        // conferences: [{
-        //   short_name: '1',
-        //   full_name: '全称',
-        //   place: "我家",
-        //   chair_name:"Test",
-        //   start_date: '2020-04-10 00:00:00',
-        //   deadline_date: '2020-04-10 00:00:10',
-        //   release_date: '2020-04-10 00:00:20',
-        //   status: 1,//1未通过，2已通过，3审核中
-        //   is_open_submission: 1, //1未开放，2已开放投稿
-        // },
-        //   {
-        //     short_name: '2',
-        //     full_name: '全称',
-        //     place: "我家",
-        //     chair_name:"Test",
-        //     start_date: '2020-04-10 00:00:00',
-        //     deadline_date: '2020-04-10 00:00:10',
-        //     release_date: '2020-05-10 00:00:20',
-        //     status: 2,
-        //     is_open_submission: 1,
-        //   },
-        //   {
-        //     short_name: '3',
-        //     full_name: '全称',
-        //     place: "我家",
-        //     chair_name:"Test",
-        //     start_date: '2020-04-10 00:00:00',
-        //     deadline_date: '2020-05-10 00:00:10',
-        //     release_date: '2020-05-10 00:00:20',
-        //     status: 2,
-        //     is_open_submission: 1,
-        //   }
-        // ],
         conferences: [],
         search: '',
       }
     },
     methods: {
-      TestEnterMeeting(row) {
+      /*TestEnterMeeting(row) {
         console.log(row);
         this.enterMeeting(row);
-      },
+      },*/
       enterMeeting(row) {
-        console.log(row);
         this.$router.push({
           name: '/InvitePCMember',
           query: {
@@ -339,7 +303,6 @@
       const _this = this;
       this.$axios.post('/ConferenceForChair')
         .then(resp => {
-          console.log(resp.data.meetings);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferences = resp.data.meetings;
           } else {
@@ -387,7 +350,7 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 90%;
+    width: 95%;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;

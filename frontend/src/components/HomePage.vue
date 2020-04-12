@@ -28,7 +28,7 @@
       }
 
     },
-    beforeMount() {
+    created() {
       this.height=window.innerHeight+"px";
       this.width=window.innerWidth+"px";
     },

@@ -70,7 +70,7 @@ export const router = new Router({
       children: [
         {
           path: '/ConferenceForChair',
-          name: '我主持的会议',
+          name: '作为Chair的会议',
           component: ConferenceForChair,
         },
         {
@@ -80,7 +80,7 @@ export const router = new Router({
         },
         {
           path: '/ConferenceForAuthor',
-          name: '我投稿的会议',
+          name: '作为author的会议',
           component: ConferenceForAuthor,
         },
       ]

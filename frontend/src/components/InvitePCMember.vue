@@ -80,7 +80,7 @@
         layout="total, prev, pager, next, jumper">
       </el-pagination>
       <div class="selectButton">
-        <el-button type="success" @click="submitUsers">确认</el-button>
+        <el-button type="success" @click="submitUsers">邀请</el-button>
         <el-button type="info" @click="toggleSelection">取消选择</el-button>
       </div>
     </div>
@@ -208,41 +208,6 @@
           });
         }
       },
-      //   inviteUsers() {
-      //     const _this = this;
-      //     //请求所有用户
-      //     this.$axios.post('/invitePCMember')
-      //       .then(resp => {
-      //         if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-      //           this.$message({
-      //             showClose: true,
-      //             message: "邀请已经发送",
-      //             type: 'warning'
-      //           });
-      //           for (let i = 0; i < this.users.length; i++) {
-      //             for (let j = 0; j < this.allUsers.length; j++) {
-      //               if (this.users[i] === this.allUsers[j].username) {
-      //                 this.allUsers[j].status = 2;
-      //                 break;
-      //               }
-      //             }
-      //           }
-      //         } else {
-      //           this.$message({
-      //             showClose: true,
-      //             message: resp.data.message,
-      //             type: 'warning'
-      //           });
-      //         }
-      //       })
-      //       .catch(error => {
-      //         this.$message({
-      //           showClose: true,
-      //           message: resp.data.message,
-      //           type: 'error',
-      //         });
-      //       })
-      //   }
     },
   }
 </script>

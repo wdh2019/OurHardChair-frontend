@@ -2,7 +2,7 @@
   <div class="base_conference">
     <div class="conference_container">
       <div class="title_section">
-        <h3 class="title">查看您在 {{this.$route.query.fullname}} 会议中的投稿记录</h3>
+        <h3 class="title">查看您在  {{this.$route.query.short_name}}  会议中的投稿记录</h3>
       </div>
       <el-collapse class="meeting_introduction">
         <el-collapse-item>
@@ -81,50 +81,33 @@
     name: "ViewSubmissionRecord",
     data() {
       return {
-        submissionRecord: [
-          {
-            date: '2020-04-10 00:00:00',
-            title: "Test",
-            filename: "Test",
-            articleAbstract: "好滋好味鸡蛋仔江浙小吃、小吃零食荷兰优质淡奶，奶香浓而不腻上海市普陀区真北路",
-          },
-          {
-            date: '2020-04-10 00:00:00',
-            title: "Test",
-            filename: "Test",
-            articleAbstract: "好滋好味鸡蛋仔江浙小吃、小吃零食荷兰优质淡奶，奶香浓而不腻上海市普陀区真北路",
-          }, {
-            date: '2020-04-10 00:00:00',
-            title: "Test",
-            filename: "Test",
-            articleAbstract: "好滋好味鸡蛋仔江浙小吃、小吃零食荷兰优质淡奶，奶香浓而不腻上海市普陀区真北路",
-          }]
+        submissionRecord: []
       }
     },
-    // created(){
-    //   //接口未定义
-    //   const _this=this;
-    //   this.$axios.post('')
-    //     .then(resp => {
-    //       if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-    //         _this.submissionRecord = resp.data.submissionRecord;
-    //       } else {
-    //         this.$message({
-    //           showClose: true,
-    //           message: resp.data.message,
-    //           type: 'warning'
-    //         });
-    //       }
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //       this.$message({
-    //         showClose: true,
-    //         message: '请求相关记录失败',
-    //         type: 'warning'
-    //       });
-    //     })
-    // }
+    created(){
+       //接口未定义
+       const _this=this;
+       this.$axios.post('')
+         .then(resp => {
+           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+             _this.submissionRecord = resp.data.submissionRecord;
+           } else {
+             this.$message({
+               showClose: true,
+               message: resp.data.message,
+               type: 'warning'
+             });
+           }
+         })
+         .catch(error => {
+           console.log(error);
+          this.$message({
+             showClose: true,
+             message: '请求相关记录失败',
+             type: 'warning'
+           });
+         })
+     }
   }
 </script>
 
