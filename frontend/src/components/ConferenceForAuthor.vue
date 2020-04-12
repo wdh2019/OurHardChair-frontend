@@ -238,15 +238,15 @@
         let deadline = this.getTime(deadlineDate);
         let release = this.getTime(releaseDate);
         if (!this.compareDate(start)) {
-          return 1
+            return 1
         } else if (this.compareDate(start) && is_open_submission === 1 && !this.compareDate(deadline)) {
-          return 2
+            return 2
         } else if (this.compareDate(start) && is_open_submission !== 1 && !this.compareDate(deadline)) {
-          return 3
+            return 3
         } else if (this.compareDate(deadline) && !this.compareDate(release)) {
-          return 4
+            return 4
         } else
-          return 5
+            return 5
       },
     },
     created() {
