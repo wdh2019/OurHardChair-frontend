@@ -69,9 +69,9 @@
                   <label class="label">会议状态</label>
                   <span>投稿开始</span>
                 </el-form-item>
-                <!--<el-form-item>-->
-                <!--<el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>-->
-                <!--</el-form-item>-->
+                <el-form-item>
+                <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                </el-form-item>
               </div>
               <div
                 v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
@@ -80,7 +80,7 @@
                   <span>投稿已经结束，等待评审结果</span>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary">进入会议</el-button>
+                <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
                 </el-form-item>
               </div>
               <div
@@ -134,6 +134,21 @@
       }
     },
     methods: {
+      enterMeeting(row) {
+        this.$router.push({
+          name: '/CheckPapers',
+          query: {
+            full_name: row.full_name,
+            short_name: row.short_name,
+            place: row.place,
+            start_date: row.start_date,
+            deadline_date: row.deadline_date,
+            release_date: row.release_date,
+            status: row.status,
+            isOpenSubmisstion: row.is_open_submission,
+          }
+        }).catch(err => err);
+      },
       getTime(time) {
         //2015-05-06 00:00:00
         let year = parseInt(time.slice(0, 4));

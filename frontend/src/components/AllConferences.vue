@@ -87,8 +87,10 @@
                 <el-button
                   size="mini"
                   type="danger"
+                  v-if="$store.state.username!==scope.row.chair_username"
                   v-on:click="enterSubmitPapers(scope.row)">投稿
                 </el-button>
+                <el-tag type="warning" v-else>您是此会议的Chair</el-tag>
               </el-form-item>
             </el-form>
           </template>

@@ -37,9 +37,6 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="提交时间">
-                <span>{{ props.row.date }}</span>
-              </el-form-item>
               <el-form-item label="文章标题">
                 <span>{{ props.row.title }}</span>
               </el-form-item>
@@ -51,10 +48,6 @@
               </el-form-item>
             </el-form>
           </template>
-        </el-table-column>
-        <el-table-column
-          label="提交时间"
-          prop="date" :show-overflow-tooltip="true">
         </el-table-column>
         <el-table-column
           label="文章标题"
@@ -69,6 +62,16 @@
           label="文章摘要"
           prop="articleAbstract"
           :show-overflow-tooltip="true">
+        </el-table-column>
+        <el-table-column
+          label="状态"
+          prop="status"
+          :show-overflow-tooltip="true">
+          <template slot-scope="scope" width="50px">
+            <el-tag type="danger" v-show="scope.row.status===0">未通过</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===1">待审核</el-tag>
+            <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -87,10 +90,12 @@
     created(){
        //接口未定义
        const _this=this;
-       this.$axios.post('')
+       this.$axios.post('/showMySubmission',{
+         username:this.$store.state.username
+       })
          .then(resp => {
            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-             _this.submissionRecord = resp.data.submissionRecord;
+             _this.submissionRecord = resp.data.submissions;
            } else {
              this.$message({
                showClose: true,
