@@ -192,10 +192,10 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
-  if (to.fullPath === "/login" || to.fullPath === '/register') {
+  if (to.fullPath ==="/" ||to.fullPath === "/login" || to.fullPath === '/register') {
     if (localStorage.getItem('token')) {
       next({
-        path: to.fullPath
+        path: from.fullPath
       });
     } else {
       next();
