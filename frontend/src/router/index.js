@@ -19,7 +19,7 @@ import UserInfo from "../components/UserInfo"
 import ViewSubmissionTRecord from "../components/ViewSubmissionRecord"
 
 
-Vue.use(Router)
+Vue.use(Router);
 
 export const router = new Router({
   //通过路由转到的页面
@@ -192,7 +192,7 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
-  if (to.fullPath === "/login" || to.fullPath === '/register') {
+  if (to.fullPath === "/login" || to.fullPath === '/register' || to.fullPath==='/') {
     if (localStorage.getItem('token')) {
       next({
         path: to.fullPath

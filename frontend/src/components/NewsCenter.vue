@@ -192,10 +192,7 @@
       markRead(index, row) {
         const _this = this;
         this.$axios.post("/markRead", {
-          senderName: row.senderName,
-          receiverName: row.receiverName,
-          relatedConferenceName: row.relatedConferenceName,
-          messageCategory: row.messageCategory,
+          id: row.id,
         })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
@@ -309,7 +306,7 @@
     },
 
     created: function () {
-      //一开始就向后端请求所有会议
+      //一开始就向后端请求所有消息
       const _this = this;
       this.$axios.post('/mailCenter')
         .then(resp => {
