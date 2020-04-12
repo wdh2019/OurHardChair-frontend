@@ -19,7 +19,7 @@ import UserInfo from "../components/UserInfo"
 import ViewSubmissionTRecord from "../components/ViewSubmissionRecord"
 
 
-Vue.use(Router)
+Vue.use(Router);
 
 export const router = new Router({
   //通过路由转到的页面
