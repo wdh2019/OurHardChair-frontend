@@ -260,10 +260,11 @@
           })
       },
       disapproveInvitation(index, row) {
+        const _this = this;
         console.log(row);
         this.$axios.post("/disapprovePCMemberInvitation", {
           senderName: row.receiverName,
-          reciverName: row.senderName,
+          receiverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
         }).then(resp => {
           console.log(resp);
