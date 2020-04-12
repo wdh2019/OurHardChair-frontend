@@ -98,13 +98,6 @@
         {value: 'Russia', label:'俄罗斯'},
         {value: 'Japan', label: '日本'},
         {value: 'Others', label: '其他区域'}
-          //label="Asia" value="Asia"
-          //label="Europe" value="Europe"
-          //label="North American" value="North American"
-          //"South American" value="South American"
-          //label="Africa" value="Africa"
-          //label="Oceania" value="Oceania"
-          //label="Antarctica" value="Antarctica"
         ],
         ruleForm: {
           username: '',

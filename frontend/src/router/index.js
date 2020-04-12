@@ -182,20 +182,20 @@ export const router = new Router({
 router.beforeEach(function (to, from, next) {
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (store.state.token) {
-      next()
+      next();
     } else {
       next({
         path: '/login',
         query: {redirect: to.fullPath} // 登录成功之后重新跳转到该路由
-      })
+      });
     }
   } else {
     next()
   }
-  if (to.fullPath === "/" || to.fullPath === "/login" || to.fullPath === '/register') {
+  if (to.fullPath === "/login" || to.fullPath === '/register') {
     if (localStorage.getItem('token')) {
       next({
-        path: from.fullPath
+        path: to.fullPath
       });
     } else {
       next();
@@ -205,7 +205,7 @@ router.beforeEach(function (to, from, next) {
     if (to.fullPath === "/ApproveConference") {
       next({
         path: from.fullPath
-      })
+      });
     } else {
       next();
     }

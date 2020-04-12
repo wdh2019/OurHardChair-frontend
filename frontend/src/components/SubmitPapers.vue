@@ -115,7 +115,6 @@
       },
       myUpload(content){
         var formData=new FormData();
-        console.log(this.ruleForm.file);
         formData.append('file',this.ruleForm.file);
         this.instance.post('/upload',formData).then(resp =>{
             if (resp.status === 200 && resp.data.hasOwnProperty("token")){

@@ -3,20 +3,21 @@
     <div class="userinfo_container">
       <div class="title_section">
       <h3 class="userinfo_title">用户信息</h3>
-      <p class="description">管理您的Gysw账号详情，包括您的用户名，邮箱等信息</p>
+      <p class="description">管理您的Gysw账号详情，包括您的用户名，邮箱等信息（暂未开放）</p>
       </div>
       <div class="userinfo_form">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  label-position="left">
         <h3 class="userinfo_title">账户信息</h3>
-        <p class="id"><span class="id_bold">ID:</span>{{$store.state.id}}</p>
+        <p class="id"><span class="id_bold">ID: </span>{{$store.state.id}}</p>
 
         <div class="inline_block display_username_field">
-           <el-form-item prop="username" class="item" label="用户名" disabled>
+           <el-form-item prop="username" class="item" label="用户名">
               <el-input v-model="ruleForm.username" :placeholder="$store.state.username" type="text" auto-complete="off" :disabled="username_disabled">
+                <i slot="suffix" class="el-icon-warning-outline" title="只能包含字母,数字或两种特殊字符(-_),只能以字母或-开头,长度为5-32个字符"></i>
               </el-input>
            </el-form-item>
         </div>
-        <el-button class="inline_block" type="primary" icon="el-icon-edit" @click="unlockUsername" title="用户名是重要信息,请勿随意更改"></el-button>
+        <el-button class="inline_block" type="primary" icon="el-icon-edit" @click="unlockUsername" title="用户名是重要信息,请勿随意更改" disabled></el-button>
 
         <div class="inline_block display_email_field">
           <el-form-item prop="email" class="item" label="邮箱">
@@ -24,25 +25,32 @@
             </el-input>
           </el-form-item>
         </div>
-        <el-button class="inline_block" type="primary" icon="el-icon-edit" @click="unlockEmail" title="绑定邮箱是重要信息,请勿随意更改"></el-button>
+        <el-button class="inline_block" type="primary" icon="el-icon-edit" @click="unlockEmail" title="绑定邮箱是重要信息,请勿随意更改" disabled></el-button>
 
         <h3 class="userinfo_title">密码与安全</h3>
         <div class="display_password_field">
         <el-form-item prop="old_password" class="item">
-          <el-input v-model="ruleForm.old_password" placeholder="输入原密码" type="password" auto-complete="off" show-password>
+          <el-input v-model="ruleForm.old_password" placeholder="输入原密码" type="password" auto-complete="off" show-password disabled>
+          </el-input>
+        </el-form-item>
+        </div>
+        <div class="display_new_password_field">
+        <el-form-item prop="new_password" class="item">
+          <el-input v-model="ruleForm.ensure_password" placeholder="新密码" type="password" auto-complete="off" show-password disabled>
+            <i slot="suffix" class="el-icon-warning-outline" title="至少包含字母,数字或特殊字符(-_)中的两种,长度6-32个字符,不能包含账号"></i>
           </el-input>
         </el-form-item>
         </div>
         <div class="display_ensure_password_field">
         <el-form-item prop="ensure_password" class="item">
-          <el-input v-model="ruleForm.ensure_password" placeholder="确认密码" type="password" auto-complete="off" show-password>
+          <el-input v-model="ruleForm.ensure_password" placeholder="确认密码" type="password" auot-complete="off" show-password disabled>
           </el-input>
         </el-form-item>
         </div>
         <h3 class="userinfo_title title3">个人信息</h3>
         <div class="inline_block display_country_field">
         <el-form-item prop="country" class="item" label="国家/地区">
-          <el-select v-model="ruleForm.country" :placeholder="$store.state.country" filterable>
+          <el-select v-model="ruleForm.country" :placeholder="$store.state.country" filterable disabled>
             <el-option v-for="country in countries" :key="country.value" :value="country.value" :label="country.label">
               <span style="float: left">{{ country.label }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">{{ country.value }}</span>
@@ -52,13 +60,13 @@
         </div>
         <div class="inline_block display_company_field">
         <el-form-item prop="company" class="item" label="所属单位">
-          <el-input v-model="ruleForm.company" :placeholder="$store.state.institution" type="text" auto-complete="off">
+          <el-input v-model="ruleForm.company" :placeholder="$store.state.institution" type="text" auto-complete="off" disabled>
           </el-input>
         </el-form-item>
         </div>
         <el-form-item class="item">
-          <el-button type="primary"  @click="submitForm('ruleForm')" size="medium">保存变更</el-button>
-          <el-button type='info'  @click="resetForm('ruleForm')" size="medium">放弃变更</el-button>
+          <el-button type="primary"  @click="submitForm('ruleForm')" size="medium" disabled>保存变更</el-button>
+          <el-button type='info'  @click="resetForm('ruleForm')" size="medium" disabled>放弃变更</el-button>
         </el-form-item>
       </el-form>
       </div>
@@ -79,17 +87,24 @@
       };
       let checkPassword = (rule, value, callback) => {
         var regPassword = /(?!^(\d+|[a-zA-Z]+|[-_]+)$)^[\w-_]{6,32}$/;
-        var username = this.$refs.username.value;
         if (!regPassword.test(value)) {
           return callback(new Error("密码格式不正确，必须包含字母、数字以及特殊符号（-_）中两种"));
         }
-        if (value.includes(username)) {
-          return callback(new Error("密码不能包含账号"));
+        return callback();
+      };
+      let checkNewPassword = (rule, value, callback) => {
+		    var username = this.$store.state.username;
+        var regPassword = /(?!^(\d+|[a-zA-Z]+|[-_]+)$)^[\w-_]{6,32}$/;
+        if (!regPassword.test(value)) {
+          return callback(new Error("密码格式不正确，必须包含字母、数字以及特殊符号（-_）中两种"));
         }
+		    if (value.includes(username)) {
+		      return callback(new Error("密码不能包含用户名"));
+		    }
         return callback();
       };
       let checkEnsurePassword = (rule, value, callback) => {
-        if (value !== this.ruleForm.old_password) {
+        if (value !== this.ruleForm.new_password) {
           return callback(new Error("确认密码与密码不相符"))
         }
         return callback();
@@ -137,6 +152,11 @@
             {required: true, message: '原密码不能为空', trigger: 'blur'},
             {validator: checkPassword, trigger: 'blur'}
           ],
+          new_password: [
+            {required: true, message: "新密码不能为空", trigger: 'blur'},
+            {min: 6, max: 32, message: "密码长度在6-32之间", trigger: 'blur'},
+            {validator: checkNewPassword, trigger: 'blur'}
+          ],
           ensure_password: [
             {required: true, message: "确认密码不能为空", trigger: 'blur'},
             {validator: checkEnsurePassword, trigger: 'blur'}
@@ -169,14 +189,13 @@
             this.$axios.post('/UserInfo', {
                 username_changed: this.ruleForm.username,
                 old_password: this.ruleForm.old_password,
-                password_changed: this.ruleForm.password,
+                password_changed: this.ruleForm.new_password,
                 email_changed: this.ruleForm.email,
                 institution_changed: this.ruleForm.company,
                 country_changed: this.ruleForm.country,
               }
             )
               .then(resp => {
-                //console.log(resp.data);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   // 跳转到login
                   this.$message({
@@ -281,10 +300,7 @@
   .display_email_field{
     width: 300px;
   }
-  .display_password_field{
-    width:50%;
-  }
-  .display_ensure_password_field{
+  .display_password_field,.display_new_password_field,.display_ensure_password_field{
     width:50%;
   }
   .display_country_field{
@@ -310,6 +326,14 @@
   content: '' !important;
   width: 0px;
   margin-right: 0px;
+  }
+
+  .el-icon-warning-outline{
+    font-size: 16px;
+  }
+  .el-icon-warning-outline:hover{
+    font-size: 18px;
+    cursor: pointer;
   }
 
 </style>

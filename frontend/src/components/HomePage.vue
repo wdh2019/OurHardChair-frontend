@@ -1,6 +1,6 @@
 <template>
     <transition name="el-zoom-in-center">
-      <el-carousel indicator-position="inside" :height="height">
+      <el-carousel indicator-position="inside" :height="height" :width="width">
         <el-carousel-item v-for="(item,index) in imgUrls" :key="index">
           <div class="demo1">
             <p class="logo">Gysw.co</p>
@@ -24,17 +24,25 @@
       return {
         imgUrls: [],
         height:'',
+        width:'',
       }
 
     },
-    mounted() {
+    beforeMount() {
       this.height=window.innerHeight+"px";
+      this.width=window.innerWidth+"px";
+    },
+    mounted() {
       this.getImages();
       window.addEventListener("resize",()=>{
-        this.height= window.innerHeight+"px";
+        this.setSize();
       });
     },
     methods: {
+      setSize(){
+        this.height=window.innerHeight+"px";
+        this.width=window.innerWidth+"px";
+      },
       getImages() {
         this.getImgUrl().then(res => {
           this.imgUrls = res
@@ -127,5 +135,9 @@
     height:100%;
     max-width: 100%;
     max-height: 100%;
+  }
+  .el-icon-arrow-left,.el-icon-arrow-right{
+    width:200px;
+    height:200px;
   }
 </style>
