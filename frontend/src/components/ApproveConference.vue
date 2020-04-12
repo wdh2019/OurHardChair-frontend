@@ -39,23 +39,12 @@
       }
     },
     methods: {
-      //审批通过
-      // handleTest(index){
-      //   var arr = ['a'];
-      //   arr.splice(0,1);
-      //   console.log(arr);
-      //   console.log(this.conferencesForApproval);
-      //   console.log(index);
-      //   console.log(this.conferencesForApproval);
-      // },
-
       handleApprove(index, row) {
         const _this = this;
         this.$axios.post('/ApproveConference', {
           fullName: row.fullName,
         })
           .then(resp => {
-            console.log(resp);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               _this.conferencesForApproval.splice(index, 1);
               this.$message({
@@ -73,11 +62,10 @@
             }
           })
           .catch(error => {
-            console.log(error);
             this.$message({
               showClose: true,
               message: '处理失败',
-              type: 'warning',
+              type: 'error',
             });
           })
       },
@@ -87,7 +75,6 @@
           fullName: row.fullName,
         })
           .then(resp => {
-            console.log(resp);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               _this.conferencesForApproval.splice(index, 1);
               this.$message({
@@ -105,11 +92,10 @@
             }
           })
           .catch(error => {
-            console.log(error);
             this.$message({
               showClose: true,
               message: '处理失败',
-              type: 'warning',
+              type: 'error',
             });
           })
       },
@@ -131,11 +117,10 @@
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             showClose: true,
             message: '请求已申请会议失败',
-            type: 'warning'
+            type: 'error'
           });
         })
     }

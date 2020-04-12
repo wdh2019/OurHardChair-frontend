@@ -83,7 +83,6 @@
                     type: 'success'
                   });
                   this.$store.commit('login', resp.data);
-                  console.log(resp);
                   this.$router.push("/UserPage").catch(err => err);
                 } else {
                   this.$message({
@@ -94,11 +93,10 @@
                 }
               })
               .catch(error => {
-                console.log(error);
                 this.$message({
                   showClose: true,
                   message: "登录失败",
-                  type:'warning'
+                  type:'error'
                 });
               })
           }

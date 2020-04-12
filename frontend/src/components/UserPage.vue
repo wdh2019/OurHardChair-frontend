@@ -28,7 +28,7 @@
       </el-submenu>
 
       <el-submenu index="user" style="float:right">
-        <template slot="title"><i class="el-icon-user" style="color: white"></i>{{$store.state.fullName}}</template>
+        <template slot="title"><i class="el-icon-user" style="color: white"></i>{{$store.state.username}}</template>
         <el-menu-item index="/UserInfo">用户信息</el-menu-item>
         <el-menu-item @click="quit" >注销</el-menu-item>
       </el-submenu>

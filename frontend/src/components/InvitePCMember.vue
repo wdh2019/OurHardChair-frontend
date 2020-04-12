@@ -111,8 +111,6 @@
     methods: {
       onSubmit() {
         const _this = this;
-        console.log(this.formInline.search_key);
-        console.log(this.formInline.full_name);
         this.$axios.post('/search', {
           search_key: this.formInline.search_key,
           full_name: this.$route.query.full_name,
@@ -128,11 +126,10 @@
           }
         })
           .catch(error => {
-            console.log(error);
             this.$message({
               showClose: true,
               message: '查找失败',
-              type: 'warning'
+              type: 'error'
             });
           });
 
@@ -148,18 +145,12 @@
         this.users = [];
         let count = 0;
         for (let user of val) {
-          // console.log(user);
           if(user.status===1){
             this.users = this.users.concat(user.username);
           }
         }
-        console.log(this.users);
-        console.log(this.allUsers);
       },
       submitUsers() {
-        console.log(this.$route.query.full_name);
-        console.log(this.$store.state.id);
-        console.log(this.users);
         if (this.users.length > 0) {
           this.$axios.post('/invitePCMember', {
             //会议全称
@@ -168,7 +159,6 @@
             users: this.users,
           })
             .then(resp => {
-              console.log(resp);
               if (resp.status === 200 && resp.data.message === "success") {
                 this.$message({
                   showClose: true,
@@ -193,7 +183,6 @@
               }
             })
             .catch(error => {
-              console.log(error);
               this.$message({
                 showClose: true,
                 message: resp.data.message,

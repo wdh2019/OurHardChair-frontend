@@ -136,11 +136,10 @@
               });
             }
         }).catch(error=>{
-            console.log(error);
             this.$message({
               showClose: true,
               message: "上传文件失败",
-              type:'danger'
+              type:'error'
             });
           });
       },
@@ -174,11 +173,10 @@
                     });
                   }
               }).catch(error => {
-                  console.log(error);
                   this.$message({
                     showClose: true,
                     message: "上传投稿信息失败",
-                    type:'danger'
+                    type:'error'
                   });
                 })
             }else if(!this.fileSelected) this.$message.warning("请选择上传文件");

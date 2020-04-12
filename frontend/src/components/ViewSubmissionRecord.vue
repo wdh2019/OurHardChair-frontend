@@ -105,11 +105,10 @@
            }
          })
          .catch(error => {
-           console.log(error);
           this.$message({
              showClose: true,
              message: '请求相关记录失败',
-             type: 'warning'
+             type: 'error'
            });
          })
      }

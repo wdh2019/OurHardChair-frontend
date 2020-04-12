@@ -151,7 +151,6 @@
         this.enterMeeting(row);
       },
       enterMeeting(row) {
-        console.log(row);
         this.$router.push({
           name: '/ViewSubmissionRecord',
           query: {
@@ -266,11 +265,10 @@
            }
          })
          .catch(error => {
-           console.log(error);
            this.$message({
              showClose: true,
              message: '请求相关会议失败',
-             type: 'warning'
+             type: 'error'
            });
          })
      }

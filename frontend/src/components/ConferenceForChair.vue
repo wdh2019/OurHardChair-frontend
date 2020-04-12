@@ -90,12 +90,6 @@
                   <span>评审结束，结果已发布</span>
                 </el-form-item>
               </div>
-              <!--测试按键
-              <div>
-                <el-form-item>
-                  <el-button type="primary" @click="TestEnterMeeting(scope.row)">进入会议</el-button>
-                </el-form-item>
-              </div>-->
             </el-form>
           </template>
         </el-table-column>
@@ -165,10 +159,6 @@
       }
     },
     methods: {
-      /*TestEnterMeeting(row) {
-        console.log(row);
-        this.enterMeeting(row);
-      },*/
       enterMeeting(row) {
         this.$router.push({
           name: '/InvitePCMember',
@@ -285,7 +275,7 @@
             this.$message({
               showClose: true,
               message:resp.data.message,
-              type:'danger'
+              type:'error'
             });
           })
         }
@@ -293,7 +283,7 @@
           this.$message({
             showClose: true,
             message: "错误地将投稿关闭",
-            type: 'danger'
+            type: 'warning'
           });
         }
       }
@@ -314,11 +304,10 @@
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             showClose: true,
             message: '请求相关会议失败',
-            type: 'warning'
+            type: 'error'
           });
         })
     }

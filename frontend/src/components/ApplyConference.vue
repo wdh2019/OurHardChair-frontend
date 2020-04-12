@@ -113,7 +113,6 @@
             )
               .then(resp => {
                 // 根据后端的返回数据修改
-                //console.log(resp.data)
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$message({
                     showClose: true,
@@ -130,11 +129,10 @@
                 }
               })
               .catch(error => {
-                console.log(error);
                 this.$message({
                   showClose: true,
                   message: '申请失败',
-                  type: 'warning'
+                  type: 'error'
                 });
               })
           } else {
@@ -151,7 +149,6 @@
       },
       formatTime(date) {
         let final = (date.getFullYear() + "-" + this.fix(date.getMonth() + 1, 2) + "-" + this.fix(date.getDate(), 2) + " " + this.fix(date.getHours(), 2) + ":" + this.fix(date.getMinutes(), 2) + ":" + this.fix(date.getSeconds(), 2));
-        console.log(final);
         return final;
       }
     },

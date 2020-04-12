@@ -217,11 +217,10 @@
             }
           })
           .catch(error => {
-            console.log(error);
             this.$message({
               showClose: true,
               message: "服务器未响应",
-              type: "danger",
+              type: "error",
             })
           })
       },
@@ -251,23 +250,20 @@
             }
           })
           .catch(error => {
-            console.log(error);
             this.$message({
               showClose: true,
               message: "服务器未响应",
-              type: "danger",
+              type: "error",
             })
           })
       },
       disapproveInvitation(index, row) {
         const _this = this;
-        console.log(row);
         this.$axios.post("/disapprovePCMemberInvitation", {
           senderName: row.receiverName,
           receiverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
         }).then(resp => {
-          console.log(resp);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.notReadInfo.splice(index, 1);
             this.$message({
@@ -285,11 +281,10 @@
           }
         })
           .catch(error => {
-            console.log(error);
             this.$message({
               showClose: true,
               message: "服务器未响应",
-              type: "danger",
+              type: "error",
             })
           })
 
@@ -320,7 +315,6 @@
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allInfo = resp.data.messages;
-            console.log(_this.allInfo);
             for (let i = 0; i < _this.allInfo.length; i++) {
               if (_this.allInfo[i].isRead === 1) {
                 this.notReadInfo.push(_this.allInfo[i]);
@@ -332,11 +326,10 @@
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             showClose: true,
             message: '获取信息失败',
-            type: 'warning'
+            type: 'error'
           });
         })
     }

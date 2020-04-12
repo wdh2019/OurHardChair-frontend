@@ -238,7 +238,6 @@
       const _this = this;
       this.$axios.post('/ConferenceForPCMember')
         .then(resp => {
-          console.log(resp);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferences = resp.data.meetings;
           } else {
@@ -250,11 +249,10 @@
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             showClose: true,
             message: '请求相关会议失败',
-            type: 'warning'
+            type: 'error'
           });
         })
     }

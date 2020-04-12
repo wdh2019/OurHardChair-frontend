@@ -3,7 +3,7 @@
     <div class="conference_container">
       <div class="title_section">
         <h3 class="title">所有会议</h3>
-        <p class="description">在如下列表中，你可以查询到当前所有审核通过会议</p>
+        <p class="description">在如下列表中，你可以查询到当前所有审核通过的会议，并向会议投稿</p>
       </div>
       <el-table
         :data="allConferences.filter(data => !search || data.full_name.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)">
@@ -90,7 +90,7 @@
                   v-if="$store.state.username!==scope.row.chair_username"
                   v-on:click="enterSubmitPapers(scope.row)">投稿
                 </el-button>
-                <el-tag type="warning" v-else>您是此会议的Chair</el-tag>
+                <el-tag type="warning" v-else>您是此会议的chair</el-tag>
               </el-form-item>
             </el-form>
           </template>
@@ -227,7 +227,6 @@
           return 5
       },
       enterSubmitPapers(row) {
-        console.log(row);
         if (row.is_open_submission === 1) {
           this.$message({
             showClose: true,
@@ -251,22 +250,6 @@
           }).catch(err => err);
         }
       },
-      handleActionTest(row) {
-        console.log(row);
-        this.$router.push({
-          name: '/SubmitPapers',
-          query: {
-            chair_name: row.chair_name,
-            short_name: row.short_name,
-            full_name: row.full_name,
-            place: row.place,
-            start_date: row.start_date,
-            deadline_date: row.deadline_date,
-            release_date: row.release_date,
-            is_open_submission: row.is_open_submission,
-          }
-        }).catch(err => err);
-      },
     },
 
 
@@ -275,7 +258,6 @@
       const _this = this;
       this.$axios.post('/AllConferences')
         .then(resp => {
-          console.log(resp.data.meetings);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allConferences = resp.data.meetings;
           } else {
@@ -287,11 +269,10 @@
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             showClose: true,
             message: '请求所有会议失败',
-            type: 'warning'
+            type: 'error'
           });
         })
     }

@@ -7,25 +7,28 @@
       </div>
       <div class="userinfo_form">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  label-position="left">
-        <h3 class="userinfo_title">账户信息</h3>
-        <p class="id"><span class="id_bold">ID: </span>{{$store.state.id}}</p>
+        <div class="display_id_and_fullName_field">
+          <h3 class="userinfo_title">账户信息</h3>
+          <div class="id inline-block"><span class="bold">ID: </span>{{$store.state.id}}</div>
+          <div class="fullName inline-block"><span class="bold">真实姓名：</span>{{$store.state.fullName}}</div>
+        </div>
 
-        <div class="inline_block display_username_field">
+        <div class="inline-block display_username_field">
            <el-form-item prop="username" class="item" label="用户名">
               <el-input v-model="ruleForm.username" :placeholder="$store.state.username" type="text" auto-complete="off" :disabled="username_disabled">
                 <i slot="suffix" class="el-icon-warning-outline" title="只能包含字母,数字或两种特殊字符(-_),只能以字母或-开头,长度为5-32个字符"></i>
               </el-input>
            </el-form-item>
         </div>
-        <el-button class="inline_block" type="primary" icon="el-icon-edit" @click="unlockUsername" title="用户名是重要信息,请勿随意更改" disabled></el-button>
+        <el-button class="inline-block" type="primary" icon="el-icon-edit" @click="unlockUsername" title="用户名是重要信息,请勿随意更改" disabled></el-button>
 
-        <div class="inline_block display_email_field">
+        <div class="inline-block display_email_field">
           <el-form-item prop="email" class="item" label="邮箱">
             <el-input v-model="ruleForm.email" :placeholder="$store.state.email" type="text" auto-complete="off"  :disabled="email_disabled">
             </el-input>
           </el-form-item>
         </div>
-        <el-button class="inline_block" type="primary" icon="el-icon-edit" @click="unlockEmail" title="绑定邮箱是重要信息,请勿随意更改" disabled></el-button>
+        <el-button class="inline-block" type="primary" icon="el-icon-edit" @click="unlockEmail" title="绑定邮箱是重要信息,请勿随意更改" disabled></el-button>
 
         <h3 class="userinfo_title">密码与安全</h3>
         <div class="display_password_field">
@@ -48,7 +51,7 @@
         </el-form-item>
         </div>
         <h3 class="userinfo_title title3">个人信息</h3>
-        <div class="inline_block display_country_field">
+        <div class="inline-block display_country_field">
         <el-form-item prop="country" class="item" label="国家/地区">
           <el-select v-model="ruleForm.country" :placeholder="$store.state.country" filterable disabled>
             <el-option v-for="country in countries" :key="country.value" :value="country.value" :label="country.label">
@@ -58,7 +61,7 @@
           </el-select>
         </el-form-item>
         </div>
-        <div class="inline_block display_company_field">
+        <div class="inline-block display_company_field">
         <el-form-item prop="company" class="item" label="所属单位">
           <el-input v-model="ruleForm.company" :placeholder="$store.state.institution" type="text" auto-complete="off" disabled>
           </el-input>
@@ -213,11 +216,10 @@
                 }
               })
               .catch(error => {
-                console.log(error);
                 this.$message({
                   showClose: true,
                   message: "修改失败",
-                  type:'warning'
+                  type:'error'
                 });
               })
           } else {
@@ -252,7 +254,7 @@
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
-    width: 65%;
+    width: 50%;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -284,15 +286,22 @@
     text-align: left;
   }
   .id{
-    margin-top: 25px;
+    width:100px;
     font-size:14px;
     text-align: left;
   }
-  .id_bold{
+  .fullName{
+    margin-left:200px;
+    width:200px;
+  }
+  .bold{
     font-weight: bold;
   }
-  .inline_block{
+  .inline-block{
     display: inline-block;
+  }
+  .display_id_and_fullName_field{
+    margin-bottom: 10px;
   }
   .display_username_field{
     width: 250px;
