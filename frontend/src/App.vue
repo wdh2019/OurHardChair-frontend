@@ -7,12 +7,26 @@
 <script>
 export default {
   name: 'App',
-   mounted: function () {
-       //此方法刷新页面时也会执行
-       window.addEventListener('beforeunload',()=>{
-          this.$store.commit('logout');
-       });
+   mounted(){
+       window.addEventListener('beforeunload',e => this.beforeunloadHandler(e));
+       window.addEventListener('unload',e => this.unloadHandler(e));
   },
+  destroyed(){
+       window.removeEventListener('beforeunload',e=>this.beforeunloadHandler(e));
+       window.removeEventListener('unload',e=>this.unloadHandler(e));
+  },
+  methods:{
+    beforeunloadHandler(){
+      this.beforeUnload_time=new Date().getTime();
+    },
+    unloadHandler(e){
+      this.gap_time=new Date().getTime()-this.beforeUnload_time;
+      debugger
+      if(this.gap_time>100){
+        this.$store.commit('logout');
+      }
+    }
+  }
 }
 </script>
 
