@@ -21,7 +21,6 @@ export default {
     },
     unloadHandler(e){
       this.gap_time=new Date().getTime()-this.beforeUnload_time;
-      debugger
       if(this.gap_time>100){
         this.$store.commit('logout');
       }
