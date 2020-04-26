@@ -192,6 +192,11 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
+  if(from.fullPath === "/"&&to.fullPath === "/login"|| to.fullPath === '/register') {
+    if(localStorage.getItem('token')){
+      store.commit('logout');
+    }
+  }
   if (to.fullPath ==="/" ||to.fullPath === "/login" || to.fullPath === '/register') {
     if (localStorage.getItem('token')) {
       next({
