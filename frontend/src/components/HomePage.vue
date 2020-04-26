@@ -5,7 +5,7 @@
           <div class="demo1">
             <p class="logo">Gysw.co</p>
             <div class="welcome">
-              <p class="welcome1">欢迎使用</p>
+              <p class="welcome1">欢迎</p>
               <p class="welcome2">Gysw 会议系统</p></div>
             <img class="img" ref='img' :src="item.imageUrl">
             <router-link to="/login" class="button login">
