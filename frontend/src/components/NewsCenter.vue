@@ -314,7 +314,7 @@
       return {
         //真实数据
         allInfo: [],
-        notReadInfo: [{messageCategory:'PCMemberInvitationRequest',topics:["123","231"],selectedTopics:[]}],
+        notReadInfo: [],
         hasReadInfo: [],
         show: 1,
       }

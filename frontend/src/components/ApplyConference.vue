@@ -121,7 +121,7 @@
           var endTime = this.formatTime(new Date(this.ruleForm.deadline_date));
           var release_time = this.formatTime(new Date(this.ruleForm.release_date));
           if (valid) {
-            //this.$axios.post用来向后台请求数据
+            //this.$axios.post用来向后台发送数据
             this.$axios.post('/ApplyConference', {
                 abbreviation: this.ruleForm.short_name,
                 fullName: this.ruleForm.full_name,
