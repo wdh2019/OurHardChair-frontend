@@ -137,7 +137,7 @@
       enterMeeting(row) {
         this.$router.push({
           name: '/CheckPapers',
-          query: {
+          params: {
             full_name: row.full_name,
             short_name: row.short_name,
             place: row.place,

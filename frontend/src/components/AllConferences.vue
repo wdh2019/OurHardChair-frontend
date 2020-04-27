@@ -236,7 +236,7 @@
         } else {
           this.$router.push({
             name: '/SubmitPapers',
-            query: {
+            params: {
               conference_id: row.conference_id,
               chair_name: row.chair_name,
               short_name: row.short_name,
