@@ -84,7 +84,7 @@
             <template slot-scope="scope">
               <el-checkbox-group v-model="scope.row.selectedTopics"
               v-show="scope.row.messageCategory==='PCMemberInvitationRequest'">
-                <el-checkbox v-for="topic in scope.row.topics" :label="topic">{{topic}}</el-checkbox>
+                <el-checkbox v-for="topic in scope.row.topics" v-bind:key="topic" :label="topic"></el-checkbox>
               </el-checkbox-group>
             </template>
           </el-table-column>
