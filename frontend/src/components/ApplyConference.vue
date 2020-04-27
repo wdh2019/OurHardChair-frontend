@@ -80,7 +80,7 @@
           place: '',
           deadline_date: '',
           release_date: '',
-          topics:["1"],
+          topics:[],
         },
         rules: {
           short_name: [{required: true, message: "会议简称不为空", trigger: 'blur'}],

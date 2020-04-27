@@ -76,6 +76,19 @@
               <span style="margin-left: 10px">{{ scope.row.message}}</span>
             </template>
           </el-table-column>
+
+          <el-table-column
+            label="会议主题"
+            width="400px"
+            prop="topics">
+            <template slot-scope="scope">
+              <el-checkbox-group v-model="scope.row.selectedTopics"
+              v-show="scope.row.messageCategory==='PCMemberInvitationRequest'">
+                <el-checkbox v-for="topic in scope.row.topics" :label="topic">{{topic}}</el-checkbox>
+              </el-checkbox-group>
+            </template>
+          </el-table-column>
+
           <el-table-column label="操作">
             <!--标为已读，对接于/markRead 对应于markRead函数-->
             <template slot-scope="scope">
@@ -228,6 +241,8 @@
           senderName: row.receiverName,
           receiverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
+          //发送的topics是已选topics
+          topics:row.selectedTopics,
         })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
@@ -299,7 +314,7 @@
       return {
         //真实数据
         allInfo: [],
-        notReadInfo: [],
+        notReadInfo: [{messageCategory:'PCMemberInvitationRequest',topics:["123","231"],selectedTopics:[]}],
         hasReadInfo: [],
         show: 1,
       }
@@ -313,6 +328,8 @@
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allInfo = resp.data.messages;
             for (let i = 0; i < _this.allInfo.length; i++) {
+              //新增字段selectedTopics,使可选topics和已选topics分开
+              _this.$set(_this.allInfo[i],"selectedTopics",[]);
               if (_this.allInfo[i].isRead === 1) {
                 this.notReadInfo.push(_this.allInfo[i]);
               } else {
