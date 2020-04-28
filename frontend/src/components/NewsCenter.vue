@@ -1,7 +1,7 @@
 <template>
-  <el-container style="height: 500px; border: 1px solid #eee">
+  <el-container style="height: 500px; border: 1px solid #eee;">
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-      <el-menu :default-active="show+''">
+      <el-menu :default-active="show+''" style="top:60px">
         <el-menu-item index="1" @click="not_read">
           <i class="el-icon-setting"></i>
           <span slot="title">未读消息</span>
@@ -13,8 +13,9 @@
       </el-menu>
     </el-aside>
     <!--未读页面-->
-    <el-container>
-      <el-header style="text-align: right; font-size: 20px">
+    <el-container style="height: 480px">
+      <el-header style="font-size: 20px;font-weight: bold;">
+        消息中心
       </el-header>
       <el-main v-show="(show===1)">
         <el-table
@@ -186,9 +187,15 @@
     </el-container>
   </el-container>
 </template>
-<style>
+<style scoped>
+  .el-menu-item{
+    height:65px;
+    border: 1px solid #eee;
+    padding-left:0px !important;
+  }
   .el-header {
-    background-color: #B3C0D1;
+    background-color: rgb(238, 241, 246);
+    /*background-color: #B3C0D1;*/
     color: #333;
     line-height: 60px;
   }
