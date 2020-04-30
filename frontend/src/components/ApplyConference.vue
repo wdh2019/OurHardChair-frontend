@@ -40,7 +40,7 @@
         </el-form-item>
 
         <el-form-item prop="topics" class="item">
-          <el-tag closable v-for="topic in ruleForm.topics" :key="topic" :type="topic_type[Math.round(Math.random()*5)]"
+          <el-tag closable v-for="topic in ruleForm.topics" :key="topic" :type="topic_type[parseTopic(topic)]"
            effect="light" class="topic_tag" @close="handleClose(topic)">{{topic}}</el-tag>
           <el-input v-model="topic_input_value" class="topic_input" placeholder="添加主题"
           ref="topic_input" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-input>
@@ -102,9 +102,19 @@
     },
 
     methods: {
+      //分析topic，决定tag颜色
+      parseTopic(topic){
+        let sum=0;
+        for(let i=0;i<topic.length;i++){
+          sum+=topic.charCodeAt(i);
+        }
+        return sum%5;
+      },
+      //删除topic
       handleClose(topic){
         this.ruleForm.topics.splice(this.ruleForm.topics.indexOf(topic),1);
       },
+      //从输入框填入topic
       handleInputConfirm(){
         let inputValue= this.topic_input_value;
         if(inputValue&&this.ruleForm.topics.indexOf(inputValue)==-1){
