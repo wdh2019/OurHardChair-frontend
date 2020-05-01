@@ -9,26 +9,26 @@
         <el-collapse-item>
           <span slot="title" class="collapse-title">会议简介</span>
           <div>
-            <p class="content"><label class="label">会议简称:  </label>{{this.$route.query.short_name}}</p>
+            <p class="content"><label class="label">会议简称:  </label>{{this.$route.params.short_name}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">会议全称:  </label>{{this.$route.query.full_name}}</p>
+            <p class="content"><label class="label">会议全称:  </label>{{this.$route.params.full_name}}</p>
           </div>
           <!--需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁-->
           <div>
-            <p class="content"><label class="label">会议主席:  </label>{{this.$route.query.chair_name}}</p>
+            <p class="content"><label class="label">会议主席:  </label>{{this.$route.params.chair_name}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">会议地点:  </label>{{this.$route.query.place}}</p>
+            <p class="content"><label class="label">会议地点:  </label>{{this.$route.params.place}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">会议开始时间:  </label>{{this.$route.query.start_date}}</p>
+            <p class="content"><label class="label">会议开始时间:  </label>{{this.$route.params.start_date}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">会议结束时间:  </label>{{this.$route.query.deadline_date}}</p>
+            <p class="content"><label class="label">会议结束时间:  </label>{{this.$route.params.deadline_date}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">会议截稿时间:  </label>{{this.$route.query.release_date}}</p>
+            <p class="content"><label class="label">会议截稿时间:  </label>{{this.$route.params.release_date}}</p>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -152,7 +152,7 @@
             if(this.fileValid&&this.fileSelected){
               this.$axios.post('/contribute',{
                 //会议id需要传进来！！！！！
-                conferenceID:this.$route.query.conference_id,
+                conferenceID:this.$route.params.conference_id,
                 authorID:this.$store.state.id,
                 filename:this.ruleForm.file.name,
                 title:this.ruleForm.title,

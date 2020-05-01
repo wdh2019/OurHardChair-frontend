@@ -1,7 +1,7 @@
 <template>
-  <el-container style="height: 500px; border: 1px solid #eee">
+  <el-container style="height: 500px; border: 1px solid #eee;">
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-      <el-menu :default-active="show+''">
+      <el-menu :default-active="show+''" style="top:60px">
         <el-menu-item index="1" @click="not_read">
           <i class="el-icon-setting"></i>
           <span slot="title">未读消息</span>
@@ -13,8 +13,9 @@
       </el-menu>
     </el-aside>
     <!--未读页面-->
-    <el-container>
-      <el-header style="text-align: right; font-size: 20px">
+    <el-container style="height: 480px">
+      <el-header style="font-size: 20px;font-weight: bold;">
+        消息中心
       </el-header>
       <el-main v-show="(show===1)">
         <el-table
@@ -76,6 +77,19 @@
               <span style="margin-left: 10px">{{ scope.row.message}}</span>
             </template>
           </el-table-column>
+
+          <el-table-column
+            label="会议主题"
+            width="400px"
+            prop="topics">
+            <template slot-scope="scope">
+              <el-checkbox-group v-model="scope.row.selectedTopics"
+              v-show="scope.row.messageCategory==='PCMemberInvitationRequest'">
+                <el-checkbox v-for="topic in scope.row.topics" v-bind:key="topic" :label="topic"></el-checkbox>
+              </el-checkbox-group>
+            </template>
+          </el-table-column>
+
           <el-table-column label="操作">
             <!--标为已读，对接于/markRead 对应于markRead函数-->
             <template slot-scope="scope">
@@ -173,9 +187,15 @@
     </el-container>
   </el-container>
 </template>
-<style>
+<style scoped>
+  .el-menu-item{
+    height:65px;
+    border: 1px solid #eee;
+    padding-left:0px !important;
+  }
   .el-header {
-    background-color: #B3C0D1;
+    background-color: rgb(238, 241, 246);
+    /*background-color: #B3C0D1;*/
     color: #333;
     line-height: 60px;
   }
@@ -228,6 +248,8 @@
           senderName: row.receiverName,
           receiverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
+          //发送的topics是已选topics
+          topics:row.selectedTopics,
         })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
@@ -313,6 +335,8 @@
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allInfo = resp.data.messages;
             for (let i = 0; i < _this.allInfo.length; i++) {
+              //新增字段selectedTopics,使可选topics和已选topics分开
+              _this.$set(_this.allInfo[i],"selectedTopics",[]);
               if (_this.allInfo[i].isRead === 1) {
                 this.notReadInfo.push(_this.allInfo[i]);
               } else {
