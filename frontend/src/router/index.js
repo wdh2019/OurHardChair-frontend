@@ -201,6 +201,7 @@ router.beforeEach(function (to, from, next) {
       next();
     }
   }
+
   if (localStorage.username !== 'admin') {
     if (to.fullPath === "/ApproveConference") {
       next({
