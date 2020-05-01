@@ -121,6 +121,11 @@
       myUpload(content){
         var formData=new FormData();
         formData.append('file',this.ruleForm.file);
+        //沈征宇修改
+        //2020-05-01
+        formData.append('conferenceID',this.$route.params.conference_id);
+        //沈征宇修改
+        //2020-05-01
         this.instance.post('/upload',formData).then(resp =>{
             if (resp.status === 200 && resp.data.hasOwnProperty("token")){
               this.$message({
