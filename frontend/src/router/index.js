@@ -181,11 +181,6 @@ export const router = new Router({
       name: 'Register',
       component: Register
     },
-    {
-      path:"/test",
-      name:"test",
-      component:Test,
-    },
   ]
 })
 
