@@ -83,6 +83,7 @@
             width="400px"
             prop="topics">
             <template slot-scope="scope">
+              <el-tag v-show="scope.row.messageCategory!=='PCMemberInvitationRequest'" v-for="topic in scope.row.topics" v-bind:key="topic">{{topic}}</el-tag>
               <el-checkbox-group v-model="scope.row.selectedTopics"
               v-show="scope.row.messageCategory==='PCMemberInvitationRequest'">
                 <el-checkbox v-for="topic in scope.row.topics" v-bind:key="topic" :label="topic"></el-checkbox>
@@ -105,7 +106,8 @@
                 <el-button
                   size="mini"
                   type="success"
-                  @click="approveInvitation(scope.$index,scope.row)">同意
+                  @click="approveInvitation(scope.$index,scope.row)"
+                  v-bind:disabled="scope.row.selectedTopics.length===0">同意
                 </el-button>
                 <!--拒绝PCMember邀请，对应于"/disapprovePCMemberInvitation"，对应于disapproveInvitation()函数-->
                 <el-button
@@ -188,6 +190,9 @@
   </el-container>
 </template>
 <style scoped>
+  .el-tag{
+    margin:2px;
+  }
   .el-menu-item{
     height:65px;
     border: 1px solid #eee;
@@ -239,7 +244,8 @@
               message: "服务器未响应",
               type: "error",
             })
-          })
+          });
+          location.reload();
       },
       //接受PCMember邀请,向/approvePCMemberInvitation接口发送消息
       approveInvitation(index, row) {
@@ -274,6 +280,7 @@
               type: "error",
             })
           });
+          location.reload();
       },
       disapproveInvitation(index, row) {
         const _this = this;
@@ -304,8 +311,8 @@
               message: "服务器未响应",
               type: "error",
             })
-          })
-
+          });
+          location.reload();
       },
       //选择进入未读界面
       not_read: function () {
@@ -333,6 +340,7 @@
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allInfo = resp.data.messages;
+            console.log(resp.data.messages);
             for (let i = 0; i < _this.allInfo.length; i++) {
               //新增字段selectedTopics,使可选topics和已选topics分开
               _this.$set(_this.allInfo[i],"selectedTopics",[]);
