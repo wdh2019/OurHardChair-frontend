@@ -17,6 +17,7 @@ import SubmitPapers from "../components/SubmitPapers"
 import ApproveConference from "../components/ApproveConference"
 import UserInfo from "../components/UserInfo"
 import ViewSubmissionTRecord from "../components/ViewSubmissionRecord"
+import Test from "../components/test/Test"
 
 
 Vue.use(Router);
@@ -180,6 +181,11 @@ export const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path:"/test",
+      name:"test",
+      component:Test,
     },
   ]
 })

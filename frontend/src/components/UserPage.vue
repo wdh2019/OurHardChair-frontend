@@ -25,16 +25,15 @@
 
       <el-submenu index="news" style="float:right" v-show="$store.state.username!=='admin'">
           <template slot="title"><el-badge :value="newsCount" class="item" :hidden="newsCount===0">最新消息</el-badge></template>
-            <el-menu-item-group v-show="newsCount!==0">
-              <el-menu-item v-show="applyNewsCount!==0" class="nav_item" >会议申请结果<el-badge :value="applyNewsCount" /></el-menu-item>
-              <el-menu-item v-show="inviteNewsCount!==0" class="nav_item" >PCMember邀请相关<el-badge :value="inviteNewsCount" /></el-menu-item>
-              <el-menu-item v-show="submitNewsCount!==0" class="nav_item" >投稿相关<el-badge :value="submitNewsCount" /></el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item class="nav_item" v-show="newsCount===0">
+            <div v-show="newsCount!==0">
+              <p v-show="applyNewsCount!==0" class="news_type" >会议申请结果<el-badge :value="applyNewsCount" /></p>
+              <p v-show="inviteNewsCount!==0" class="news_type" >PCMember邀请相关<el-badge :value="inviteNewsCount" /></p>
+              <p v-show="submitNewsCount!==0" class="news_type" >投稿相关<el-badge :value="submitNewsCount" /></p>
+            </div>
+            <p class="news_type" v-show="newsCount===0">
               暂无新消息
-            </el-menu-item>
+            </p>
             <el-menu-item index="/NewsCenter" class="more_news nav_item">详情</el-menu-item>
-
       </el-submenu>
 
       <el-submenu index="user" style="float:right">
@@ -121,12 +120,18 @@
 </script>
 
 <style>
+  .news_type{
+    font-size: 14px;
+    color:white;
+    padding:0 10px 0 20px;
+    cursor:default;
+  }
   .el-menu.el-menu--popup{
     min-width:115px;
   }
   .el-menu-item.nav_item{
     margin-left:10px;
-    margin-right:5px;
+    margin-right:10px;
   }
   .el-badge__content--undefined{
     margin-left:5px;
