@@ -20,7 +20,7 @@
           <el-date-picker
             v-model="ruleForm.start_date"
             type="datetime"
-            placeholder="开始时间">
+            placeholder="举办日期">
           </el-date-picker>
         </el-form-item>
 
@@ -28,19 +28,19 @@
           <el-date-picker
             v-model="ruleForm.deadline_date"
             type="datetime"
-            placeholder="截止时间">
+            placeholder="截稿日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item prop="release_date" class="item">
           <el-date-picker
             v-model="ruleForm.release_date"
             type="datetime"
-            placeholder="发布时间">
+            placeholder="成绩发布日期">
           </el-date-picker>
         </el-form-item>
 
         <el-form-item prop="topics" class="item">
-          <el-tag closable v-for="topic in ruleForm.topics" :key="topic" :type="topic_type[Math.round(Math.random()*5)]"
+          <el-tag closable v-for="topic in ruleForm.topics" :key="topic" :type="topic_type[parseTopic(topic)]"
            effect="light" class="topic_tag" @close="handleClose(topic)">{{topic}}</el-tag>
           <el-input v-model="topic_input_value" class="topic_input" placeholder="添加主题"
           ref="topic_input" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-input>
@@ -59,20 +59,27 @@
     name: 'ConferenceApplication',
     data() {
       let checkDeadLine = (rule, value, callback) => {
-        if (value < this.ruleForm.start_date) {
-          return callback(new Error("截止时间不能早于开始时间"))
+        if (value < this.current_date) {
+          return callback(new Error("截稿时间不能早于此刻"))
         }
         return callback();
       };
       let checkSubmitTime = (rule, value, callback) => {
         if (value < this.ruleForm.deadline_date) {
-          return callback(new Error("公布时间不能早于截止时间"))
+          return callback(new Error("成绩公布时间不能早于截稿时间"))
         }
         return callback();
       };
+      let checkStartTime = (rule,value,callback) => {
+        if (value < this.ruleForm.start_date) {
+          return callback(new Error("会议举办时间不能早于成绩公布时间"))
+        }
+        return callback();
+      }
       return {
         topic_input_value:'',
         topic_type:["success","primary","info","warning","danger"],
+        current_date:new Date(),
         ruleForm: {
           short_name: '',
           full_name: '',
@@ -86,7 +93,10 @@
           short_name: [{required: true, message: "会议简称不为空", trigger: 'blur'}],
           full_name: [{required: true, message: '会议全称不为空', trigger: 'blur'}],
           place: [{required: true, message: "会议地点不为空", trigger: 'blur'}],
-          start_date: [{type: 'date', required: true, message: "开始日期不为空", trigger: 'blur'}],
+          start_date: [
+            {type: 'date', required: true, message: "开始日期不为空", trigger: 'blur'},
+            {validator: checkStartTime}
+            ],
           deadline_date: [
             {type: 'date', required: true, message: "截止日期不为空", trigger: 'blur'},
             {validator: checkDeadLine}
@@ -102,9 +112,19 @@
     },
 
     methods: {
+      //分析topic，决定tag颜色
+      parseTopic(topic){
+        let sum=0;
+        for(let i=0;i<topic.length;i++){
+          sum+=topic.charCodeAt(i);
+        }
+        return sum%5;
+      },
+      //删除topic
       handleClose(topic){
         this.ruleForm.topics.splice(this.ruleForm.topics.indexOf(topic),1);
       },
+      //从输入框填入topic
       handleInputConfirm(){
         let inputValue= this.topic_input_value;
         if(inputValue&&this.ruleForm.topics.indexOf(inputValue)==-1){

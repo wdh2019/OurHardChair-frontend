@@ -21,6 +21,12 @@ import ViewSubmissionTRecord from "../components/ViewSubmissionRecord"
 
 Vue.use(Router);
 
+//解决路由跳转相同地址时报错
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+};
+
 export const router = new Router({
   //通过路由转到的页面
   routes: [
@@ -174,6 +180,11 @@ export const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path:"/test",
+      name:"test",
+      component:Test,
     },
   ]
 })

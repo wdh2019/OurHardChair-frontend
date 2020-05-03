@@ -40,6 +40,7 @@ export default new Vuex.Store({
       localStorage.removeItem('email');
       localStorage.removeItem('country');
       localStorage.removeItem('institution');
+      localStorage.removeItem('messageStore');
       state.username = null;
 	    state.fullName = null;
       state.email = null;

@@ -121,11 +121,7 @@
       myUpload(content){
         var formData=new FormData();
         formData.append('file',this.ruleForm.file);
-        //沈征宇修改
-        //2020-05-01
         formData.append('conferenceID',this.$route.params.conference_id);
-        //沈征宇修改
-        //2020-05-01
         this.instance.post('/upload',formData).then(resp =>{
             if (resp.status === 200 && resp.data.hasOwnProperty("token")){
               this.$message({
@@ -199,6 +195,14 @@
         this.$refs[formName].resetFields();
         this.$refs.upload.clearFiles();
       },
+    },
+    created() {
+      //在页面刷新时将vuex里的信息保存到localStorage里
+       window.addEventListener("beforeunload",()=>{
+         localStorage.setItem("messageStore",JSON.stringify(this.$route.params))
+       });
+      //在页面加载时读取localStorage里的状态信息
+       localStorage.getItem("messageStore") && Object.assign(this.$route.params,JSON.parse(localStorage.getItem("messageStore")));
     }
   }
 </script>

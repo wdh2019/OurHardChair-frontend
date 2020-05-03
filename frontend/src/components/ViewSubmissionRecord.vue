@@ -88,7 +88,6 @@
       }
     },
     created(){
-       //接口未定义
        const _this=this;
        this.$axios.post('/showMySubmission',{
          username:this.$store.state.username
@@ -110,8 +109,15 @@
              message: '请求相关记录失败',
              type: 'error'
            });
-         })
+         });
+		   //在页面刷新时将vuex里的信息保存到localStorage里
+		    window.addEventListener("beforeunload",()=>{
+		      localStorage.setItem("messageStore",JSON.stringify(this.$route.params))
+		    });
+		   //在页面加载时读取localStorage里的状态信息
+		    localStorage.getItem("messageStore") && Object.assign(this.$route.params,JSON.parse(localStorage.getItem("messageStore")));
      }
+
   }
 </script>
 

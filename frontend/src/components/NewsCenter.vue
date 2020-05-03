@@ -1,7 +1,7 @@
 <template>
-  <el-container style="height: 500px; border: 1px solid #eee">
+  <el-container style="height: 500px; border: 1px solid #eee;">
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-      <el-menu :default-active="show+''">
+      <el-menu :default-active="show+''" style="top:60px">
         <el-menu-item index="1" @click="not_read">
           <i class="el-icon-setting"></i>
           <span slot="title">未读消息</span>
@@ -13,8 +13,9 @@
       </el-menu>
     </el-aside>
     <!--未读页面-->
-    <el-container>
-      <el-header style="text-align: right; font-size: 20px">
+    <el-container style="height: 480px">
+      <el-header style="font-size: 20px;font-weight: bold;">
+        消息中心
       </el-header>
       <el-main v-show="(show===1)">
         <el-table
@@ -82,6 +83,7 @@
             width="400px"
             prop="topics">
             <template slot-scope="scope">
+              <el-tag v-show="scope.row.messageCategory!=='PCMemberInvitationRequest'" v-for="topic in scope.row.topics" v-bind:key="topic">{{topic}}</el-tag>
               <el-checkbox-group v-model="scope.row.selectedTopics"
               v-show="scope.row.messageCategory==='PCMemberInvitationRequest'">
                 <el-checkbox v-for="topic in scope.row.topics" v-bind:key="topic" :label="topic"></el-checkbox>
@@ -104,7 +106,8 @@
                 <el-button
                   size="mini"
                   type="success"
-                  @click="approveInvitation(scope.$index,scope.row)">同意
+                  @click="approveInvitation(scope.$index,scope.row)"
+                  v-bind:disabled="scope.row.selectedTopics.length===0">同意
                 </el-button>
                 <!--拒绝PCMember邀请，对应于"/disapprovePCMemberInvitation"，对应于disapproveInvitation()函数-->
                 <el-button
@@ -186,9 +189,18 @@
     </el-container>
   </el-container>
 </template>
-<style>
+<style scoped>
+  .el-tag{
+    margin:2px;
+  }
+  .el-menu-item{
+    height:65px;
+    border: 1px solid #eee;
+    padding-left:0px !important;
+  }
   .el-header {
-    background-color: #B3C0D1;
+    background-color: rgb(238, 241, 246);
+    /*background-color: #B3C0D1;*/
     color: #333;
     line-height: 60px;
   }
@@ -232,7 +244,8 @@
               message: "服务器未响应",
               type: "error",
             })
-          })
+          });
+          location.reload();
       },
       //接受PCMember邀请,向/approvePCMemberInvitation接口发送消息
       approveInvitation(index, row) {
@@ -241,7 +254,6 @@
           senderName: row.receiverName,
           receiverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
-          //发送的topics是已选topics
           topics:row.selectedTopics,
         })
           .then(resp => {
@@ -267,7 +279,8 @@
               message: "服务器未响应",
               type: "error",
             })
-          })
+          });
+          location.reload();
       },
       disapproveInvitation(index, row) {
         const _this = this;
@@ -298,8 +311,8 @@
               message: "服务器未响应",
               type: "error",
             })
-          })
-
+          });
+          location.reload();
       },
       //选择进入未读界面
       not_read: function () {
@@ -327,6 +340,7 @@
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allInfo = resp.data.messages;
+            console.log(resp.data.messages);
             for (let i = 0; i < _this.allInfo.length; i++) {
               //新增字段selectedTopics,使可选topics和已选topics分开
               _this.$set(_this.allInfo[i],"selectedTopics",[]);
