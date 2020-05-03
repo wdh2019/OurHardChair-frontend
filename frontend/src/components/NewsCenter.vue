@@ -248,6 +248,7 @@
           senderName: row.receiverName,
           receiverName: row.senderName,
           relatedConferenceName: row.relatedConferenceName,
+          topics:row.selectedTopics,
         })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
@@ -273,16 +274,6 @@
               type: "error",
             })
           });
-          this.$axios.post("/setTopicsForPCMember",{
-            topics:row.selectedTopics,
-            conferenceName:row.relatedConferenceName,
-          }).catch(error => {
-            this.$message({
-              showClose: true,
-              message: "上传topics失败",
-              type:"error",
-            })
-          })
       },
       disapproveInvitation(index, row) {
         const _this = this;
