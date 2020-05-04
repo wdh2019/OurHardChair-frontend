@@ -35,54 +35,43 @@
                 <label class="label">发布时间</label>
                 <span>{{ scope.row.release_date }}</span>
               </el-form-item>
-              <div v-show="scope.row.status===1">
+              <!--显示在此的所有会议都是审核通过的，所以不用判断status-->
+              <div
+                v-show="scope.row.is_open_submission===1">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>审核未通过</span>
-                </el-form-item>
-              </div>
-              <div v-show="scope.row.status===3">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>审核中</span>
+                  <span>审核通过，投稿尚未开始</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.is_open_submission,scope.row.deadline_date,scope.row.release_date)===1">
+                v-show="scope.row.is_open_submission===2">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>会议尚未开始</span>
+                  <span>开始投稿</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
+                v-show="scope.row.is_open_submission===3">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>会议进行中,投稿尚未开始</span>
+                  <span>投稿截止，开始评审</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
+                v-show="scope.row.is_open_submission===4">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>投稿开始</span>
+                  <span>评审结果发布</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
+                v-show="scope.row.is_open_submission===5">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>投稿已经结束，等待评审结果</span>
+                  <span>会议开始</span>
                 </el-form-item>
               </div>
-              <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===5">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>评审结束，结果已发布</span>
-                </el-form-item>
-              </div>
-              <el-form-item class="el-form-item" v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
+              <el-form-item class="el-form-item" v-show="scope.row.is_open_submission===2">
                 <label class="label">操作</label>
                 <el-button
                   size="mini"
@@ -107,15 +96,18 @@
           </template>
         </el-table-column>
         <el-table-column prop="place" label="举办地点" width="300px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="start_date" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="deadline_date" label="截止时间" width="200px"
+        <el-table-column prop="deadline_date" label="截稿时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="release_date" label="发布时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="is_open_submission" label="投稿状态" width="120px">
-          <template slot-scope="scope" width="50px">
-            <el-tag type="danger" v-show="scope.row.is_open_submission===1">未开放投稿</el-tag>
+        <el-table-column prop="start_date" label="举办时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="is_open_submission" label="会议状态" width="200px" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <el-tag type="warning" v-show="scope.row.is_open_submission===1">未开放投稿</el-tag>
             <el-tag type="success" v-show="scope.row.is_open_submission===2">已开放投稿</el-tag>
+            <el-tag type="info" v-show="scope.row.is_open_submission===3">投稿截止，等待评审结果</el-tag>
+            <el-tag type="primary" v-show="scope.row.is_open_submission===4">评审结果发布</el-tag>
+            <el-tag type="danger" v-show="scope.row.is_open_submission===5">会议开始</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -211,21 +203,7 @@
       //"截稿，开始评审" 3
       //"评审结果发布" 4
       // "会议开始" 5
-      getStatus(startDate, is_open_submission, deadlineDate, releaseDate) {
-        let start = this.getTime(startDate);
-        let deadline = this.getTime(deadlineDate);
-        let release = this.getTime(releaseDate);
-        if (!this.compareDate(start)) {
-            return 1
-        } else if (this.compareDate(start) && is_open_submission == 1 && !this.compareDate(deadline)) {
-            return 2
-        } else if (this.compareDate(start) && is_open_submission != 1 && !this.compareDate(deadline)) {
-            return 3
-        } else if (this.compareDate(deadline) && !this.compareDate(release)) {
-            return 4
-        } else
-            return 5
-      },
+
       enterSubmitPapers(row) {
         if (row.is_open_submission === 1) {
           this.$message({

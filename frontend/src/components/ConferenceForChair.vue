@@ -26,6 +26,7 @@
                   <label>{{scope.row.is_open_submission}}</label>
                 </el-switch>
                 </el-form-item>
+              <!--开启投稿 end-->
               <!--开启审稿-->
               <div>
               <el-form-item>
@@ -53,7 +54,7 @@
                 </el-switch>
                 </el-form-item>
                 </div>
-
+                <!--开启审稿end-->
               <div v-show="scope.row.status===1" >
                 <el-form-item>
                   <label class="label">会议状态</label>
@@ -101,6 +102,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议开始</span>
+                  <!--之后，此处可能填入进入会议按钮，功能为参与会议-->
                 </el-form-item>
               </div>
 
@@ -119,10 +121,10 @@
           </template>
         </el-table-column>
         <el-table-column prop="place" label="举办地点" width="300px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="start_date" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="deadline_date" label="截止时间" width="200px"
+        <el-table-column prop="deadline_date" label="截稿时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="release_date" label="发布时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="start_date" label="举办时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="status" label="审核状态" width="120px">
           <template slot-scope="scope">
             <el-tag type="primary"  v-show="scope.row.status===1">审核中</el-tag>
@@ -362,7 +364,7 @@
   }
   /* 展开行的背景色 */
   .el-table >>> .el-table__expanded-cell[class*="cell"]{
-    background-color: rgb(240, 249, 235);
+    background-color: rgb(236, 245, 255);
   }
 
   .base_conference {
