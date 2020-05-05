@@ -16,7 +16,8 @@ import CheckPapers from "../components/CheckPapers"
 import SubmitPapers from "../components/SubmitPapers"
 import ApproveConference from "../components/ApproveConference"
 import UserInfo from "../components/UserInfo"
-import ViewSubmissionTRecord from "../components/ViewSubmissionRecord"
+import ViewSubmissionRecord from "../components/ViewSubmissionRecord"
+import ViewContribution from "../components/ViewContribution"
 
 
 Vue.use(Router);
@@ -71,7 +72,7 @@ export const router = new Router({
       name: '我的会议',
       component: UserPage,
       meta: {
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [
         {
@@ -161,7 +162,12 @@ export const router = new Router({
           path: '/ViewSubmissionRecord',
           //path: '/SubmitPapers/:row',
           name: '/ViewSubmissionRecord',
-          component: ViewSubmissionTRecord,
+          component: ViewSubmissionRecord,
+        },
+        {
+          path: '/ViewContribution',
+          name: '/ViewContribution',
+          component: ViewContribution,
         }
       ]
     },

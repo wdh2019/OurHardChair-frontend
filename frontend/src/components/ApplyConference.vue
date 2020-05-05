@@ -16,14 +16,6 @@
         <el-form-item prop="place" class="item">
           <el-input v-model="ruleForm.place" placeholder="举办地点"></el-input>
         </el-form-item>
-        <el-form-item prop="start_date" class="item">
-          <el-date-picker
-            v-model="ruleForm.start_date"
-            type="datetime"
-            placeholder="举办日期">
-          </el-date-picker>
-        </el-form-item>
-
         <el-form-item prop="deadline_date" class="item">
           <el-date-picker
             v-model="ruleForm.deadline_date"
@@ -36,6 +28,13 @@
             v-model="ruleForm.release_date"
             type="datetime"
             placeholder="成绩发布日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item prop="start_date" class="item">
+          <el-date-picker
+            v-model="ruleForm.start_date"
+            type="datetime"
+            placeholder="举办日期">
           </el-date-picker>
         </el-form-item>
 
@@ -61,20 +60,20 @@
     name: 'ConferenceApplication',
     data() {
       let checkDeadLine = (rule, value, callback) => {
-        if (value < this.current_date) {
+        if (value!==null && value < this.current_date) {
           return callback(new Error("截稿时间不能早于此刻"))
         }
         return callback();
       };
       let checkSubmitTime = (rule, value, callback) => {
-        if (value < this.ruleForm.deadline_date) {
-          return callback(new Error("成绩公布时间不能早于截稿时间"))
+        if (value!==null && this.ruleForm.deadline_date!==null && value < this.ruleForm.deadline_date) {
+          return callback(new Error("成绩发布时间不能早于截稿时间"))
         }
         return callback();
       };
       let checkStartTime = (rule,value,callback) => {
-        if (value < this.ruleForm.start_date) {
-          return callback(new Error("会议举办时间不能早于成绩公布时间"))
+        if (value!==null && this.ruleForm.release_date!==null && value< this.ruleForm.release_date) {
+          return callback(new Error("会议举办时间不能早于成绩发布时间"))
         }
         return callback();
       }
@@ -92,22 +91,22 @@
           topics: [],
         },
         rules: {
-          short_name: [{required: true, message: "会议简称不为空", trigger: 'blur'}],
-          full_name: [{required: true, message: '会议全称不为空', trigger: 'blur'}],
-          place: [{required: true, message: "会议地点不为空", trigger: 'blur'}],
+          short_name: [{required: true, message: "会议简称不能为空", trigger: 'blur'}],
+          full_name: [{required: true, message: '会议全称不能为空', trigger: 'blur'}],
+          place: [{required: true, message: "会议地点不能为空", trigger: 'blur'}],
           start_date: [
-            {type: 'date', required: true, message: "开始日期不为空", trigger: 'blur'},
+            {type: 'date', required: true, message: "举办日期不能为空", trigger: 'blur'},
             {validator: checkStartTime}
             ],
           deadline_date: [
-            {type: 'date', required: true, message: "截止日期不为空", trigger: 'blur'},
+            {type: 'date', required: true, message: "截稿日期不能为空", trigger: 'blur'},
             {validator: checkDeadLine}
           ],
           release_date: [
-            {type: 'date', required: true, message: "公布日期不为空", trigger: 'blur'},
+            {type: 'date', required: true, message: "成绩发布日期不能为空", trigger: 'blur'},
             {validator: checkSubmitTime}
           ],
-          topics: [{required: true, message: "主题不为空", trigger: 'blur'}],
+          topics:[{required:true,message:"主题不能为空",trigger:'blur'}],
         },
         loading: false
       }

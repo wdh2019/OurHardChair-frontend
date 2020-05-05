@@ -10,86 +10,122 @@
         <el-table-column prop="action" label="操作" width="50px" type="expand">
           <template slot-scope="scope">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item class="el-form-item">
-                <label class="label">会议简称</label>
-                <span>{{ scope.row.short_name }}</span>
+              <!--开启投稿-->
+                <el-form-item>
+                <el-switch
+                  ref="switch"
+                  v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==1"
+                  v-bind:value="scope.row.is_open_submission===1"
+                  active-text="开启投稿"
+                  inactive-text="未开启投稿"
+                  :active-value='false'
+                  :inactive-value='true'
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                  @change="changeSubmissionStatus(scope.row)">
+                  <label>{{scope.row.is_open_submission}}</label>
+                </el-switch>
+                </el-form-item>
+              <!--开启投稿 end-->
+              <!--开启审稿-->
+              <div>
+              <el-form-item>
+                <label class="label">稿件分配策略</label>
+                <el-radio-group v-model="scope.row.allocationStrategy">
+                    <el-radio :label="1">基于topic相关度</el-radio>
+                    <el-radio :label="2">基于审稿平均负担</el-radio>
+                </el-radio-group>
               </el-form-item>
-              <el-form-item class="el-form-item">
-                <label class="label">开始时间</label>
-                <span>{{ scope.row.start_date }}</span>
-              </el-form-item>
-              <el-form-item class="el-form-item">
-                <label class="label">会议全称</label>
-                <span>{{ scope.row.full_name }}</span>
-              </el-form-item>
-              <el-form-item class="el-form-item">
-                <label class="label">结束时间</label>
-                <span>{{scope.row.deadline_date }}</span>
-              </el-form-item>
-              <el-form-item class="el-form-item">
-                <label class="label">举办地点</label>
-                <span>{{ scope.row.place }}</span>
-              </el-form-item>
-              <el-form-item class="el-form-item">
-                <label class="label">发布时间</label>
-                <span>{{ scope.row.release_date }}</span>
-              </el-form-item>
-              <div v-show="scope.row.status===1">
+              </div>
+              <div>
+                <el-form-item>
+                <el-switch
+                  ref="switch"
+                  v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==2||scope.row.allocationStrategy===''"
+                  v-bind:value="scope.row.is_open_submission===2"
+                  active-text="开启审稿"
+                  inactive-text="未开启审稿"
+                  :active-value='false'
+                  :inactive-value='true'
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                  @change="changeContributionStatus(scope.row)">
+                  <label>{{scope.row.is_open_submission}}</label>
+                </el-switch>
+                </el-form-item>
+              </div>
+              <!--开启审稿end-->
+			        <!--开启评审结果发布-->
+			        <div>
+				        <el-form-item>
+				        <el-switch
+				           ref="switch"
+				           v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==3"
+				           v-bind:value="scope.row.is_open_submission===3"
+				           active-text="发布评审结果"
+				           inactive-text="未发布评审结果"
+				           :active-value='false'
+				           :inactive-value='true'
+				           active-color="#13ce66"
+				           inactive-color="#ff4949"
+				           @change="changeReleaseStatus(scope.row)">
+				           <label>{{scope.row.is_open_submission}}</label>
+				        </el-switch>
+				        </el-form-item>
+		          </div>
+			  <!--开启评审结果发布end-->
+
+              <div v-show="scope.row.status===1" >
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>审核中</span>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status===3">
+              <div v-show="scope.row.status===3" >
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>审核未通过</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===1">
+                v-show="scope.row.status===2&&scope.row.is_open_submission===1">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>会议尚未开始</span>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                  <span>审核通过，投稿尚未开始</span>
+                  <el-button type="primary" size="small" @click="enterMeeting(scope.row)">进入会议</el-button>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===2">
+                v-show="scope.row.status===2&&scope.row.is_open_submission===2">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>会议进行中,投稿尚未开始</span>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                  <span>开始投稿</span>
+                  <el-button type="primary" size="small" @click="enterMeeting(scope.row)">进入会议</el-button>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===3">
+                v-show="scope.row.status===2&&scope.row.is_open_submission===3">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>投稿开始</span>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                  <span>投稿截止，开始评审</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===4">
+                v-show="scope.row.status===2&&scope.row.is_open_submission===4">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>投稿已经结束，等待评审结果</span>
+                  <span>评审结果发布</span>
                 </el-form-item>
               </div>
               <div
-                v-show="scope.row.status===2&&getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)===5">
+                v-show="scope.row.status===2&&scope.row.is_open_submission===5">
                 <el-form-item>
                   <label class="label">会议状态</label>
-                  <span>评审结束，结果已发布</span>
+                  <span>会议开始</span>
+                  <!--之后，此处可能填入进入会议按钮，功能为参与会议-->
                 </el-form-item>
               </div>
+
             </el-form>
           </template>
         </el-table-column>
@@ -105,33 +141,29 @@
           </template>
         </el-table-column>
         <el-table-column prop="place" label="举办地点" width="300px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="start_date" label="开始时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="deadline_date" label="截止时间" width="200px"
+        <el-table-column prop="deadline_date" label="截稿时间" width="200px"
                          :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="release_date" label="发布时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column prop="start_date" label="举办时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="status" label="审核状态" width="120px">
           <template slot-scope="scope">
-            <el-tag type="primary" v-show="scope.row.status===1">审核中</el-tag>
-            <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
-            <el-tag type="danger" v-show="scope.row.status===3">审核未通过</el-tag>
+            <el-tag type="primary"  v-show="scope.row.status===1">审核中</el-tag>
+            <el-tag type="success"  v-show="scope.row.status===2">已通过</el-tag>
+            <el-tag type="danger"  v-show="scope.row.status===3">审核未通过</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="is_open_submission" label="投稿状态" width="250px">
+        <el-table-column prop="status" label="投稿状态" width="120px">
           <template slot-scope="scope">
-            <el-switch
-              ref="switch"
-              v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission===2||
-            getStatus(scope.row.start_date,scope.row.is_open_submission,scope.row.deadline_date,scope.row.release_date)!==2"
-              v-bind:value="scope.row.is_open_submission"
-              active-text="开启投稿"
-              inactive-text="未开启投稿"
-              :active-value='2'
-              :inactive-value='1'
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              @change="changeSubmissionStatus($event,scope.row)">
-              <label>{{scope.row.is_open_submission}}</label>
-            </el-switch>
+            <el-tag type="warning"  v-show="scope.row.is_open_submission===1">未开启</el-tag>
+            <el-tag type="success"  v-show="scope.row.is_open_submission===2">已开启</el-tag>
+            <el-tag type="info"  v-show="scope.row.is_open_submission===3">已截止</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="审稿状态" width="120px">
+          <template slot-scope="scope">
+            <el-tag type="warning"  v-show="scope.row.is_open_submission<3">未开启</el-tag>
+            <el-tag type="success"  v-show="scope.row.is_open_submission===3">已开启</el-tag>
+            <el-tag type="info"  v-show="scope.row.is_open_submission===4">结果已发布</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -170,7 +202,7 @@
             deadline_date: row.deadline_date,
             release_date: row.release_date,
             status: row.status,
-            isOpenSubmisstion: row.is_open_submission,
+            isOpenSubmission: row.is_open_submission,
           }
         }).catch(err => err);
       },
@@ -242,35 +274,26 @@
       //"截稿，开始评审" 3
       //"评审结果发布" 4
       // "会议开始" 5
-      getStatus(startDate, is_open_submission, deadlineDate, releaseDate) {
-        let start = this.getTime(startDate);
-        let deadline = this.getTime(deadlineDate);
-        let release = this.getTime(releaseDate);
-        if (!this.compareDate(start)) {
-            return 1
-        } else if (this.compareDate(start) && is_open_submission == 1 && !this.compareDate(deadline)) {
-            return 2
-        } else if (this.compareDate(start) && is_open_submission != 1 && !this.compareDate(deadline)) {
-            return 3
-        } else if (this.compareDate(deadline) && !this.compareDate(release)) {
-            return 4
-        } else
-            return 5
-      },
+
       //根据投稿按钮的开关，发送给后端投稿状态
-      changeSubmissionStatus(status, row) {
-        row.is_open_submission = row.is_open_submission === 1 ? 2 : 1;
-        if (status === 2) {
+      changeSubmissionStatus(row) {
+        if (row.is_open_submission===1) {
           this.$axios.post('/openSubmission',{
-
               full_name: row.full_name,
-
           }).then(resp => {
-            this.$message({
-              showClose: true,
-              message:resp.data.message,
-              type:'success'
-            });
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+              this.$message({
+                showClose: true,
+                message:resp.data.message,
+                type:'success'
+              });
+            }else{
+              this.$message({
+                showClose: true,
+                message:resp.data.message,
+                type: 'warning'
+              });
+            }
           }).catch(error =>{
             this.$message({
               showClose: true,
@@ -279,14 +302,66 @@
             });
           })
         }
-        else {
-          this.$message({
-            showClose: true,
-            message: "错误地将投稿关闭",
-            type: 'warning'
+      },
+      changeContributionStatus(row) {
+        if(row.is_open_submission===2){
+          this.$axios.post('/openManuscriptReview',{
+              conferenceId: row.conferenceId,
+              allocationStrategy:row.allocationStrategy,
+          })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'success'
+              })
+            }else{
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'warning'
+              })
+            }
+          })
+          .catch(error => {
+            this.$message({
+              showClose: true,
+              message: error.message,
+              type:'error'
+            })
           });
         }
-      }
+      },
+      changeReleaseStatus(row){
+        if(row.is_open_submission===3){
+          this.$axios.post('',{
+              conferenceId: row.conferenceId,
+          })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'success'
+              })
+            }else{
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'warning'
+              })
+            }
+          })
+          .catch(error => {
+            this.$message({
+              showClose: true,
+              message: error.message,
+              type:'error'
+            })
+          });
+        }
+      },
     },
     created() {
       //一开始就向后端请求已申请的会议
@@ -295,6 +370,9 @@
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferences = resp.data.meetings;
+            for(let i=0;i<_this.conferences.length;i++){
+              _this.$set(_this.conferences[i],"allocationStrategy",'');
+            }
           } else {
             this.$message({
               showClose: true,
@@ -309,8 +387,8 @@
             message: '请求相关会议失败',
             type: 'error'
           });
-        })
-    }
+        });
+    },
   }
 </script>
 
@@ -318,17 +396,23 @@
   .demo-table-expand {
     font-size: 0;
   }
-
   .demo-table-expand .label {
-    width: 90px;
-    color: #99a9bf;
+    width: fit-content;
+    color: #606266;
     font-weight: bold;
+    margin-right: 20px;
   }
-
   .demo-table-expand .el-form-item {
     margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
+    margin-bottom: 5px;
+    width: 25%;
+  }
+  .demo-table-expand .el-button{
+    margin-left:20px;
+  }
+  /* 展开行的背景色 */
+  .el-table >>> .el-table__expanded-cell[class*="cell"]{
+    background-color: rgb(236, 245, 255);
   }
 
   .base_conference {

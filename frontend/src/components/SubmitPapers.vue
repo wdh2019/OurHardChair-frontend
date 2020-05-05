@@ -264,11 +264,6 @@
     font-weight: normal;
   }
 
-  .title3 {
-    margin-top: 40px;
-    margin-bottom: 10px;
-  }
-
   p.description {
     text-align: left;
     color: #999;
@@ -277,69 +272,5 @@
     font-size: 14px;
   }
 
-  .userinfo_form {
-    margin-top: 40px;
-    text-align: left;
-  }
-
-  .id {
-    margin-top: 25px;
-    font-size: 14px;
-    text-align: left;
-  }
-
-  .id_bold {
-    font-weight: bold;
-  }
-
-  .inline_block {
-    display: inline-block;
-  }
-
-  .display_username_field {
-    width: 250px;
-  }
-
-  .display_email_field {
-    width: 300px;
-  }
-
-  .display_password_field {
-    width: 50%;
-  }
-
-  .display_ensure_password_field {
-    width: 50%;
-  }
-
-  .display_country_field {
-    width: 250px;
-  }
-
-  .display_company_field {
-    width: 350px;
-  }
-
-  .userinfo_container .item {
-    margin-top: 0px;
-    margin-bottom: 20px;
-  }
-
-  .middle_button {
-    margin-top: 20px;
-    width: 15%;
-    height: 50px;
-    border: none
-  }
-
-  .item .el-form-item__label {
-    color: red;
-  }
-
-  .item .el-form-item__label:before {
-    content: '' !important;
-    width: 0px;
-    margin-right: 0px;
-  }
 
 </style>
