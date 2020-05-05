@@ -15,7 +15,7 @@
           </div>
           <!--需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁-->
           <div>
-            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_name}}</p>
+            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_username}}</p>
           </div>
           <div>
             <p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>

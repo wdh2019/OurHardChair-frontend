@@ -16,7 +16,7 @@
           </div>
           <!--需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁-->
           <div>
-            <p class="content"><label class="label">会议主席:  </label>{{this.$route.params.chair_name}}</p>
+            <p class="content"><label class="label">会议主席:  </label>{{this.$route.params.chair_username}}</p>
           </div>
           <div>
             <p class="content"><label class="label">会议地点:  </label>{{this.$route.params.place}}</p>
@@ -123,7 +123,7 @@
         formData.append('file',this.ruleForm.file);
         +        //沈征宇修改
 +        //2020-05-01
-+        formData.append('conferenceID',this.$route.params.conference_id);
++        formData.append('conference_id',this.$route.params.conference_id);
 +        //沈征宇修改
 +        //2020-05-01
         this.instance.post('/upload',formData).then(resp =>{
@@ -157,7 +157,7 @@
             if(this.fileValid&&this.fileSelected){
               this.$axios.post('/contribute',{
                 //会议id需要传进来！！！！！
-                conferenceID:this.$route.params.conference_id,
+                conference_id:this.$route.params.conference_id,
                 authorID:this.$store.state.id,
                 filename:this.ruleForm.file.name,
                 title:this.ruleForm.title,

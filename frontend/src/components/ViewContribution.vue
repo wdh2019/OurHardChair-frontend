@@ -14,7 +14,7 @@
             <p class="content"><label class="label">会议全称: </label>{{this.$route.params.full_name}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_name}}</p>
+            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_username}}</p>
           </div>
           <div>
             <p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>
@@ -76,7 +76,7 @@
             label="预览"
             :show-overflow-tooltip="true">
             <template slot-scope="slot">
-              <el-button type="danger" size="small" @click="viewPDF($route.params.conferenceId,slot.row.title)">预览</el-button>
+              <el-button type="danger" size="small" @click="viewPDF($route.params.conference_id,slot.row.title)">预览</el-button>
             </template>
           </el-table-column>
           <el-table-column
@@ -118,22 +118,22 @@
           let _status="";
           let type="";
            switch(status){
-             case 1: _status="待审稿";type="warning";break;
-             case 2: _status="已审稿";type="success";break;
+             case 0: _status="待审稿";type="warning";break;
+             case 1: _status="已审稿";type="success";break;
              default: _status="待审稿";type="warning";break;
            }
            return {status:_status,type:type};
         },
-        viewPDF(conferenceID,title){
+        viewPDF(conference_id,title){
           window.open(
           "http://114.116.112.8:8080/js/pdf/web/viewer.html?file="
-           + encodeURIComponent("/preview/"+conferenceID+"/"+title+".pdf"));
+           + encodeURIComponent("/preview/"+conference_id+"/"+title+".pdf"));
         },
         enterArticle(row){
           this.$router.push({
             name: '/CheckPapers',
             params: {
-                conferenceId:this.$route.params.conferenceId,
+                conference_id:this.$route.params.conference_id,
                 title:row.title,
                 articleAbstract:row.articleAbstract,
                 authors:row.authors,
@@ -144,8 +144,8 @@
     created() {
         const _this=this;
         this.$axios.post('/reviewArticle',{
-          conferenceID:this.$route.params.conferenceId,
-          title:this.$route.params.title,
+          conference_id:this.$route.params.conference_id,
+          userId:this.$store.state.id,
         })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
