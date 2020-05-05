@@ -41,9 +41,11 @@
 
         <el-form-item prop="topics" class="item">
           <el-tag closable v-for="topic in ruleForm.topics" :key="topic" :type="topic_type[parseTopic(topic)]"
-           effect="light" class="topic_tag" @close="handleClose(topic)">{{topic}}</el-tag>
+                  effect="light" class="topic_tag" @close="handleClose(topic)">{{topic}}
+          </el-tag>
+
           <el-input v-model="topic_input_value" class="topic_input" placeholder="添加主题"
-          ref="topic_input" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-input>
+                    ref="topic_input" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm" prefix-icon="el-icon-circle-plus-outline"></el-input>
         </el-form-item>
         <el-form-item class="item">
           <el-button type="primary" @click="submitForm('ruleForm')" class="middle_button">立即创建</el-button>
@@ -71,8 +73,8 @@
         return callback();
       };
       return {
-        topic_input_value:'',
-        topic_type:["success","primary","info","warning","danger"],
+        topic_input_value: '',
+        topic_type: ["success", "primary", "info", "warning", "danger"],
         ruleForm: {
           short_name: '',
           full_name: '',
@@ -80,7 +82,7 @@
           place: '',
           deadline_date: '',
           release_date: '',
-          topics:[],
+          topics: [],
         },
         rules: {
           short_name: [{required: true, message: "会议简称不为空", trigger: 'blur'}],
@@ -95,7 +97,7 @@
             {type: 'date', required: true, message: "公布日期不为空", trigger: 'blur'},
             {validator: checkSubmitTime}
           ],
-          topics:[{required:true,message:"主题不为空",trigger:'blur'}],
+          topics: [{required: true, message: "主题不为空", trigger: 'blur'}],
         },
         loading: false
       }
@@ -103,25 +105,27 @@
 
     methods: {
       //分析topic，决定tag颜色
-      parseTopic(topic){
-        let sum=0;
-        for(let i=0;i<topic.length;i++){
-          sum+=topic.charCodeAt(i);
+      parseTopic(topic) {
+        let sum = 0;
+        for (let i = 0; i < topic.length; i++) {
+          sum += topic.charCodeAt(i);
         }
-        return sum%5;
+        return sum % 5;
       },
       //删除topic
-      handleClose(topic){
-        this.ruleForm.topics.splice(this.ruleForm.topics.indexOf(topic),1);
+      handleClose(topic) {
+        this.ruleForm.topics.splice(this.ruleForm.topics.indexOf(topic), 1);
       },
+
       //从输入框填入topic
-      handleInputConfirm(){
-        let inputValue= this.topic_input_value;
-        if(inputValue&&this.ruleForm.topics.indexOf(inputValue)==-1){
+      handleInputConfirm() {
+        let inputValue = this.topic_input_value;
+        if (inputValue && this.ruleForm.topics.indexOf(inputValue) == -1) {
           this.ruleForm.topics.push(inputValue);
         }
-        this.topic_input_value='';
+        this.topic_input_value = '';
       },
+
       fix(num, length) {
         return ('' + num).length < length ? ((new Array(length + 1)).join('0') + num).slice(-length) : '' + num;
       },
@@ -139,7 +143,7 @@
                 holdingTime: startTime,
                 submissionDeadline: endTime,
                 reviewReleaseDate: release_time,
-                topics:this.ruleForm.topics,
+                topics: this.ruleForm.topics,
               }
             )
               .then(resp => {
@@ -236,11 +240,12 @@
     border: none
   }
 
-  .topic_tag{
+  .topic_tag {
+    margin-right: 10px;
     float: left;
   }
 
-  .topic_input{
+  .topic_input {
     margin-top: 10px;
   }
 </style>
