@@ -8,7 +8,6 @@
 export default {
   name: 'App',
   mounted(){
-      if(this.$store.state.token!==null) this.$router.push('/UserPage');
       window.addEventListener('beforeunload',e => this.beforeunloadHandler(e));
       window.addEventListener('unload',e => this.unloadHandler(e));
   },

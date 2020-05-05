@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-menu
+      :unique-opened="true"
       :default-active="$route.path"
       mode="horizontal"
       class="el-menu-demo"
@@ -24,22 +25,21 @@
 
       <el-submenu index="news" style="float:right" v-show="$store.state.username!=='admin'">
           <template slot="title"><el-badge :value="newsCount" class="item" :hidden="newsCount===0">最新消息</el-badge></template>
-            <el-menu-item-group v-show="newsCount!==0">
-              <el-menu-item class="nav_item">会议申请结果<el-badge :value="applyNewsCount" :hidden="applyNewsCount===0" /></el-menu-item>
-              <el-menu-item class="nav_item">PCMember邀请相关<el-badge :value="inviteNewsCount" :hidden="inviteNewsCount===0" /></el-menu-item>
-              <el-menu-item class="nav_item">投稿相关<el-badge :value="submitNewsCount" :hidden="submitNewsCount===0" /></el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item class="nav_item" v-show="newsCount===0">
+            <div v-show="newsCount!==0">
+              <p v-show="applyNewsCount!==0" class="news_type" >会议申请结果<el-badge :value="applyNewsCount" /></p>
+              <p v-show="inviteNewsCount!==0" class="news_type" >PCMember邀请相关<el-badge :value="inviteNewsCount" /></p>
+              <p v-show="submitNewsCount!==0" class="news_type" >投稿相关<el-badge :value="submitNewsCount" /></p>
+            </div>
+            <p class="news_type" v-show="newsCount===0">
               暂无新消息
-            </el-menu-item>
-            <el-menu-item index="/NewsCenter" class="more_news nav_item">更多</el-menu-item>
-
+            </p>
+            <el-menu-item index="/NewsCenter" class="more_news nav_item">详情</el-menu-item>
       </el-submenu>
 
       <el-submenu index="user" style="float:right">
         <template slot="title"><i class="el-icon-user" style="color: white"></i>{{$store.state.username}}</template>
         <el-menu-item class="nav_item" index="/UserInfo">用户信息</el-menu-item>
-        <el-menu-item class="nav_item" @click="quit" >注销</el-menu-item>
+        <el-menu-item class="nav_item" index="/" @click="quit" >注销</el-menu-item>
       </el-submenu>
     </el-menu>
     <el-main>
@@ -91,23 +91,24 @@
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             for (let i = 0; i < resp.data.messages.length; i++) {
-              if (_this.allInfo[i].isRead === 1) {
-                if(_this.allInfo[i].messageCategory==='ApplyConferenceResponse'){
+              if (resp.data.messages[i].isRead === 1) {
+                if(resp.data.messages[i].messageCategory==='ApplyConferenceResponse'){
                   this.applyNewsCount++;
                 }
-                if(_this.allInfo[i].messageCategory==='PCMemberInvitationRequest'||_this.allInfo[i].messageCategory==='PCMemberInvitationResponse'){
+                if(resp.data.messages[i].messageCategory==='PCMemberInvitationRequest'||resp.data.messages[i].messageCategory==='PCMemberInvitationResponse'){
                   this.inviteNewsCount++;
                 }
-                if(_this.allInfo[i].messageCategory==='ManuscriptSubmissionRequest'||_this.allInfo[i].messageCategory==='ManuscriptSubmissionResponse'){
+                if(resp.data.messages[i].messageCategory==='ManuscriptSubmissionRequest'||resp.data.messages[i].messageCategory==='ManuscriptSubmissionResponse'){
                   this.submitNewsCount++;
                 }
-                this.notReadInfo.push(_this.allInfo[i]);
+                this.notReadInfo.push(resp.data.messages[i]);
                 this.newsCount++;
               }
             }
           } else {}
         })
         .catch(error => {
+          console.log(error);
           this.$message({
             showClose: true,
             message: '获取信息失败',
@@ -119,12 +120,18 @@
 </script>
 
 <style>
+  .news_type{
+    font-size: 14px;
+    color:white;
+    padding:0 10px 0 20px;
+    cursor:default;
+  }
   .el-menu.el-menu--popup{
     min-width:115px;
   }
   .el-menu-item.nav_item{
     margin-left:10px;
-    margin-right:5px;
+    margin-right:10px;
   }
   .el-badge__content--undefined{
     margin-left:5px;

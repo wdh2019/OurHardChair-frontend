@@ -21,6 +21,12 @@ import ViewSubmissionTRecord from "../components/ViewSubmissionRecord"
 
 Vue.use(Router);
 
+//解决路由跳转相同地址时报错
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+};
+
 export const router = new Router({
   //通过路由转到的页面
   routes: [
@@ -30,7 +36,7 @@ export const router = new Router({
       component: UserPage,
       redirect: '/UserInfo',
       meta: {
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [
         {
@@ -51,7 +57,7 @@ export const router = new Router({
       name: '会议总览',
       component: UserPage,
       meta: {
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [{
         path: "/AllConferences",
@@ -65,7 +71,7 @@ export const router = new Router({
       name: '我的会议',
       component: UserPage,
       meta: {
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [
         {
@@ -90,7 +96,7 @@ export const router = new Router({
       name: '操作中心之管理员特权',
       component: UserPage,
       meta: {
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [{
         path: '/ApproveConference',
@@ -103,7 +109,7 @@ export const router = new Router({
       name: '设置',
       component: UserPage,
       meta: {
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [{
         path: '/UserInfo',
@@ -116,7 +122,7 @@ export const router = new Router({
       name: '最新消息',
       component: UserPage,
       meta: {
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [{
         path: '/NewsCenter',
@@ -129,7 +135,7 @@ export const router = new Router({
       name: '其他功能',
       component: UserPage,
       meta: {
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [
         {

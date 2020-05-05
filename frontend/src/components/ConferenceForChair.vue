@@ -237,11 +237,11 @@
         }
 
       },
-      //"会议尚未开始" 1
-      //"会议进行中，尚未开始投稿"  2
-      //"开始投稿" 3
-      //"投稿截止" 4
-      //"评审结束" 5
+      //"审核通过，但尚未开启投稿"  1
+      //"开始投稿" 2
+      //"截稿，开始评审" 3
+      //"评审结果发布" 4
+      // "会议开始" 5
       getStatus(startDate, is_open_submission, deadlineDate, releaseDate) {
         let start = this.getTime(startDate);
         let deadline = this.getTime(deadlineDate);
