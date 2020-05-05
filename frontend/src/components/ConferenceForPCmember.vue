@@ -128,8 +128,9 @@
     methods: {
       enterMeeting(row) {
         this.$router.push({
-          name: '/CheckPapers',
+          name: '/ViewContribution',
           params: {
+            conferenceId: row.conferenceId, //!
             full_name: row.full_name,
             short_name: row.short_name,
             place: row.place,
@@ -137,7 +138,7 @@
             deadline_date: row.deadline_date,
             release_date: row.release_date,
             status: row.status,
-            isOpenSubmisstion: row.is_open_submission,
+            isOpenSubmission: row.is_open_submission,
           }
         }).catch(err => err);
       },

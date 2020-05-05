@@ -22,7 +22,7 @@
                   :inactive-value='true'
                   active-color="#13ce66"
                   inactive-color="#ff4949"
-                  @change="changeSubmissionStatus($event,scope.row)">
+                  @change="changeSubmissionStatus(scope.row)">
                   <label>{{scope.row.is_open_submission}}</label>
                 </el-switch>
                 </el-form-item>
@@ -49,12 +49,32 @@
                   :inactive-value='true'
                   active-color="#13ce66"
                   inactive-color="#ff4949"
-                  @change="changeContributionStatus($event,scope.row)">
+                  @change="changeContributionStatus(scope.row)">
                   <label>{{scope.row.is_open_submission}}</label>
                 </el-switch>
                 </el-form-item>
-                </div>
-                <!--开启审稿end-->
+              </div>
+              <!--开启审稿end-->
+			        <!--开启评审结果发布-->
+			        <div>
+				        <el-form-item>
+				        <el-switch
+				           ref="switch"
+				           v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==3"
+				           v-bind:value="scope.row.is_open_submission===3"
+				           active-text="发布评审结果"
+				           inactive-text="未发布评审结果"
+				           :active-value='false'
+				           :inactive-value='true'
+				           active-color="#13ce66"
+				           inactive-color="#ff4949"
+				           @change="changeReleaseStatus(scope.row)">
+				           <label>{{scope.row.is_open_submission}}</label>
+				        </el-switch>
+				        </el-form-item>
+		          </div>
+			  <!--开启评审结果发布end-->
+
               <div v-show="scope.row.status===1" >
                 <el-form-item>
                   <label class="label">会议状态</label>
@@ -256,7 +276,7 @@
       // "会议开始" 5
 
       //根据投稿按钮的开关，发送给后端投稿状态
-      changeSubmissionStatus(status, row) {
+      changeSubmissionStatus(row) {
         if (row.is_open_submission===1) {
           this.$axios.post('/openSubmission',{
               full_name: row.full_name,
@@ -283,7 +303,7 @@
           })
         }
       },
-      changeContributionStatus(status,row) {
+      changeContributionStatus(row) {
         if(row.is_open_submission===2){
           this.$axios.post('/openManuscriptReview',{
               conferenceId: row.conferenceId,
@@ -312,8 +332,36 @@
             })
           });
         }
-
-      }
+      },
+      changeReleaseStatus(row){
+        if(row.is_open_submission===3){
+          this.$axios.post('',{
+              conferenceId: row.conferenceId,
+          })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'success'
+              })
+            }else{
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'warning'
+              })
+            }
+          })
+          .catch(error => {
+            this.$message({
+              showClose: true,
+              message: error.message,
+              type:'error'
+            })
+          });
+        }
+      },
     },
     created() {
       //一开始就向后端请求已申请的会议
