@@ -16,7 +16,11 @@
           </div>
           <!--需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁-->
           <div>
+<<<<<<< HEAD
+            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_name}}</p>
+=======
             <p class="content"><label class="label">会议主席:  </label>{{this.$route.params.chair_username}}</p>
+>>>>>>> 99ee4eae2f19dd7577ea49530e720f5eb21bbf90
           </div>
           <div>
             <p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>
@@ -287,13 +291,7 @@
       beforeRemove(file, fileList) {
         //return this.$confirm(`确定移除 ${ file.name }？`);
       },
-<<<<<<< HEAD
-      myUpload(content) {
-        var formData = new FormData();
-        formData.append('file', this.ruleForm.file);
-        this.instance.post('/upload', formData).then(resp => {
-          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-=======
+
       myUpload(content){
         var formData=new FormData();
         formData.append('file',this.ruleForm.file);
@@ -317,7 +315,6 @@
               });
             }
         }).catch(error=>{
->>>>>>> 99ee4eae2f19dd7577ea49530e720f5eb21bbf90
             this.$message({
               showClose: true,
               message: "上传成功",
