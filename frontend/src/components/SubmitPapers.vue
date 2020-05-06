@@ -2,7 +2,7 @@
   <div id="base">
     <div class="container">
       <div>
-        <h3 class="title">YangYunteng,欢迎您的投稿</h3>
+        <h3 class="title">{{this.$store.state.fullName}},欢迎您的投稿</h3>
         <p class="description">请您填写以下信息</p>
       </div>
       <el-collapse class="meeting_introduction">
@@ -16,11 +16,7 @@
           </div>
           <!--需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁-->
           <div>
-<<<<<<< HEAD
-            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_name}}</p>
-=======
-            <p class="content"><label class="label">会议主席:  </label>{{this.$route.params.chair_username}}</p>
->>>>>>> 99ee4eae2f19dd7577ea49530e720f5eb21bbf90
+            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_username}}</p>
           </div>
           <div>
             <p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>
@@ -40,89 +36,8 @@
         <el-form-item prop="title" class="item" label="文章标题">
           <el-input v-model="ruleForm.title" placeholder="文章标题"></el-input>
         </el-form-item>
-        <el-form-item prop="checkedTopics" class="item" label="文章主题">
-          <el-checkbox-group v-model="ruleForm.checkedTopics">
-            <el-checkbox v-for="topic in topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
         <el-form-item prop="articleAbstract" class="item" label="文章摘要">
-          <el-input v-model="ruleForm.articleAbstract" placeholder="文章摘要" type="textarea"
-                    :rows="8"></el-input>
-        </el-form-item>
-        <el-table
-          :data="ruleForm.authors"
-          class="author_info"
-          v-show="ruleForm.authors.length>0">
-          <el-table-column
-            label="作者姓名"
-            prop="name"
-            width="150"
-            :show-overflow-tooltip="true">
-          </el-table-column>
-          <el-table-column
-            label="所在单位"
-            prop="institution"
-            width="150"
-            :show-overflow-tooltip="true">
-          </el-table-column>
-          <el-table-column
-            label="所在地区"
-            prop="region"
-            width="150"
-            :show-overflow-tooltip="true">
-          </el-table-column>
-
-          <el-table-column
-            label="作者邮箱"
-            prop="email"
-            width="150"
-            :show-overflow-tooltip="true">
-          </el-table-column>
-          <el-table-column label="操作" width="200px">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index)">编辑
-              </el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index)">删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-form-item prop="authors" class="item">
-
-          <el-button icon="el-icon-circle-plus-outline" circle class="button_add"
-                     @click="addAuthorDisplay"></el-button>
-          <p class="label_add">作者信息添加</p>
-          <el-form :model="authorRulesForm" :rules="authorRules" ref="authorRulesForm"
-                   v-show="authorAddDisplay" class="author_input">
-            <el-form-item prop="name">
-              <el-input v-model="authorRulesForm.name" placeholder="作者姓名" class="input"></el-input>
-            </el-form-item>
-            <el-form-item prop="institution">
-              <el-input v-model="authorRulesForm.institution" placeholder="所属单位" class="input"></el-input>
-            </el-form-item>
-            <el-form-item prop="region">
-              <el-input v-model="authorRulesForm.region" placeholder="所在地区" class="input"></el-input>
-            </el-form-item>
-            <el-form-item prop="email">
-              <el-input v-model="authorRulesForm.email" placeholder="作者邮箱" class="input"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button @click="resetAuthorSubmitForm" class="button">重置信息</el-button>
-              <el-button type="primary" @click="authorSubmitForm('authorRulesForm')" class="button"
-                         v-show="authorAddPattern===0">添加作者
-              </el-button>
-              <el-button type="primary" @click="changeAuthorSubmitForm('authorRulesForm',row)"
-                         class="button"
-                         v-show="authorAddPattern===1"> 修改
-              </el-button>
-            </el-form-item>
-          </el-form>
-
+          <el-input v-model="ruleForm.articleAbstract" placeholder="文章摘要" type="textarea" :rows="8"></el-input>
         </el-form-item>
         <el-form-item label="文件上传" style="text-align: left;">
           <el-upload
@@ -149,9 +64,7 @@
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
-      <button @click="print">print</button>
     </div>
-
   </div>
 </template>
 
@@ -159,39 +72,10 @@
   export default {
     name: "SubmitPapers",
     data() {
-      let checkTopic = (rule, value, callback) => {
-        if (value.length === 0)
-          return callback("至少选择一个主题");
-        return callback();
-      };
-      let checkAuthors = (rule, value, callback) => {
-        if (value.length === 0)
-          return callback("填写至少一位作者");
-        return callback();
-      };
-      let checkEmail = (rule, value, callback) => {
-        var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-        if (!regEmail.test(value)) {
-          return callback(new Error('邮箱格式不正确'))
-        }
-        return callback()
-      };
       return {
-        row: 0,
-        authorAddPattern: 0,
-        authorAddDisplay: false,
         fileSelected: false,
         fileValid: false,
-        topics: ["经济", "环境"],
-        authors: [{
-          name: "dnwi",
-          institution: "dnwi",
-          region: "ndiw",
-          email: 'mdow@nsj.com'
-        }],
         ruleForm: {
-          authors: [],
-          checkedTopics: [],
           title: '',
           filename: '',
           articleAbstract: '',
@@ -204,66 +88,16 @@
           ],
           filename: [
             {required: true, message: '请填写文件名', trigger: 'change'},
+
           ],
           articleAbstract: [
             {required: true, message: '请填写文章摘要', trigger: 'blur'},
             {min: 1, max: 800, message: '文章摘要不得超过800个字符', trigger: 'blur'}
           ],
-          checkedTopics: [
-            {validator: checkTopic, trigger: "blur"}
-          ],
-          authors: [
-            {validator: checkAuthors, trigger: 'blur'}
-          ]
-        },
-        authorRulesForm: {
-          name: '',
-          institution: '',
-          region: '',
-          email: '',
-        },
-        authorRules: {
-          name: [
-            {required: true, message: '作者姓名不能为空', trigger: 'blur'}
-          ],
-          institution: [
-            {required: true, message: "所在单位不能为空", trigger: 'blur'}
-          ],
-          region: [
-            {required: true, message: "所在地区不能为空", trigger: 'blur'}
-          ],
-          email: [
-            {required: true, message: '作者邮箱不能为空', trigger: 'blur'},
-            {validator: checkEmail, trigger: 'blur'}
-          ]
         }
-      }
+      };
     },
     methods: {
-      handleDelete(index) {
-        if (this.row === index) {
-          this.authorAddDisplay = false;
-          this.resetAuthorSubmitForm();
-        }
-        if (index < this.row) {
-          this.row--;
-        }
-
-        this.ruleForm.authors.splice(index, 1);
-      },
-      addAuthorDisplay() {
-        this.authorAddPattern = 0;
-        this.authorAddDisplay = !(this.authorAddDisplay);
-      },
-      handleEdit(index) {
-        this.authorAddPattern = 1;
-        this.row = index;
-        this.authorRulesForm.name = this.ruleForm.authors[index].name;
-        this.authorRulesForm.institution = this.ruleForm.authors[index].institution;
-        this.authorRulesForm.region = this.ruleForm.authors[index].region;
-        this.authorRulesForm.email = this.ruleForm.authors[index].email;
-        this.authorAddDisplay = true;
-      },
       handleRemove(file, fileList) {
         //console.log(file, fileList);
       },
@@ -291,30 +125,16 @@
       beforeRemove(file, fileList) {
         //return this.$confirm(`确定移除 ${ file.name }？`);
       },
-
-      myUpload(content){
-        var formData=new FormData();
-        formData.append('file',this.ruleForm.file);
-        +        //沈征宇修改
-+        //2020-05-01
-+        formData.append('conference_id',this.$route.params.conference_id);
-+        //沈征宇修改
-+        //2020-05-01
-        this.instance.post('/upload',formData).then(resp =>{
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
-              this.$message({
-                showClose:true,
-                message: "上传成功",
-                type:"success",
-              });
-            }else{
-              this.$message({
-                showClose:true,
-                message: resp.data.message,
-                type:"warning",
-              });
-            }
-        }).catch(error=>{
+      myUpload(content) {
+        var formData = new FormData();
+        formData.append('file', this.ruleForm.file);
+        //沈征宇修改
+        //2020-05-01
+        formData.append('conference_id', this.$route.params.conference_id);
+        //沈征宇修改
+        //2020-05-01
+        this.instance.post('/upload', formData).then(resp => {
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             this.$message({
               showClose: true,
               message: "上传成功",
@@ -344,19 +164,11 @@
             if (this.fileValid && this.fileSelected) {
               this.$axios.post('/contribute', {
                 //会议id需要传进来！！！！！
-<<<<<<< HEAD
-                conferenceID: this.$route.params.conference_id,
+                conference_id: this.$route.params.conference_id,
                 authorID: this.$store.state.id,
                 filename: this.ruleForm.file.name,
                 title: this.ruleForm.title,
                 articleAbstract: this.ruleForm.articleAbstract,
-=======
-                conference_id:this.$route.params.conference_id,
-                authorID:this.$store.state.id,
-                filename:this.ruleForm.file.name,
-                title:this.ruleForm.title,
-                articleAbstract:this.ruleForm.articleAbstract,
->>>>>>> 99ee4eae2f19dd7577ea49530e720f5eb21bbf90
               }).then(resp => {
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$message({
@@ -394,48 +206,14 @@
         this.$refs[formName].resetFields();
         this.$refs.upload.clearFiles();
       },
-      print() {
-        console.log(this.ruleForm.checkedTopics);
-      },
-
-
-      authorSubmitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            let author = {};
-            author.name = this.authorRulesForm.name;
-            author.institution = this.authorRulesForm.institution;
-            author.region = this.authorRulesForm.region;
-            author.email = this.authorRulesForm.email;
-            this.ruleForm.authors.push(author);
-            this.resetAuthorSubmitForm();
-            this.addAuthorDisplay();
-          }
-        });
-      },
-      changeAuthorSubmitForm(formName, index) {
-        console.log(index);
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$set(this.ruleForm.authors[index], 'name', this.authorRulesForm.name);
-            // this.ruleForm.authors[index].name = this.authorRulesForm.name;
-            this.$set(this.ruleForm.authors[index], 'institution', this.authorRulesForm.institution);
-            this.$set(this.ruleForm.authors[index], 'region', this.authorRulesForm.region);
-            this.$set(this.ruleForm.authors[index], 'email', this.authorRulesForm.email);
-            console.log(this.ruleForm.authors);
-            this.resetAuthorSubmitForm();
-            this.authorAddDisplay = false;
-          }
-        });
-
-      },
-      //重置author表单的所有信息
-      resetAuthorSubmitForm() {
-        for (let [key, value] of Object.entries(this.authorRulesForm)) {
-          this.authorRulesForm[key] = '';
-        }
-
-      }
+    },
+    created() {
+      //在页面刷新时将vuex里的信息保存到localStorage里
+      window.addEventListener("beforeunload", () => {
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      });
+      //在页面加载时读取localStorage里的状态信息
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
     }
   }
 </script>
@@ -482,7 +260,7 @@
     margin: 10px auto;
     margin-top: -10px;
     width: 70%;
-    /*height: 800px;*/
+    height: 800px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -498,11 +276,6 @@
     font-weight: normal;
   }
 
-  .title3 {
-    margin-top: 40px;
-    margin-bottom: 10px;
-  }
-
   p.description {
     text-align: left;
     color: #999;
@@ -511,104 +284,5 @@
     font-size: 14px;
   }
 
-  .userinfo_form {
-    margin-top: 40px;
-    text-align: left;
-  }
 
-  .id {
-    margin-top: 25px;
-    font-size: 14px;
-    text-align: left;
-  }
-
-  .id_bold {
-    font-weight: bold;
-  }
-
-  .inline_block {
-    display: inline-block;
-  }
-
-  .display_username_field {
-    width: 250px;
-  }
-
-  .display_email_field {
-    width: 300px;
-  }
-
-  .display_password_field {
-    width: 50%;
-  }
-
-  .display_ensure_password_field {
-    width: 50%;
-  }
-
-  .display_country_field {
-    width: 250px;
-  }
-
-  .display_company_field {
-    width: 350px;
-  }
-
-  .userinfo_container .item {
-    margin-top: 0px;
-    margin-bottom: 20px;
-  }
-
-  .middle_button {
-    margin-top: 20px;
-    width: 15%;
-    height: 50px;
-    border: none
-  }
-
-  .item .el-form-item__label {
-    color: red;
-  }
-
-  .item .el-form-item__label:before {
-    content: '' !important;
-    width: 0;
-    margin-right: 0;
-  }
-
-  .button_add {
-    float: left;
-  }
-
-  .label_add {
-    margin-top: -2px;
-    margin-left: 20px;
-    float: left;
-    font-weight: bold;
-  }
-
-  .author_input {
-    margin-top: 50px;
-    border: 1px groove rgba(96, 189, 255, 0.71);
-    padding: 30px;
-    border-radius: 20px;
-  }
-
-  .author_input .input {
-    margin-top: 20px;
-    margin-left: 5%;
-    width: 50%;
-    float: left;
-  }
-
-  .author_input .button {
-    margin-top: 30px;
-    margin-right: 10px;
-    float: right;
-  }
-
-  .author_info {
-    width: 80%;
-    margin-left: 10%;
-  }
 </style>
