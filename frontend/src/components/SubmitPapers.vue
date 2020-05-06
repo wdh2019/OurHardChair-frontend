@@ -36,8 +36,99 @@
         <el-form-item prop="title" class="item" label="文章标题">
           <el-input v-model="ruleForm.title" placeholder="文章标题"></el-input>
         </el-form-item>
+        <el-form-item prop="checkedTopics" class="item" label="文章主题">
+          <el-checkbox-group v-model="ruleForm.checkedTopics">
+            <el-checkbox v-for="topic in topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
         <el-form-item prop="articleAbstract" class="item" label="文章摘要">
           <el-input v-model="ruleForm.articleAbstract" placeholder="文章摘要" type="textarea" :rows="8"></el-input>
+        </el-form-item>
+        <el-table
+          :data="ruleForm.authors"
+          class="author_info"
+          v-show="ruleForm.authors.length>0">
+          <el-table-column
+            label="作者姓名"
+            prop="name"
+            width="150"
+            :show-overflow-tooltip="true">
+            <!--<template slot-scope="scope">-->
+            <!--<span style="margin-left: 10px">{{ scope.row.name }}</span>-->
+            <!--</template>-->
+          </el-table-column>
+          <el-table-column
+            label="所在单位"
+            prop="institution"
+            width="150"
+            :show-overflow-tooltip="true">
+            <!--<template slot-scope="scope">-->
+            <!--<span style="margin-left: 10px">{{ scope.row.institution }}</span>-->
+            <!--</template>-->
+          </el-table-column>
+          <el-table-column
+            label="所在地区"
+            prop="region"
+            width="150"
+            :show-overflow-tooltip="true">
+            <!--<template slot-scope="scope">-->
+            <!--<span style="margin-left: 10px">{{ scope.row.region }}</span>-->
+            <!--</template>-->
+          </el-table-column>
+
+          <el-table-column
+            label="作者邮箱"
+            prop="email"
+            width="150"
+            :show-overflow-tooltip="true">
+            <!--<template slot-scope="scope">-->
+            <!--<span style="margin-left: 10px">{{ scope.row.email }}</span>-->
+            <!--</template>-->
+          </el-table-column>
+          <el-table-column label="操作" width="200px">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index)">编辑
+              </el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index)">删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-form-item prop="authors" class="item">
+          <p class="label_add">作者信息添加</p>
+          <el-button icon="el-icon-circle-plus-outline" circle class="button_add"
+                     @click="addAuthorDisplay"></el-button>
+          <el-form :model="authorRulesForm" :rules="authorRules" ref="authorRulesForm"
+                   v-show="authorAddDisplay" class="author_input">
+            <el-form-item prop="name">
+              <el-input v-model="authorRulesForm.name" placeholder="作者姓名" class="input"></el-input>
+            </el-form-item>
+            <el-form-item prop="institution">
+              <el-input v-model="authorRulesForm.institution" placeholder="所属单位" class="input"></el-input>
+            </el-form-item>
+            <el-form-item prop="region">
+              <el-input v-model="authorRulesForm.region" placeholder="所在地区" class="input"></el-input>
+            </el-form-item>
+            <el-form-item prop="email">
+              <el-input v-model="authorRulesForm.email" placeholder="作者邮箱" class="input"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="resetAuthorSubmitForm" class="button">重置信息</el-button>
+              <el-button type="primary" @click="authorSubmitForm('authorRulesForm')" class="button"
+                         v-show="authorAddPattern===0">添加作者
+              </el-button>
+              <el-button type="primary" @click="changeAuthorSubmitForm('authorRulesForm',row)"
+                         class="button"
+                         v-show="authorAddPattern===1"> &nbsp;修改&nbsp;
+              </el-button>
+            </el-form-item>
+          </el-form>
+
         </el-form-item>
         <el-form-item label="文件上传" style="text-align: left;">
           <el-upload
@@ -72,14 +163,37 @@
   export default {
     name: "SubmitPapers",
     data() {
+      let checkTopic = (rule, value, callback) => {
+        if (value.length === 0)
+          return callback("至少选择一个主题");
+        return callback();
+      };
+      let checkAuthors = (rule, value, callback) => {
+        if (value.length === 0)
+          return callback("填写至少一位作者");
+        return callback();
+      };
+      let checkEmail = (rule, value, callback) => {
+        var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        if (!regEmail.test(value)) {
+          return callback(new Error('邮箱格式不正确'))
+        }
+        return callback()
+      };
       return {
+        row: 0,
+        authorAddPattern: 0,// 0 添加模式，1 修改模式
+        authorAddDisplay: false,
         fileSelected: false,
         fileValid: false,
+        topics: ["经济", "环境"],
         ruleForm: {
           title: '',
           filename: '',
           articleAbstract: '',
           file: '',
+          authors: [],
+          checkedTopics: [],
         },
         rules: {
           title: [
@@ -94,10 +208,100 @@
             {required: true, message: '请填写文章摘要', trigger: 'blur'},
             {min: 1, max: 800, message: '文章摘要不得超过800个字符', trigger: 'blur'}
           ],
+          checkedTopics: [
+            {validator: checkTopic, trigger: "blur"}
+          ],
+          authors: [
+            {validator: checkAuthors, trigger: 'blur'}
+          ]
+        },
+        authorRulesForm: {
+          name: '',
+          institution: '',
+          region: '',
+          email: '',
+        },
+        authorRules: {
+          name: [
+            {required: true, message: '作者姓名不能为空', trigger: 'blur'}
+          ],
+          institution: [
+            {required: true, message: "所在单位不能为空", trigger: 'blur'}
+          ],
+          region: [
+            {required: true, message: "所在地区不能为空", trigger: 'blur'}
+          ],
+          email: [
+            {required: true, message: '作者邮箱不能为空', trigger: 'blur'},
+            {validator: checkEmail, trigger: 'blur'}
+          ]
         }
       };
     },
     methods: {
+      //处理作者信息添加功能的函数
+      handleDelete(index) {
+        if (this.row === index) {
+          this.authorAddDisplay = false;
+          this.resetAuthorSubmitForm();
+        }
+        if (index < this.row) {
+          this.row--;
+        }
+
+        this.ruleForm.authors.splice(index, 1);
+      },
+      addAuthorDisplay() {
+        this.authorAddPattern = 0;
+        this.authorAddDisplay = !(this.authorAddDisplay);
+      },
+      handleEdit(index) {
+        this.authorAddPattern = 1;
+        this.row = index;
+        this.authorRulesForm.name = this.ruleForm.authors[index].name;
+        this.authorRulesForm.institution = this.ruleForm.authors[index].institution;
+        this.authorRulesForm.region = this.ruleForm.authors[index].region;
+        this.authorRulesForm.email = this.ruleForm.authors[index].email;
+        this.authorAddDisplay = true;
+      },
+
+      authorSubmitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let author = {};
+            author.name = this.authorRulesForm.name;
+            author.institution = this.authorRulesForm.institution;
+            author.region = this.authorRulesForm.region;
+            author.email = this.authorRulesForm.email;
+            this.ruleForm.authors.push(author);
+            this.resetAuthorSubmitForm();
+            this.addAuthorDisplay();
+          }
+        });
+      },
+      changeAuthorSubmitForm(formName, index) {
+        console.log(index);
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.$set(this.ruleForm.authors[index], 'name', this.authorRulesForm.name);
+            // this.ruleForm.authors[index].name = this.authorRulesForm.name;
+            this.$set(this.ruleForm.authors[index], 'institution', this.authorRulesForm.institution);
+            this.$set(this.ruleForm.authors[index], 'region', this.authorRulesForm.region);
+            this.$set(this.ruleForm.authors[index], 'email', this.authorRulesForm.email);
+            console.log(this.ruleForm.authors);
+            this.resetAuthorSubmitForm();
+            this.authorAddDisplay = false;
+          }
+        });
+
+      },
+      //重置author表单的所有信息
+      resetAuthorSubmitForm() {
+        for (let [key, value] of Object.entries(this.authorRulesForm)) {
+          this.authorRulesForm[key] = '';
+        }
+
+      },
       handleRemove(file, fileList) {
         //console.log(file, fileList);
       },
@@ -225,10 +429,6 @@
     order: 1;
   }
 
-  .el-collapse-item__header {
-    flex: 1 0 auto;
-    order: -1;
-  }
 
   .meeting_introduction {
 
@@ -247,12 +447,6 @@
     font-weight: bold;
   }
 
-  #userinfo {
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    position: fixed;
-  }
 
   .container {
     border-radius: 15px;
@@ -284,5 +478,37 @@
     font-size: 14px;
   }
 
+  .button_add {
+    float: left;
+    margin-top: -50px;
+    margin-left: 100px;
+  }
 
+  .label_add {
+    font-weight: bold;
+  }
+
+  .author_input {
+    border: 1px groove rgba(96, 189, 255, 0.71);
+    padding: 30px;
+    border-radius: 20px;
+  }
+
+  .author_input .input {
+    margin-top: 20px;
+    margin-left: 5%;
+    width: 50%;
+    float: left;
+  }
+
+  .author_input .button {
+    margin-top: 30px;
+    margin-right: 10px;
+    float: right;
+  }
+
+  .author_info {
+    width: 80%;
+    margin-left: 10%;
+  }
 </style>
