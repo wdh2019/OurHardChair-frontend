@@ -216,7 +216,7 @@
             name: '/SubmitPapers',
             params: {
               conference_id: row.conference_id,
-              chair_name: row.chair_name,
+              chair_username: row.chair_username,
               short_name: row.short_name,
               full_name: row.full_name,
               place: row.place,

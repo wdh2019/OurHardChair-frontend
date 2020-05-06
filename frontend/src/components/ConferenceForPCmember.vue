@@ -130,7 +130,7 @@
         this.$router.push({
           name: '/ViewContribution',
           params: {
-            conferenceId: row.conferenceId, //!
+            conference_id: row.conference_id, 
             full_name: row.full_name,
             short_name: row.short_name,
             place: row.place,

@@ -17,7 +17,7 @@
             <p class="content"><label class="label">文章摘要: </label>{{this.$route.params.articleAbstract}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">文章预览: </label><el-button type="danger" size="small" @click="viewPDF($route.params.conferenceId,$route.params.title)">预览</el-button></p>
+            <p class="content"><label class="label">文章预览: </label><el-button type="danger" size="small" @click="viewPDF($route.params.conference_id,$route.params.title)">预览</el-button></p>
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -86,16 +86,16 @@
         resetForm(formName) {
           this.$refs[formName].resetFields();
         },
-        viewPDF(conferenceID,title){
+        viewPDF(conference_id,title){
           window.open(
           "http://114.116.112.8:8080/js/pdf/web/viewer.html?file="
-           + encodeURIComponent("/preview/"+conferenceID+"/"+title+".pdf"));
+           + encodeURIComponent("/preview/"+conference_id+"/"+title+".pdf"));
         },
         submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
                 this.$axios.post('/submitReviewResult',{
-                  conferenceID:this.$route.params.conferenceId,
+                  conference_id:this.$route.params.conference_id,
                   userId:this.$store.state.id,
                   title:this.$route.params.title,
                   score:this.ruleForm.score,

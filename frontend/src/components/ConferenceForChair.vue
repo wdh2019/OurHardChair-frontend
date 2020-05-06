@@ -306,7 +306,7 @@
       changeContributionStatus(row) {
         if(row.is_open_submission===2){
           this.$axios.post('/openManuscriptReview',{
-              conferenceId: row.conferenceId,
+              conference_id: row.conference_id,
               allocationStrategy:row.allocationStrategy,
           })
           .then(resp => {
@@ -336,7 +336,7 @@
       changeReleaseStatus(row){
         if(row.is_open_submission===3){
           this.$axios.post('',{
-              conferenceId: row.conferenceId,
+              conference_id: row.conference_id,
           })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")){
