@@ -18,7 +18,7 @@ import ApproveConference from "../components/ApproveConference"
 import UserInfo from "../components/UserInfo"
 import ViewSubmissionRecord from "../components/ViewSubmissionRecord"
 import ViewContribution from "../components/ViewContribution"
-
+import ResetPapers from "../components/ResetPapers"
 
 Vue.use(Router);
 
@@ -168,6 +168,11 @@ export const router = new Router({
           path: '/ViewContribution',
           name: '/ViewContribution',
           component: ViewContribution,
+        },
+        {
+          path: '/ResetPapers',
+          name: '/ResetPapers',
+          component: ResetPapers,
         }
       ]
     },

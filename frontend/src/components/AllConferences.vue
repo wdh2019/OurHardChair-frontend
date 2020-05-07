@@ -23,7 +23,7 @@
                 <span>{{ scope.row.full_name }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
-                <label class="label">结束时间</label>
+                <label class="label">截稿时间</label>
                 <span>{{scope.row.deadline_date }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
@@ -127,6 +127,8 @@
   export default {
     name: "AllConferences",
     data() {
+
+
       return {
         pagesize: 10,
         curPage: 1,
@@ -216,14 +218,16 @@
             name: '/SubmitPapers',
             params: {
               conference_id: row.conference_id,
-              chair_username: row.chair_username,
-              short_name: row.short_name,
               full_name: row.full_name,
+              short_name: row.short_name,
               place: row.place,
               start_date: row.start_date,
               deadline_date: row.deadline_date,
               release_date: row.release_date,
+              status: row.status,
+              chair_username: row.chair_username,
               is_open_submission: row.is_open_submission,
+              topics: row.topics,
             }
           }).catch(err => err);
         }

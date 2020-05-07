@@ -10,7 +10,7 @@
         <el-table-column prop="fullName" label="会议全称"></el-table-column>
         <el-table-column prop="holdingPlace" label="举办地点"></el-table-column>
         <el-table-column prop="holdingTime" label="开始时间"></el-table-column>
-        <el-table-column prop="submissionDeadline" label="截止时间"></el-table-column>
+        <el-table-column prop="submissionDeadline" label="截稿时间"></el-table-column>
         <el-table-column prop="reviewReleaseDate" label="发布时间"></el-table-column>
         <el-table-column prop="action" label="操作">
           <template slot-scope="scope">
@@ -105,6 +105,7 @@
       //一开始就向后端请求已申请的会议
       this.$axios.post('/ReviewConference')
         .then(resp => {
+          console.log(resp.data)
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferencesForApproval = resp.data.meetings;
           } else {

@@ -2,56 +2,62 @@
   <div id="base">
     <div class="container">
       <div>
-        <h3 class="title">YangYunteng,欢迎您的投稿</h3>
+        <h3 class="title">{{this.$store.state.fullName}},欢迎您的投稿</h3>
         <p class="description">请您填写以下信息</p>
       </div>
-      <el-collapse class="meeting_introduction">
-        <el-collapse-item>
-          <span slot="title" class="collapse-title">会议简介</span>
-          <div>
-            <p class="content"><label class="label">会议简称: </label>{{this.$route.params.short_name}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议全称: </label>{{this.$route.params.full_name}}</p>
-          </div>
-          <!--需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁-->
-          <div>
-            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_name}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议开始时间: </label>{{this.$route.params.start_date}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议结束时间: </label>{{this.$route.params.deadline_date}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议截稿时间: </label>{{this.$route.params.release_date}}</p>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
+      <!--<el-collapse class="meeting_introduction">-->
+      <!--<el-collapse-item>-->
+      <!--<span slot="title" class="collapse-title">会议简介</span>-->
+      <!--<div>-->
+      <!--<p class="content"><label class="label">会议简称: </label>{{this.$route.params.short_name}}</p>-->
+      <!--</div>-->
+      <!--<div>-->
+      <!--<p class="content"><label class="label">会议全称: </label>{{this.$route.params.full_name}}</p>-->
+      <!--</div>-->
+      <!--&lt;!&ndash;需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁&ndash;&gt;-->
+      <!--<div>-->
+      <!--<p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_username}}</p>-->
+      <!--</div>-->
+      <!--<div>-->
+      <!--<p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>-->
+      <!--</div>-->
+      <!--<div>-->
+      <!--<p class="content"><label class="label">会议开始时间: </label>{{this.$route.params.start_date}}</p>-->
+      <!--</div>-->
+      <!--<div>-->
+      <!--<p class="content"><label class="label">会议结束时间: </label>{{this.$route.params.deadline_date}}</p>-->
+      <!--</div>-->
+      <!--<div>-->
+      <!--<p class="content"><label class="label">会议截稿时间: </label>{{this.$route.params.release_date}}</p>-->
+      <!--</div>-->
+
+      <!--</el-collapse-item>-->
+      <!--</el-collapse>-->
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item prop="title" class="item" label="文章标题">
           <el-input v-model="ruleForm.title" placeholder="文章标题"></el-input>
         </el-form-item>
+        <!--<el-form-item prop="checkedTopics" class="item" label="文章主题">-->
+        <!--<el-checkbox-group v-model="ruleForm.checkedTopics" style="float: left">-->
+        <!--<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>-->
+        <!--<el-checkbox label="地推活动" name="type"></el-checkbox>-->
+        <!--</el-checkbox-group>-->
+        <!--</el-form-item>-->
         <el-form-item prop="checkedTopics" class="item" label="文章主题">
           <el-checkbox-group v-model="ruleForm.checkedTopics">
             <el-checkbox v-for="topic in topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item prop="articleAbstract" class="item" label="文章摘要">
-          <el-input v-model="ruleForm.articleAbstract" placeholder="文章摘要" type="textarea"
-                    :rows="8"></el-input>
+          <el-input v-model="ruleForm.articleAbstract" placeholder="文章摘要" type="textarea" :rows="8"></el-input>
         </el-form-item>
         <el-table
           :data="ruleForm.authors"
           class="author_info"
-          v-show="ruleForm.authors.length>0">
+        >
           <el-table-column
             label="作者姓名"
-            prop="name"
+            prop="writerName"
             width="150"
             :show-overflow-tooltip="true">
           </el-table-column>
@@ -63,7 +69,7 @@
           </el-table-column>
           <el-table-column
             label="所在地区"
-            prop="region"
+            prop="country"
             width="150"
             :show-overflow-tooltip="true">
           </el-table-column>
@@ -89,20 +95,23 @@
           </el-table-column>
         </el-table>
         <el-form-item prop="authors" class="item">
-
           <el-button icon="el-icon-circle-plus-outline" circle class="button_add"
                      @click="addAuthorDisplay"></el-button>
-          <p class="label_add">作者信息添加</p>
+          <p class="label_add">作者信息添加&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;<el-button type="primary" size="small"
+                                                                                     icon="el-icon-star-off"
+                                                                                     @click="addUserAsAuthor"
+                                                                                     circle></el-button>&nbsp;添加自己为作者&nbsp;&nbsp;)
+          </p>
           <el-form :model="authorRulesForm" :rules="authorRules" ref="authorRulesForm"
                    v-show="authorAddDisplay" class="author_input">
-            <el-form-item prop="name">
-              <el-input v-model="authorRulesForm.name" placeholder="作者姓名" class="input"></el-input>
+            <el-form-item prop="writerName">
+              <el-input v-model="authorRulesForm.writerName" placeholder="作者姓名" class="input"></el-input>
             </el-form-item>
             <el-form-item prop="institution">
               <el-input v-model="authorRulesForm.institution" placeholder="所属单位" class="input"></el-input>
             </el-form-item>
-            <el-form-item prop="region">
-              <el-input v-model="authorRulesForm.region" placeholder="所在地区" class="input"></el-input>
+            <el-form-item prop="country">
+              <el-input v-model="authorRulesForm.country" placeholder="所在地区" class="input"></el-input>
             </el-form-item>
             <el-form-item prop="email">
               <el-input v-model="authorRulesForm.email" placeholder="作者邮箱" class="input"></el-input>
@@ -114,40 +123,39 @@
               </el-button>
               <el-button type="primary" @click="changeAuthorSubmitForm('authorRulesForm',row)"
                          class="button"
-                         v-show="authorAddPattern===1"> 修改
+                         v-show="authorAddPattern===1"> &nbsp;修改&nbsp;
               </el-button>
             </el-form-item>
           </el-form>
 
         </el-form-item>
-        <el-form-item label="文件上传" style="text-align: left;">
-          <el-upload
-            ref="upload"
-            style="float:left"
-            class="upload-demo"
-            action="api/upload"
-            :http-request="myUpload"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-upload="beforeUpload"
-            :before-remove="beforeRemove"
-            :auto-upload="false"
-            accept=".pdf"
-            :limit="1"
-            :on-exceed="handleExceed"
-          >
-            <el-button size="small" type="primary">选择文件</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件,文件大小不能超过1M</div>
-          </el-upload>
-        </el-form-item>
+        <!--<el-form-item label="文件上传" style="text-align: left;">-->
+        <!--<el-upload-->
+        <!--ref="upload"-->
+        <!--style="float:left"-->
+        <!--class="upload-demo"-->
+        <!--action="api/upload"-->
+        <!--:http-request="myUpload"-->
+        <!--:on-preview="handlePreview"-->
+        <!--:on-remove="handleRemove"-->
+        <!--:before-upload="beforeUpload"-->
+        <!--:before-remove="beforeRemove"-->
+        <!--:auto-upload="false"-->
+        <!--accept=".pdf"-->
+        <!--:limit="1"-->
+        <!--:on-exceed="handleExceed"-->
+        <!--&gt;-->
+        <!--<el-button size="small" type="primary">选择文件</el-button>-->
+        <!--<div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件,文件大小不能超过1M</div>-->
+        <!--</el-upload>-->
+        <!--</el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">确认</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
-      <button @click="print">print</button>
     </div>
-
+    <button @click="checkAuthorInAuthors()">查看相关信息</button>
   </div>
 </template>
 
@@ -174,24 +182,20 @@
       };
       return {
         row: 0,
-        authorAddPattern: 0,
+        authorAddPattern: 0,// 0 添加模式，1 修改模式
         authorAddDisplay: false,
         fileSelected: false,
         fileValid: false,
-        topics: ["经济", "环境"],
-        authors: [{
-          name: "dnwi",
-          institution: "dnwi",
-          region: "ndiw",
-          email: 'mdow@nsj.com'
-        }],
+        originalTitle: JSON.parse(localStorage.getItem("messageStore")).title === undefined ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
+        topics: JSON.parse(localStorage.getItem("messageStore")).topics === undefined ? this.$route.params.topics : JSON.parse(localStorage.getItem("messageStore")).topics,
+        // topics:["1","2","3"],
         ruleForm: {
-          authors: [],
-          checkedTopics: [],
-          title: '',
-          filename: '',
-          articleAbstract: '',
-          file: '',
+          title: JSON.parse(localStorage.getItem("messageStore")).title === undefined ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
+          //filename: '',
+          articleAbstract: JSON.parse(localStorage.getItem("messageStore")).articleAbstract === undefined ? this.$route.params.articleAbstract : JSON.parse(localStorage.getItem("messageStore")).articleAbstract,
+          //file: '',
+          authors: JSON.parse(localStorage.getItem("messageStore")).writers === undefined ? this.$route.params.writers : JSON.parse(localStorage.getItem("messageStore")).writers,
+          checkedTopics: JSON.parse(localStorage.getItem("messageStore")).checkedTopics === undefined ? this.$route.params.checkedTopics : JSON.parse(localStorage.getItem("messageStore")).checkedTopics,
         },
         rules: {
           title: [
@@ -200,6 +204,7 @@
           ],
           filename: [
             {required: true, message: '请填写文件名', trigger: 'change'},
+
           ],
           articleAbstract: [
             {required: true, message: '请填写文章摘要', trigger: 'blur'},
@@ -213,19 +218,19 @@
           ]
         },
         authorRulesForm: {
-          name: '',
+          writerName: '',
           institution: '',
-          region: '',
+          country: '',
           email: '',
         },
         authorRules: {
-          name: [
+          writerName: [
             {required: true, message: '作者姓名不能为空', trigger: 'blur'}
           ],
           institution: [
             {required: true, message: "所在单位不能为空", trigger: 'blur'}
           ],
-          region: [
+          country: [
             {required: true, message: "所在地区不能为空", trigger: 'blur'}
           ],
           email: [
@@ -233,9 +238,14 @@
             {validator: checkEmail, trigger: 'blur'}
           ]
         }
-      }
+      };
     },
     methods: {
+      print() {
+        console.log(this.topics);
+        console.log(this.ruleForm);
+      },
+      //处理作者信息添加功能的函数
       handleDelete(index) {
         if (this.row === index) {
           this.authorAddDisplay = false;
@@ -254,11 +264,105 @@
       handleEdit(index) {
         this.authorAddPattern = 1;
         this.row = index;
-        this.authorRulesForm.name = this.ruleForm.authors[index].name;
+        this.authorRulesForm.writerName = this.ruleForm.authors[index].writerName;
         this.authorRulesForm.institution = this.ruleForm.authors[index].institution;
-        this.authorRulesForm.region = this.ruleForm.authors[index].region;
+        this.authorRulesForm.country = this.ruleForm.authors[index].country;
         this.authorRulesForm.email = this.ruleForm.authors[index].email;
         this.authorAddDisplay = true;
+      },
+      addUserAsAuthor() {
+        this.authorAddPattern = 0;
+        this.authorAddDisplay = true;
+        this.authorRulesForm.writerName = this.$store.state.fullName;
+        this.authorRulesForm.institution = this.$store.state.institution;
+        this.authorRulesForm.country = this.$store.state.country;
+        this.authorRulesForm.email = this.$store.state.email;
+      },
+      authorSubmitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let author = {};
+            author.writerName = this.authorRulesForm.writerName;
+            author.institution = this.authorRulesForm.institution;
+            author.country = this.authorRulesForm.country;
+            author.email = this.authorRulesForm.email;
+            if (!this.checkAuthorInAuthors(author)) {
+              this.ruleForm.authors.push(author);
+            } else {
+              this.$message({
+                showClose: true,
+                message: "该作者已经添加",
+                type: "warning",
+              });
+            }
+
+            this.resetAuthorSubmitForm();
+            this.addAuthorDisplay();
+          }
+        });
+      },
+      checkAuthorInAuthors(author) {
+        if (this.ruleForm.authors.length === 0) {
+          return false;
+        }
+        for (let i = 0; i < this.ruleForm.authors.length; i++) {
+          let count = 0;
+          for (let [key, value] of Object.entries(this.ruleForm.authors[i])) {
+            if (author[key] === value) {
+              count++;
+            }
+          }
+          if (count === 4) {
+            return true;
+          }
+        }
+        return false;
+      },
+      changeAuthorSubmitForm(formName, index) {
+        console.log(index);
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let author = {};
+            author.writerName = this.authorRulesForm.writerName;
+            author.institution = this.authorRulesForm.institution;
+            author.country = this.authorRulesForm.country;
+            author.email = this.authorRulesForm.email;
+            console.log(author);
+            console.log(this.checkAuthorInAuthors(author));
+            console.log(this.ruleForm.authors);
+            if (!this.checkAuthorInAuthors(author)) {
+              this.$set(this.ruleForm.authors[index], 'writerName', this.authorRulesForm.writerName);
+              // this.ruleForm.authors[index].name = this.authorRulesForm.name;
+              this.$set(this.ruleForm.authors[index], 'institution', this.authorRulesForm.institution);
+              this.$set(this.ruleForm.authors[index], 'country', this.authorRulesForm.country);
+              this.$set(this.ruleForm.authors[index], 'email', this.authorRulesForm.email);
+            } else {
+              this.$message({
+                showClose: true,
+                message: "该作者已存在，修改失败",
+                type: "warning",
+              });
+            }
+            //console.log(this.ruleForm.authors);
+            this.resetAuthorSubmitForm();
+            this.authorAddDisplay = false;
+          }
+        });
+
+      },
+      //重置author表单的所有信息
+      resetAuthorSubmitForm() {
+        for (let [key, value] of Object.entries(this.authorRulesForm)) {
+          this.authorRulesForm[key] = '';
+        }
+
+      },
+      handleTopics(topics) {
+        let result = "";
+        for (let [key, value] of Object.entries(topics)) {
+          result += value + " ";
+        }
+        return result;
       },
       handleRemove(file, fileList) {
         //console.log(file, fileList);
@@ -290,6 +394,11 @@
       myUpload(content) {
         var formData = new FormData();
         formData.append('file', this.ruleForm.file);
+        //沈征宇修改
+        //2020-05-01
+        formData.append('conference_id', this.$route.params.conference_id);
+        //沈征宇修改
+        //2020-05-01
         this.instance.post('/upload', formData).then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             this.$message({
@@ -316,17 +425,34 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             //虚晃upload一下，submit以后触发beforeUpload
-            this.$refs.upload.submit();
+            //this.$refs.upload.submit();
             //正常的post
-            if (this.fileValid && this.fileSelected) {
+            // if (this.fileValid && this.fileSelected) {
+            // console.log(this.$route.params.conference_id)
+            // console.log(this.originalTitle);
+            // console.log(this.ruleForm.title);
+            // console.log(this.ruleForm.articleAbstract)
+            // console.log(this.ruleForm.authors);
+            // console.log(this.ruleForm.checkedTopics)
+            if (true) {
+              console.log(this.$route.params.conference_id)
+              console.log(this.$store.state.id);
+              console.log(this.ruleForm.title);
+              console.log(this.ruleForm.articleAbstract)
+              console.log(this.ruleForm.authors);
+              console.log(this.ruleForm.checkedTopics)
               this.$axios.post('/contribute', {
                 //会议id需要传进来！！！！！
-                conferenceID: this.$route.params.conference_id,
-                authorID: this.$store.state.id,
-                filename: this.ruleForm.file.name,
+                conference_id: this.$route.params.conference_id,
+                originalTitle: this.originalTitle,
+                //filename: this.ruleForm.file.name,
+                filename: "title.pdf",
                 title: this.ruleForm.title,
                 articleAbstract: this.ruleForm.articleAbstract,
+                writers: this.ruleForm.authors,
+                topics: this.ruleForm.checkedTopics,
               }).then(resp => {
+                console.log(resp);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$message({
                     showClose: true,
@@ -348,7 +474,8 @@
                   type: 'error'
                 });
               })
-            } else if (!this.fileSelected) this.$message.warning("请选择上传文件");
+            }
+            //else if (!this.fileSelected) this.$message.warning("请选择上传文件");
           } else {
             this.$message({
               showClose: true,
@@ -361,50 +488,20 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-        this.$refs.upload.clearFiles();
+        //this.$refs.upload.clearFiles();
       },
-      print() {
-        console.log(this.ruleForm.checkedTopics);
-      },
-
-
-      authorSubmitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            let author = {};
-            author.name = this.authorRulesForm.name;
-            author.institution = this.authorRulesForm.institution;
-            author.region = this.authorRulesForm.region;
-            author.email = this.authorRulesForm.email;
-            this.ruleForm.authors.push(author);
-            this.resetAuthorSubmitForm();
-            this.addAuthorDisplay();
-          }
-        });
-      },
-      changeAuthorSubmitForm(formName, index) {
-        console.log(index);
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$set(this.ruleForm.authors[index], 'name', this.authorRulesForm.name);
-            // this.ruleForm.authors[index].name = this.authorRulesForm.name;
-            this.$set(this.ruleForm.authors[index], 'institution', this.authorRulesForm.institution);
-            this.$set(this.ruleForm.authors[index], 'region', this.authorRulesForm.region);
-            this.$set(this.ruleForm.authors[index], 'email', this.authorRulesForm.email);
-            console.log(this.ruleForm.authors);
-            this.resetAuthorSubmitForm();
-            this.authorAddDisplay = false;
-          }
-        });
-
-      },
-      //重置author表单的所有信息
-      resetAuthorSubmitForm() {
-        for (let [key, value] of Object.entries(this.authorRulesForm)) {
-          this.authorRulesForm[key] = '';
-        }
-
-      }
+    },
+    created() {
+      //在页面刷新时将vuex里的信息保存到localStorage里
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      });
+      //在页面加载时读取localStorage里的状态信息
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      console.log("CHECKED")
+      console.log(this.$route.params)
+      console.log(JSON.parse(localStorage.getItem("messageStore")).checkedTopics)
     }
   }
 </script>
@@ -416,13 +513,7 @@
     order: 1;
   }
 
-  .el-collapse-item__header {
-    flex: 1 0 auto;
-    order: -1;
-  }
-
   .meeting_introduction {
-
     text-align: left;
     margin-left: 35px;
     margin-top: 30px;
@@ -438,20 +529,12 @@
     font-weight: bold;
   }
 
-  #userinfo {
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    position: fixed;
-  }
-
   .container {
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
     margin-top: -10px;
     width: 70%;
-    /*height: 800px;*/
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
@@ -467,11 +550,6 @@
     font-weight: normal;
   }
 
-  .title3 {
-    margin-top: 40px;
-    margin-bottom: 10px;
-  }
-
   p.description {
     text-align: left;
     color: #999;
@@ -480,84 +558,19 @@
     font-size: 14px;
   }
 
-  .userinfo_form {
-    margin-top: 40px;
-    text-align: left;
-  }
-
-  .id {
-    margin-top: 25px;
-    font-size: 14px;
-    text-align: left;
-  }
-
-  .id_bold {
-    font-weight: bold;
-  }
-
-  .inline_block {
-    display: inline-block;
-  }
-
-  .display_username_field {
-    width: 250px;
-  }
-
-  .display_email_field {
-    width: 300px;
-  }
-
-  .display_password_field {
-    width: 50%;
-  }
-
-  .display_ensure_password_field {
-    width: 50%;
-  }
-
-  .display_country_field {
-    width: 250px;
-  }
-
-  .display_company_field {
-    width: 350px;
-  }
-
-  .userinfo_container .item {
-    margin-top: 0px;
-    margin-bottom: 20px;
-  }
-
-  .middle_button {
-    margin-top: 20px;
-    width: 15%;
-    height: 50px;
-    border: none
-  }
-
-  .item .el-form-item__label {
-    color: red;
-  }
-
-  .item .el-form-item__label:before {
-    content: '' !important;
-    width: 0;
-    margin-right: 0;
-  }
-
   .button_add {
     float: left;
   }
 
   .label_add {
-    margin-top: -2px;
-    margin-left: 20px;
     float: left;
     font-weight: bold;
+    margin-top: -3px;
+    margin-left: 10px
   }
 
   .author_input {
-    margin-top: 50px;
+    margin-top: 40px;
     border: 1px groove rgba(96, 189, 255, 0.71);
     padding: 30px;
     border-radius: 20px;

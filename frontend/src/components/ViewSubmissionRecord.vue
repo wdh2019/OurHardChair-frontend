@@ -2,8 +2,9 @@
   <div class="base_conference">
     <div class="conference_container">
       <div class="title_section">
-        <h3 class="title">查看您在  {{this.$route.params.short_name}}  会议中的投稿记录</h3>
+        <h3 class="title">查看您在 {{this.$route.params.short_name}} 会议中的投稿记录</h3>
       </div>
+      <p>id{{conference_id}}</p>
       <el-collapse class="meeting_introduction">
         <el-collapse-item>
           <span slot="title" class="collapse-title">会议简介</span>
@@ -21,6 +22,9 @@
             <p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>
           </div>
           <div>
+            <p class="content"><label class="label">会议主题: </label>{{this.handleTopics(this.$route.params.topics)}}</p>
+          </div>
+          <div>
             <p class="content"><label class="label">会议开始时间: </label>{{this.$route.params.start_date}}</p>
           </div>
           <div>
@@ -34,21 +38,6 @@
       <el-table
         :data="submissionRecord"
         style="width: 100%">
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="文章标题">
-                <span>{{ props.row.title }}</span>
-              </el-form-item>
-              <el-form-item label="文件名">
-                <span>{{ props.row.filename }}</span>
-              </el-form-item>
-              <el-form-item label="文章摘要">
-                <span>{{ props.row.articleAbstract }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
         <el-table-column
           label="文章标题"
           prop="title" :show-overflow-tooltip="true">
@@ -64,6 +53,11 @@
           :show-overflow-tooltip="true">
         </el-table-column>
         <el-table-column
+          label="文章主题"
+          prop="topics"
+          :show-overflow-tooltip="true">
+        </el-table-column>
+        <el-table-column
           label="状态"
           prop="status"
           :show-overflow-tooltip="true">
@@ -71,6 +65,22 @@
             <el-tag type="danger" v-show="scope.row.status===0">未通过</el-tag>
             <el-tag type="primary" v-show="scope.row.status===1">待审核</el-tag>
             <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              v-show="$route.params.is_open_submission===2"
+              size="mini"
+              type="primary"
+              @click="handleEdit(scope.$index, scope.row)">修改信息
+            </el-button>
+            <el-button
+              v-show="$route.params.is_open_submission!==2"
+              size="mini"
+              type="primary"
+              @click="handleEdit(scope.$index, scope.row)">查看详情
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -84,39 +94,77 @@
     name: "ViewSubmissionRecord",
     data() {
       return {
+        conference_id: JSON.parse(localStorage.getItem("messageStore")).conference_id === undefined ? this.$route.params.conference_id : JSON.parse(localStorage.getItem("messageStore")).conference_id,
         submissionRecord: []
       }
     },
-    created(){
-       const _this=this;
-       this.$axios.post('/showMySubmission',{
-         username:this.$store.state.username
-       })
-         .then(resp => {
-           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-             _this.submissionRecord = resp.data.submissions;
-           } else {
-             this.$message({
-               showClose: true,
-               message: resp.data.message,
-               type: 'warning'
-             });
-           }
-         })
-         .catch(error => {
+    methods: {
+      handleTopics(topics) {
+        let tempTopic = "";
+        for (let i = 0; i < topics.length; i++) {
+          tempTopic += topics[i] + "   "
+        }
+        return tempTopic;
+      },
+      handleEdit(index, row) {
+        console.log("handleEdit")
+        console.log(this.$route.params.topics);
+        console.log("handleEdit12")
+        this.$router.push({
+          name: '/ResetPapers',
+          params: {
+            conference_id: this.$route.params.conference_id,
+            topics: this.$route.params.topics,
+            checkedTopics: row.topics,
+            title: row.title,
+            articleAbstract: row.articleAbstract,
+            writers: row.writers,
+          }
+        }).catch(err => err);
+      },
+    },
+
+    //接口需要进一步协商
+    created() {
+      const _this = this;
+      this.$axios.post('/showMySubmission', {
+        username: this.$store.state.username
+      })
+        .then(resp => {
+          //console.log(resp.data);
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            _this.submissionRecord = resp.data.submissions;
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            });
+          }
+        })
+        .catch(error => {
           this.$message({
-             showClose: true,
-             message: '请求相关记录失败',
-             type: 'error'
-           });
-         });
-		   //在页面刷新时将vuex里的信息保存到localStorage里
-		    window.addEventListener("beforeunload",()=>{
-		      localStorage.setItem("messageStore",JSON.stringify(this.$route.params))
-		    });
-		   //在页面加载时读取localStorage里的状态信息
-		    localStorage.getItem("messageStore") && Object.assign(this.$route.params,JSON.parse(localStorage.getItem("messageStore")));
-     }
+            showClose: true,
+            message: '请求相关记录失败',
+            type: 'error'
+          });
+        });
+      console.log(JSON.parse(localStorage.getItem("messageStore")).conference_id)
+      //在页面刷新时将vuex里的信息保存到localStorage里
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      });
+      //在页面加载时读取localStorage里的状态信息
+      Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      console.log("params存的值");
+      console.log(this.$route.params);
+      console.log("messageStore存的值");
+      console.log(JSON.parse(localStorage.getItem("messageStore")))
+      //localStorage.removeItem("messageStore")
+      // console.log("messageStore存的值");
+      // console.log(JSON.parse(localStorage.getItem("messageStore")))
+    }
 
   }
 </script>

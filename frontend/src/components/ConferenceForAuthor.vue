@@ -23,7 +23,7 @@
                 <span>{{ scope.row.full_name }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
-                <label class="label">结束时间</label>
+                <label class="label">截稿时间</label>
                 <span>{{scope.row.deadline_date }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
@@ -34,6 +34,14 @@
               <el-form-item class="el-form-item">
                 <label class="label">发布时间</label>
                 <span>{{ scope.row.release_date }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">会议主题</label>
+                <span>{{ scope.row.topicsString }}</span>
+              </el-form-item>
+              <el-form-item class="el-form-item">
+                <label class="label">会议主席</label>
+                <span>{{ scope.row.chair_username }}</span>
               </el-form-item>
               <!--显示在此的所有会议都是审核通过的，所以不用判断status-->
               <div
@@ -59,6 +67,9 @@
                   <label class="label">会议状态</label>
                   <span>投稿截止，开始评审</span>
                 </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                </el-form-item>
               </div>
               <div
                 v-show="scope.row.is_open_submission===4">
@@ -77,14 +88,16 @@
                   <span>会议开始</span>
                 </el-form-item>
                 <el-form-item>
-                  <!--之后，此处可能填入进入会议按钮，功能为参与会议-->
+                  <el-form-item>
+                    <el-button type="primary" @click="enterMeeting(scope.row)">进入会议</el-button>
+                  </el-form-item>
                 </el-form-item>
               </div>
             </el-form>
           </template>
         </el-table-column>
         <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="full_name" label="会议全称"  width="300px" :show-overflow-tooltip="true">
+        <el-table-column prop="full_name" label="会议全称" width="300px" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -123,11 +136,25 @@
         search: '',
       }
     },
+
     methods: {
+      handleConferences() {
+        for (let i = 0; i < this.conferences.length; i++) {
+          let topics = this.conferences[i]['topics'];
+          let temp = "";
+          for (let j = 0; j < topics.length; j++) {
+            temp += topics[j] + "  ";
+          }
+          this.conferences[i]['topicsString'] = temp;
+        }
+      },
       enterMeeting(row) {
+        console.log(row.place)
+        console.log(row.start_date)
         this.$router.push({
           name: '/ViewSubmissionRecord',
           params: {
+            conference_id: row.conference_id,
             full_name: row.full_name,
             short_name: row.short_name,
             place: row.place,
@@ -135,9 +162,27 @@
             deadline_date: row.deadline_date,
             release_date: row.release_date,
             status: row.status,
-            isOpenSubmission: row.is_open_submission,
+            chair_username: row.chair_username,
+            is_open_submission: row.is_open_submission,
+            can_release: row.can_release,
+            topics: row.topics,
+            topicsString: row.topicsString,
+            // full_name
+            // short_name
+            // place
+            // start_date
+            // deadline_date
+            // release_date
+            // status
+            // chair_username
+            // is_open_submission
+            // can_release
+            // topics
+
           }
-        }).catch(err => err);
+        },
+        localStorage.setItem("messageStore",JSON.stringify(this.$route.params))
+        ).catch(err => err);
       },
       getTime(time) {
         //2015-05-06 00:00:00
@@ -209,28 +254,43 @@
       // "会议开始" 5
     },
     created() {
-    //一开始就向后端请求会议
-       const _this = this;
-       this.$axios.post('/ConferenceForAuthor')
-         .then(resp => {
-           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-             _this.conferences = resp.data.meetings;
-           } else {
-             this.$message({
-               showClose: true,
-               message: resp.data.message,
-               type: 'warning'
-             });
-           }
-         })
-         .catch(error => {
-           this.$message({
-             showClose: true,
-             message: '请求相关会议失败',
-             type: 'error'
-           });
-         })
-     }
+      //一开始就向后端请求会议
+      const _this = this;
+      this.$axios.post('/ConferenceForAuthor')
+        .then(resp => {
+          console.log(resp.data);
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            //meetings中所包含的属性
+            // conference_id
+            // full_name
+            // short_name
+            // place
+            // start_date
+            // deadline_date
+            // release_date
+            // status
+            // chair_username
+            // is_open_submission
+            // can_release
+            // topics
+            _this.conferences = resp.data.meetings;
+            this.handleConferences();
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            });
+          }
+        })
+        .catch(error => {
+          this.$message({
+            showClose: true,
+            message: '请求相关会议失败',
+            type: 'error'
+          });
+        })
+    }
   }
 </script>
 
@@ -256,7 +316,7 @@
   }
 
   .conference_container {
-    width:85%;
+    width: 85%;
     border-radius: 15px;
     background-clip: padding-box;
     margin: 10px auto;
