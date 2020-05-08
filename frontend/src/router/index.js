@@ -19,6 +19,8 @@ import UserInfo from "../components/UserInfo"
 import ViewSubmissionRecord from "../components/ViewSubmissionRecord"
 import ViewContribution from "../components/ViewContribution"
 import ResetPapers from "../components/ResetPapers"
+import ViewResultDetails from "../components/ViewResultDetails"
+
 
 Vue.use(Router);
 
@@ -170,6 +172,11 @@ export const router = new Router({
           component: ViewContribution,
         },
         {
+          path: '/ViewResultDetails',
+          name: '/ViewResultDetails',
+          component: ViewResultDetails,
+        },
+        {
           path: '/ResetPapers',
           name: '/ResetPapers',
           component: ResetPapers,
@@ -209,12 +216,12 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
-  if(from.fullPath === "/"&&to.fullPath === "/login"|| to.fullPath === '/register') {
-    if(localStorage.getItem('token')){
+  if (from.fullPath === "/" && to.fullPath === "/login" || to.fullPath === '/register') {
+    if (localStorage.getItem('token')) {
       store.commit('logout');
     }
   }
-  if (to.fullPath ==="/" ||to.fullPath === "/login" || to.fullPath === '/register') {
+  if (to.fullPath === "/" || to.fullPath === "/login" || to.fullPath === '/register') {
     if (localStorage.getItem('token')) {
       next({
         path: from.fullPath
@@ -234,7 +241,7 @@ router.beforeEach(function (to, from, next) {
     }
   }
   if (localStorage.username === "admin") {
-    if (to.fullPath === "/ApproveConference" || to.fullPath === "/UserInfo" || to.fullPath==="/UserPage") {
+    if (to.fullPath === "/ApproveConference" || to.fullPath === "/UserInfo" || to.fullPath === "/UserPage") {
       next()
     } else {
       next({

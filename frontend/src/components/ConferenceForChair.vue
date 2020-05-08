@@ -11,7 +11,7 @@
           <template slot-scope="scope">
             <el-form label-position="left" inline class="demo-table-expand">
               <!--开启投稿-->
-                <el-form-item>
+              <el-form-item>
                 <el-switch
                   ref="switch"
                   v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==1"
@@ -25,63 +25,63 @@
                   @change="changeSubmissionStatus(scope.row)">
                   <label>{{scope.row.is_open_submission}}</label>
                 </el-switch>
-                </el-form-item>
+              </el-form-item>
               <!--开启投稿 end-->
               <!--开启审稿-->
               <div>
-              <el-form-item>
-                <label class="label">稿件分配策略</label>
-                <el-radio-group v-model="scope.row.allocationStrategy">
+                <el-form-item>
+                  <label class="label">稿件分配策略</label>
+                  <el-radio-group v-model="scope.row.allocationStrategy">
                     <el-radio :label="1">基于topic相关度</el-radio>
                     <el-radio :label="2">基于审稿平均负担</el-radio>
-                </el-radio-group>
-              </el-form-item>
+                  </el-radio-group>
+                </el-form-item>
               </div>
               <div>
                 <el-form-item>
-                <el-switch
-                  ref="switch"
-                  v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==2||scope.row.allocationStrategy===''"
-                  v-bind:value="scope.row.is_open_submission===2"
-                  active-text="开启审稿"
-                  inactive-text="未开启审稿"
-                  :active-value='false'
-                  :inactive-value='true'
-                  active-color="#13ce66"
-                  inactive-color="#ff4949"
-                  @change="changeContributionStatus(scope.row)">
-                  <label>{{scope.row.is_open_submission}}</label>
-                </el-switch>
+                  <el-switch
+                    ref="switch"
+                    v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==2||scope.row.allocationStrategy===''"
+                    v-bind:value="scope.row.is_open_submission===2"
+                    active-text="开启审稿"
+                    inactive-text="未开启审稿"
+                    :active-value='false'
+                    :inactive-value='true'
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    @change="changeContributionStatus(scope.row)">
+                    <label>{{scope.row.is_open_submission}}</label>
+                  </el-switch>
                 </el-form-item>
               </div>
               <!--开启审稿end-->
-			        <!--开启评审结果发布-->
-			        <div>
-				        <el-form-item>
-				        <el-switch
-				           ref="switch"
-				           v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==3"
-				           v-bind:value="scope.row.is_open_submission===3"
-				           active-text="发布评审结果"
-				           inactive-text="未发布评审结果"
-				           :active-value='false'
-				           :inactive-value='true'
-				           active-color="#13ce66"
-				           inactive-color="#ff4949"
-				           @change="changeReleaseStatus(scope.row)">
-				           <label>{{scope.row.is_open_submission}}</label>
-				        </el-switch>
-				        </el-form-item>
-		          </div>
-			  <!--开启评审结果发布end-->
+              <!--开启评审结果发布-->
+              <div>
+                <el-form-item>
+                  <el-switch
+                    ref="switch"
+                    v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==3"
+                    v-bind:value="scope.row.is_open_submission===3"
+                    active-text="发布评审结果"
+                    inactive-text="未发布评审结果"
+                    :active-value='false'
+                    :inactive-value='true'
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    @change="changeReleaseStatus(scope.row)">
+                    <label>{{scope.row.is_open_submission}}</label>
+                  </el-switch>
+                </el-form-item>
+              </div>
+              <!--开启评审结果发布end-->
 
-              <div v-show="scope.row.status===1" >
+              <div v-show="scope.row.status===1">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>审核中</span>
                 </el-form-item>
               </div>
-              <div v-show="scope.row.status===3" >
+              <div v-show="scope.row.status===3">
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>审核未通过</span>
@@ -130,7 +130,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="short_name" label="会议简称" width="150px" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="full_name" label="会议全称"  width="300px" :show-overflow-tooltip="true">
+        <el-table-column prop="full_name" label="会议全称" width="300px" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label class="label">会议全称</label>
             <el-input class="search_input"
@@ -147,23 +147,23 @@
         <el-table-column prop="start_date" label="举办时间" width="200px" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="status" label="审核状态" width="120px">
           <template slot-scope="scope">
-            <el-tag type="primary"  v-show="scope.row.status===1">审核中</el-tag>
-            <el-tag type="success"  v-show="scope.row.status===2">已通过</el-tag>
-            <el-tag type="danger"  v-show="scope.row.status===3">审核未通过</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===1">审核中</el-tag>
+            <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
+            <el-tag type="danger" v-show="scope.row.status===3">审核未通过</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="投稿状态" width="120px">
           <template slot-scope="scope">
-            <el-tag type="warning"  v-show="scope.row.is_open_submission===1">未开启</el-tag>
-            <el-tag type="success"  v-show="scope.row.is_open_submission===2">已开启</el-tag>
-            <el-tag type="info"  v-show="scope.row.is_open_submission===3">已截止</el-tag>
+            <el-tag type="warning" v-show="scope.row.is_open_submission===1">未开启</el-tag>
+            <el-tag type="success" v-show="scope.row.is_open_submission===2">已开启</el-tag>
+            <el-tag type="info" v-show="scope.row.is_open_submission===3">已截止</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="审稿状态" width="120px">
           <template slot-scope="scope">
-            <el-tag type="warning"  v-show="scope.row.is_open_submission<3">未开启</el-tag>
-            <el-tag type="success"  v-show="scope.row.is_open_submission===3">已开启</el-tag>
-            <el-tag type="info"  v-show="scope.row.is_open_submission===4">结果已发布</el-tag>
+            <el-tag type="warning" v-show="scope.row.is_open_submission<3">未开启</el-tag>
+            <el-tag type="success" v-show="scope.row.is_open_submission===3">已开启</el-tag>
+            <el-tag type="info" v-show="scope.row.is_open_submission===4">结果已发布</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -277,89 +277,93 @@
 
       //根据投稿按钮的开关，发送给后端投稿状态
       changeSubmissionStatus(row) {
-        if (row.is_open_submission===1) {
-          this.$axios.post('/openSubmission',{
-              full_name: row.full_name,
+        if (row.is_open_submission === 1) {
+          this.$axios.post('/openSubmission', {
+            full_name: row.full_name,
           }).then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               this.$message({
                 showClose: true,
-                message:resp.data.message,
-                type:'success'
+                message: resp.data.message,
+                type: 'success'
               });
-            }else{
+              window.location.reload();
+            } else {
               this.$message({
                 showClose: true,
-                message:resp.data.message,
+                message: resp.data.message,
                 type: 'warning'
               });
             }
-          }).catch(error =>{
+          }).catch(error => {
             this.$message({
               showClose: true,
-              message:resp.data.message,
-              type:'error'
+              message: resp.data.message,
+              type: 'error'
             });
           })
         }
       },
       changeContributionStatus(row) {
-        if(row.is_open_submission===2){
-          this.$axios.post('/openManuscriptReview',{
-              conference_id: row.conference_id,
-              allocationStrategy:row.allocationStrategy,
+        if (row.is_open_submission === 2) {
+          this.$axios.post('/openManuscriptReview', {
+            conference_id: row.conference_id,
+            allocationStrategy: row.allocationStrategy,
           })
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'success'
-              })
-            }else{
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'warning'
-              })
-            }
-          })
-          .catch(error => {
-            this.$message({
-              showClose: true,
-              message: error.message,
-              type:'error'
+            .then(resp => {
+              if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,
+                  type: 'success'
+                });
+                window.location.reload();
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,
+                  type: 'warning'
+                })
+              }
             })
-          });
+            .catch(error => {
+              this.$message({
+                showClose: true,
+                message: error.message,
+                type: 'error'
+              })
+            });
         }
       },
-      changeReleaseStatus(row){
-        if(row.is_open_submission===3){
-          this.$axios.post('',{
-              conference_id: row.conference_id,
+      changeReleaseStatus(row) {
+        if (row.is_open_submission === 3) {
+          this.$axios.post('/releaseReviewResult', {
+            conference_id: row.conference_id,
+            userId:this.$store.state.id,
           })
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")){
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'success'
-              })
-            }else{
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'warning'
-              })
-            }
-          })
-          .catch(error => {
-            this.$message({
-              showClose: true,
-              message: error.message,
-              type:'error'
+            .then(resp => {
+              if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,
+                  type: 'success'
+                });
+                window.location.reload();
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,
+                  type: 'warning'
+                })
+              }
             })
-          });
+            .catch(error => {
+              this.$message({
+                showClose: true,
+                message: error.message,
+                type: 'error'
+              })
+            });
         }
       },
     },
@@ -368,10 +372,11 @@
       const _this = this;
       this.$axios.post('/ConferenceForChair')
         .then(resp => {
+          console.log(resp.data);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferences = resp.data.meetings;
-            for(let i=0;i<_this.conferences.length;i++){
-              _this.$set(_this.conferences[i],"allocationStrategy",'');
+            for (let i = 0; i < _this.conferences.length; i++) {
+              _this.$set(_this.conferences[i], "allocationStrategy", '');
             }
           } else {
             this.$message({
@@ -396,22 +401,26 @@
   .demo-table-expand {
     font-size: 0;
   }
+
   .demo-table-expand .label {
     width: fit-content;
     color: #606266;
     font-weight: bold;
     margin-right: 20px;
   }
+
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 5px;
     width: 25%;
   }
-  .demo-table-expand .el-button{
-    margin-left:20px;
+
+  .demo-table-expand .el-button {
+    margin-left: 20px;
   }
+
   /* 展开行的背景色 */
-  .el-table >>> .el-table__expanded-cell[class*="cell"]{
+  .el-table >>> .el-table__expanded-cell[class*="cell"] {
     background-color: rgb(236, 245, 255);
   }
 

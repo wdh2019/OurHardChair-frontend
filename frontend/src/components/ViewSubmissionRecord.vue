@@ -62,7 +62,8 @@
           :show-overflow-tooltip="true">
           <template slot-scope="scope" width="50px">
             <el-tag type="danger" v-show="scope.row.status===0">未审稿</el-tag>
-            <el-tag type="primary" v-show="scope.row.status===1">已审稿</el-tag>
+            <el-tag type="danger" v-show="scope.row.status===1">审稿中</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===2">已发布</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -77,7 +78,7 @@
               v-show="$route.params.is_open_submission!==2"
               size="mini"
               type="primary"
-              @click="handleEdit(scope.$index, scope.row)">查看详情
+              @click="viewDetails(scope.$index,scope.row)">查看详情
             </el-button>
           </template>
         </el-table-column>
@@ -93,12 +94,13 @@
     data() {
       return {
         conference_id: this.$route.params.conference_id,
-        submissionRecord: []
+        submissionRecord: [],
+        evaluations: [],
       }
     },
     methods: {
       handleTopics(topics) {
-        console.log(topics);
+        //console.log(topics);
         let tempTopic = "";
         for (let i = 0; i < topics.length; i++) {
           tempTopic += topics[i] + "   "
@@ -118,11 +120,18 @@
           }
         }).catch(err => err);
       },
+      viewDetails(index, row) {
+        this.$router.push({
+          name: '/ViewResultDetails',
+          params: {
+            evaluations: this.evaluations,
+          }
+        }).catch(err => err)
+      }
     },
 
     //接口需要进一步协商
     created() {
-      console.log("start");
       const _this = this;
       //在页面加载时读取localStorage里的状态信息
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
@@ -131,30 +140,59 @@
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
       });
-      console.log(this.$route.params.conference_id);
-      
-      this.$axios.post('/showMySubmission', {
-        conference_id: this.$route.params.conference_id,
-      })
-        .then(resp => {
-          console.log(resp.data);
-          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-            _this.submissionRecord = resp.data.submissions;
-          } else {
+
+      console.log("submission");
+      console.log(this.$route.params.is_open_submission);
+      if (this.$route.params.is_open_submission === 2) {
+        this.$axios.post('/showMySubmission', {
+          conference_id: this.$route.params.conference_id,
+        })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              _this.submissionRecord = resp.data.submissions;
+            } else {
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'warning'
+              });
+            }
+          })
+          .catch(error => {
             this.$message({
               showClose: true,
-              message: resp.data.message,
-              type: 'warning'
+              message: '请求相关记录失败',
+              type: 'error'
             });
-          }
-        })
-        .catch(error => {
-          this.$message({
-            showClose: true,
-            message: '请求相关记录失败',
-            type: 'error'
           });
-        });
+      } else {
+        this.$axios.post('/showMySubmission', {
+          conference_id: this.$route.params.conference_id,
+        })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              let resultResponses = resp.data.resultResponses;
+              for (let i = 0; i < resultResponses.length; i++) {
+                _this.submissionRecord.push(resultResponses[i].article);
+                _this.evaluations.push(resultResponses[i].result);
+              }
+            } else {
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'warning'
+              });
+            }
+          })
+          .catch(error => {
+            this.$message({
+              showClose: true,
+              message: '请求相关记录失败',
+              type: 'error'
+            });
+          });
+      }
+
     }
   }
 </script>
