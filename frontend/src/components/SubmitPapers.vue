@@ -183,7 +183,7 @@
         authorAddDisplay: false,
         fileSelected: false,
         fileValid: false,
-        topics: JSON.parse(localStorage.getItem("messageStore")).topics,
+        topics: this.$route.params.topics,
         ruleForm: {
           title: '',
           filename: '',
@@ -481,6 +481,7 @@
     created() {
       //在页面刷新时将vuex里的信息保存到localStorage里
       window.addEventListener("beforeunload", () => {
+		    localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
       //在页面加载时读取localStorage里的状态信息

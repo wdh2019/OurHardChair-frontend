@@ -166,9 +166,7 @@
             topics: row.topics,
             topicsString: row.topicsString,
           }
-        },
-        localStorage.setItem("messageStore",JSON.stringify(this.$route.params))
-        ).catch(err => err);
+        }).catch(err => err);
       },
       getTime(time) {
         //2015-05-06 00:00:00

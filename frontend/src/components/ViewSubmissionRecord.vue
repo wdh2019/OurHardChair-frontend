@@ -21,7 +21,7 @@
             <p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">会议主题: </label>{{this.handleTopics(this.$route.params.topics)}}</p>
+            <p class="content"><label class="label">会议主题: </label>{{handleTopics(this.$route.params.topics)}}</p>
           </div>
           <div>
             <p class="content"><label class="label">会议开始时间: </label>{{this.$route.params.start_date}}</p>
@@ -92,12 +92,13 @@
     name: "ViewSubmissionRecord",
     data() {
       return {
-        conference_id: JSON.parse(localStorage.getItem("messageStore")).conference_id === undefined ? this.$route.params.conference_id : JSON.parse(localStorage.getItem("messageStore")).conference_id,
+        conference_id: this.$route.params.conference_id,
         submissionRecord: []
       }
     },
     methods: {
       handleTopics(topics) {
+        console.log(topics);
         let tempTopic = "";
         for (let i = 0; i < topics.length; i++) {
           tempTopic += topics[i] + "   "
@@ -122,11 +123,18 @@
     //接口需要进一步协商
     created() {
       console.log("start");
-      let conference_id = this.$route.params.conference_id === undefined ? JSON.parse(localStorage.getItem("messageStore")).conference_id : this.$route.params.conference_id;
-      console.log(conference_id);
       const _this = this;
+      //在页面加载时读取localStorage里的状态信息
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      //在页面刷新时将vuex里的信息保存到localStorage里
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      });
+      console.log(this.$route.params.conference_id);
+      
       this.$axios.post('/showMySubmission', {
-        conference_id: conference_id
+        conference_id: this.$route.params.conference_id,
       })
         .then(resp => {
           console.log(resp.data);
@@ -147,15 +155,7 @@
             type: 'error'
           });
         });
-      //在页面刷新时将vuex里的信息保存到localStorage里
-      window.addEventListener("beforeunload", () => {
-        localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
-      });
-      //在页面加载时读取localStorage里的状态信息
-      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
     }
-
   }
 </script>
 
