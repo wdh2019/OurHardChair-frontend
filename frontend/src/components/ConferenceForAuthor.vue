@@ -165,7 +165,7 @@
             can_release: row.can_release,
             topics: row.topics,
             topicsString: row.topicsString,
-          }
+          },
         }).catch(err => err);
       },
       getTime(time) {

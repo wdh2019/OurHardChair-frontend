@@ -139,7 +139,7 @@
             release_date: row.release_date,
             status: row.status,
             isOpenSubmission: row.is_open_submission,
-          }
+          },
         }).catch(err => err);
       },
       getTime(time) {

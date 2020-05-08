@@ -230,7 +230,7 @@
               chair_username: row.chair_username,
               is_open_submission: row.is_open_submission,
               topics: row.topics,
-            }
+            },
           }).catch(err => err);
         }
       },
