@@ -57,27 +57,18 @@
             prop="writerName"
             width="150"
             :show-overflow-tooltip="true">
-            <!--<template slot-scope="scope">-->
-            <!--<span style="margin-left: 10px">{{ scope.row.name }}</span>-->
-            <!--</template>-->
           </el-table-column>
           <el-table-column
             label="所在单位"
             prop="institution"
             width="150"
             :show-overflow-tooltip="true">
-            <!--<template slot-scope="scope">-->
-            <!--<span style="margin-left: 10px">{{ scope.row.institution }}</span>-->
-            <!--</template>-->
           </el-table-column>
           <el-table-column
             label="所在地区"
             prop="country"
             width="150"
             :show-overflow-tooltip="true">
-            <!--<template slot-scope="scope">-->
-            <!--<span style="margin-left: 10px">{{ scope.row.country }}</span>-->
-            <!--</template>-->
           </el-table-column>
 
           <el-table-column
@@ -85,9 +76,6 @@
             prop="email"
             width="150"
             :show-overflow-tooltip="true">
-            <!--<template slot-scope="scope">-->
-            <!--<span style="margin-left: 10px">{{ scope.row.email }}</span>-->
-            <!--</template>-->
           </el-table-column>
           <el-table-column label="操作" width="200px">
             <template slot-scope="scope">
@@ -138,28 +126,28 @@
           </el-form>
 
         </el-form-item>
-        <!--<el-form-item label="文件上传" style="text-align: left;">-->
-        <!--<el-upload-->
-        <!--ref="upload"-->
-        <!--style="float:left"-->
-        <!--class="upload-demo"-->
-        <!--action="api/upload"-->
-        <!--:http-request="myUpload"-->
-        <!--:on-preview="handlePreview"-->
-        <!--:on-remove="handleRemove"-->
-        <!--:before-upload="beforeUpload"-->
-        <!--:before-remove="beforeRemove"-->
-        <!--:auto-upload="false"-->
-        <!--accept=".pdf"-->
-        <!--:limit="1"-->
-        <!--:on-exceed="handleExceed"-->
-        <!--&gt;-->
-        <!--<el-button size="small" type="primary">选择文件</el-button>-->
-        <!--<div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件,文件大小不能超过1M</div>-->
-        <!--</el-upload>-->
-        <!--</el-form-item>-->
+        <el-form-item label="文件上传" style="text-align: left;">
+          <el-upload
+            ref="upload"
+            style="float:left"
+            class="upload-demo"
+            action="api/upload"
+            :http-request="myUpload"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-upload="beforeUpload"
+            :before-remove="beforeRemove"
+            :auto-upload="false"
+            accept=".pdf"
+            :limit="1"
+            :on-exceed="handleExceed"
+          >
+            <el-button size="small" type="primary">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件,文件大小不能超过1M</div>
+          </el-upload>
+        </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">确认</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -432,22 +420,20 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             //虚晃upload一下，submit以后触发beforeUpload
-            //this.$refs.upload.submit();
+            this.$refs.upload.submit();
             //正常的post
-            // if (this.fileValid && this.fileSelected) {
-            if (true) {
+            if (this.fileValid && this.fileSelected) {
               console.log(this.$route.params.conference_id)
               console.log(this.$store.state.id);
               console.log(this.ruleForm.title);
               console.log(this.ruleForm.articleAbstract)
               console.log(this.ruleForm.authors);
-              console.log(this.ruleForm.checkedTopics)
-              this.$axios.post('/modifyContribution', {
+              console.log(this.ruleForm.checkedTopics);
+              this.$axios.post('/contribute', {
                 //会议id需要传进来！！！！！
                 conference_id: this.$route.params.conference_id,
                 contributorID: this.$store.state.id,
-                //filename: this.ruleForm.file.name,
-                filename: "title.pdf",
+                filename: this.ruleForm.file.name,
                 title: this.ruleForm.title,
                 articleAbstract: this.ruleForm.articleAbstract,
                 writers: this.ruleForm.authors,
@@ -476,7 +462,7 @@
                 });
               })
             }
-            //else if (!this.fileSelected) this.$message.warning("请选择上传文件");
+            else if (!this.fileSelected) this.$message.warning("请选择上传文件");
           } else {
             this.$message({
               showClose: true,

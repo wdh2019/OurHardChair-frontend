@@ -4,7 +4,6 @@
       <div class="title_section">
         <h3 class="title">查看您在 {{this.$route.params.short_name}} 会议中的投稿记录</h3>
       </div>
-      <p>id{{conference_id}}</p>
       <el-collapse class="meeting_introduction">
         <el-collapse-item>
           <span slot="title" class="collapse-title">会议简介</span>
@@ -62,9 +61,8 @@
           prop="status"
           :show-overflow-tooltip="true">
           <template slot-scope="scope" width="50px">
-            <el-tag type="danger" v-show="scope.row.status===0">未通过</el-tag>
-            <el-tag type="primary" v-show="scope.row.status===1">待审核</el-tag>
-            <el-tag type="success" v-show="scope.row.status===2">已通过</el-tag>
+            <el-tag type="danger" v-show="scope.row.status===0">未审稿</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===1">已审稿</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -107,9 +105,6 @@
         return tempTopic;
       },
       handleEdit(index, row) {
-        console.log("handleEdit")
-        console.log(this.$route.params.topics);
-        console.log("handleEdit12")
         this.$router.push({
           name: '/ResetPapers',
           params: {
@@ -126,12 +121,15 @@
 
     //接口需要进一步协商
     created() {
+      console.log("start");
+      let conference_id = this.$route.params.conference_id === undefined ? JSON.parse(localStorage.getItem("messageStore")).conference_id : this.$route.params.conference_id;
+      console.log(conference_id);
       const _this = this;
       this.$axios.post('/showMySubmission', {
-        username: this.$store.state.username
+        conference_id: conference_id
       })
         .then(resp => {
-          //console.log(resp.data);
+          console.log(resp.data);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.submissionRecord = resp.data.submissions;
           } else {
@@ -149,21 +147,13 @@
             type: 'error'
           });
         });
-      console.log(JSON.parse(localStorage.getItem("messageStore")).conference_id)
       //在页面刷新时将vuex里的信息保存到localStorage里
       window.addEventListener("beforeunload", () => {
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
       //在页面加载时读取localStorage里的状态信息
-      Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-      console.log("params存的值");
-      console.log(this.$route.params);
-      console.log("messageStore存的值");
-      console.log(JSON.parse(localStorage.getItem("messageStore")))
-      //localStorage.removeItem("messageStore")
-      // console.log("messageStore存的值");
-      // console.log(JSON.parse(localStorage.getItem("messageStore")))
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
     }
 
   }

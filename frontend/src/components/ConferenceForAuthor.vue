@@ -149,8 +149,6 @@
         }
       },
       enterMeeting(row) {
-        console.log(row.place)
-        console.log(row.start_date)
         this.$router.push({
           name: '/ViewSubmissionRecord',
           params: {
@@ -167,18 +165,6 @@
             can_release: row.can_release,
             topics: row.topics,
             topicsString: row.topicsString,
-            // full_name
-            // short_name
-            // place
-            // start_date
-            // deadline_date
-            // release_date
-            // status
-            // chair_username
-            // is_open_submission
-            // can_release
-            // topics
-
           }
         },
         localStorage.setItem("messageStore",JSON.stringify(this.$route.params))
@@ -258,7 +244,7 @@
       const _this = this;
       this.$axios.post('/ConferenceForAuthor')
         .then(resp => {
-          console.log(resp.data);
+          console.log(resp.data)
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             //meetings中所包含的属性
             // conference_id

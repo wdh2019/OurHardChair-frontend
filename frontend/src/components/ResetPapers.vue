@@ -44,7 +44,7 @@
         <!--</el-checkbox-group>-->
         <!--</el-form-item>-->
         <el-form-item prop="checkedTopics" class="item" label="文章主题">
-          <el-checkbox-group v-model="ruleForm.checkedTopics">
+          <el-checkbox-group v-model="ruleForm.checkedTopics" style="float: left;">
             <el-checkbox v-for="topic in topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
@@ -441,7 +441,7 @@
               console.log(this.ruleForm.articleAbstract)
               console.log(this.ruleForm.authors);
               console.log(this.ruleForm.checkedTopics)
-              this.$axios.post('/contribute', {
+              this.$axios.post('/modifyContribution', {
                 //会议id需要传进来！！！！！
                 conference_id: this.$route.params.conference_id,
                 originalTitle: this.originalTitle,
@@ -499,9 +499,6 @@
       });
       //在页面加载时读取localStorage里的状态信息
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-      console.log("CHECKED")
-      console.log(this.$route.params)
-      console.log(JSON.parse(localStorage.getItem("messageStore")).checkedTopics)
     }
   }
 </script>
