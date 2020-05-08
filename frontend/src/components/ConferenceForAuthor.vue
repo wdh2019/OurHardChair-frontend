@@ -165,7 +165,8 @@
             can_release: row.can_release,
             topics: row.topics,
             topicsString: row.topicsString,
-          }
+          },
+		      localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
         }).catch(err => err);
       },
       getTime(time) {

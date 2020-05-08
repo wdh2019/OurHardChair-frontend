@@ -129,7 +129,7 @@
       //在页面刷新时将vuex里的信息保存到localStorage里
       window.addEventListener("beforeunload", () => {
         localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
       });
       console.log(this.$route.params.conference_id);
       

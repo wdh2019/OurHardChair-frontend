@@ -228,7 +228,8 @@
               chair_username: row.chair_username,
               is_open_submission: row.is_open_submission,
               topics: row.topics,
-            }
+            },
+			    localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
           }).catch(err => err);
         }
       },

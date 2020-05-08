@@ -203,7 +203,8 @@
             release_date: row.release_date,
             status: row.status,
             isOpenSubmission: row.is_open_submission,
-          }
+          },
+          localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
         }).catch(err => err);
       },
       getTime(time) {
