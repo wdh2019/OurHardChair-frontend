@@ -42,7 +42,7 @@
         </el-form-item>
         <el-form-item prop="checkedTopics" class="item" label="文章主题">
           <el-checkbox-group v-model="ruleForm.checkedTopics" style="float: left">
-            <el-checkbox v-for="topic in this.$route.params.topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
+            <el-checkbox v-for="topic in topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item prop="articleAbstract" class="item" label="文章摘要">
