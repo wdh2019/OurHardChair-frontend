@@ -151,13 +151,13 @@
         authorAddDisplay: false,
         fileSelected: false,
         fileValid: true,
-        originalTitle: JSON.parse(localStorage.getItem("messageStore")).title === undefined ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
-        topics: JSON.parse(localStorage.getItem("messageStore")).topics === undefined ? this.$route.params.topics : JSON.parse(localStorage.getItem("messageStore")).topics,
+        originalTitle: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
+        topics: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.topics : JSON.parse(localStorage.getItem("messageStore")).topics,
         ruleForm: {
-          title: JSON.parse(localStorage.getItem("messageStore")).title === undefined ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
-          articleAbstract: JSON.parse(localStorage.getItem("messageStore")).articleAbstract === undefined ? this.$route.params.articleAbstract : JSON.parse(localStorage.getItem("messageStore")).articleAbstract,
-          authors: JSON.parse(localStorage.getItem("messageStore")).writers === undefined ? this.$route.params.writers : JSON.parse(localStorage.getItem("messageStore")).writers,
-          checkedTopics: JSON.parse(localStorage.getItem("messageStore")).checkedTopics === undefined ? this.$route.params.checkedTopics : JSON.parse(localStorage.getItem("messageStore")).checkedTopics,
+          title: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
+          articleAbstract: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.articleAbstract : JSON.parse(localStorage.getItem("messageStore")).articleAbstract,
+          authors: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.writers : JSON.parse(localStorage.getItem("messageStore")).writers,
+          checkedTopics: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.checkedTopics : JSON.parse(localStorage.getItem("messageStore")).checkedTopics,
         },
         rules: {
           title: [
@@ -399,11 +399,9 @@
               console.log(this.ruleForm.authors);
               console.log(this.ruleForm.checkedTopics)
               this.$axios.post('/modifyContribution', {
-                //会议id需要传进来！！！！！
                 conference_id: this.$route.params.conference_id,
                 originalTitle: this.originalTitle,
-                //filename: this.ruleForm.file.name,
-                filename: "title.pdf",
+                filename: this.ruleForm.file.name,
                 title: this.ruleForm.title,
                 articleAbstract: this.ruleForm.articleAbstract,
                 writers: this.ruleForm.authors,
@@ -413,7 +411,7 @@
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$message({
                     showClose: true,
-                    message: "投稿成功",
+                    message: "更新投稿成功",
                     type: "success",
                   });
                   this.$router.push('/AllConferences');
@@ -444,17 +442,18 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-        //this.$refs.upload.clearFiles();
+        this.$refs.upload.clearFiles();
       },
     },
     created() {
-      //在页面加载时读取localStorage里的状态信息
-      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      console.log(JSON.parse(localStorage.getItem("messageStore")));
       //在页面刷新时将vuex里的信息保存到localStorage里
       window.addEventListener("beforeunload", () => {
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
+      //在页面加载时读取localStorage里的状态信息
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
     }
   }
 </script>

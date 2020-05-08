@@ -15,11 +15,11 @@
                 <el-switch
                   ref="switch"
                   v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==1"
-                  v-bind:value="scope.row.is_open_submission===1"
+                  v-bind:value="scope.row.is_open_submission>1"
                   active-text="开启投稿"
                   inactive-text="未开启投稿"
-                  :active-value='false'
-                  :inactive-value='true'
+                  :active-value='true'
+                  :inactive-value='false'
                   active-color="#13ce66"
                   inactive-color="#ff4949"
                   @change="changeSubmissionStatus(scope.row)">
@@ -42,11 +42,11 @@
                   <el-switch
                     ref="switch"
                     v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==2||scope.row.allocationStrategy===''"
-                    v-bind:value="scope.row.is_open_submission===2"
+                    v-bind:value="scope.row.is_open_submission>2"
                     active-text="开启审稿"
                     inactive-text="未开启审稿"
-                    :active-value='false'
-                    :inactive-value='true'
+                    :active-value='true'
+                    :inactive-value='false'
                     active-color="#13ce66"
                     inactive-color="#ff4949"
                     @change="changeContributionStatus(scope.row)">
@@ -61,11 +61,11 @@
                   <el-switch
                     ref="switch"
                     v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==3"
-                    v-bind:value="scope.row.is_open_submission===3"
+                    v-bind:value="scope.row.is_open_submission>3"
                     active-text="发布评审结果"
                     inactive-text="未发布评审结果"
-                    :active-value='false'
-                    :inactive-value='true'
+                    :active-value='true'
+                    :inactive-value='false'
                     active-color="#13ce66"
                     inactive-color="#ff4949"
                     @change="changeReleaseStatus(scope.row)">
@@ -372,7 +372,6 @@
       const _this = this;
       this.$axios.post('/ConferenceForChair')
         .then(resp => {
-          console.log(resp.data);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferences = resp.data.meetings;
             for (let i = 0; i < _this.conferences.length; i++) {
