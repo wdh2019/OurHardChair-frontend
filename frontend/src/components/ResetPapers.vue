@@ -5,44 +5,10 @@
         <h3 class="title">{{this.$store.state.fullName}},欢迎您的投稿</h3>
         <p class="description">请您填写以下信息</p>
       </div>
-      <!--<el-collapse class="meeting_introduction">-->
-      <!--<el-collapse-item>-->
-      <!--<span slot="title" class="collapse-title">会议简介</span>-->
-      <!--<div>-->
-      <!--<p class="content"><label class="label">会议简称: </label>{{this.$route.params.short_name}}</p>-->
-      <!--</div>-->
-      <!--<div>-->
-      <!--<p class="content"><label class="label">会议全称: </label>{{this.$route.params.full_name}}</p>-->
-      <!--</div>-->
-      <!--&lt;!&ndash;需要接口的重新商榷最后后端返回chair的名字，或者此处编写方法问后端查找chair是谁&ndash;&gt;-->
-      <!--<div>-->
-      <!--<p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_username}}</p>-->
-      <!--</div>-->
-      <!--<div>-->
-      <!--<p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>-->
-      <!--</div>-->
-      <!--<div>-->
-      <!--<p class="content"><label class="label">会议开始时间: </label>{{this.$route.params.start_date}}</p>-->
-      <!--</div>-->
-      <!--<div>-->
-      <!--<p class="content"><label class="label">会议结束时间: </label>{{this.$route.params.deadline_date}}</p>-->
-      <!--</div>-->
-      <!--<div>-->
-      <!--<p class="content"><label class="label">会议截稿时间: </label>{{this.$route.params.release_date}}</p>-->
-      <!--</div>-->
-
-      <!--</el-collapse-item>-->
-      <!--</el-collapse>-->
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item prop="title" class="item" label="文章标题">
           <el-input v-model="ruleForm.title" placeholder="文章标题"></el-input>
         </el-form-item>
-        <!--<el-form-item prop="checkedTopics" class="item" label="文章主题">-->
-        <!--<el-checkbox-group v-model="ruleForm.checkedTopics" style="float: left">-->
-        <!--<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>-->
-        <!--<el-checkbox label="地推活动" name="type"></el-checkbox>-->
-        <!--</el-checkbox-group>-->
-        <!--</el-form-item>-->
         <el-form-item prop="checkedTopics" class="item" label="文章主题">
           <el-checkbox-group v-model="ruleForm.checkedTopics" style="float: left;">
             <el-checkbox v-for="topic in topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
@@ -129,26 +95,26 @@
           </el-form>
 
         </el-form-item>
-        <!--<el-form-item label="文件上传" style="text-align: left;">-->
-        <!--<el-upload-->
-        <!--ref="upload"-->
-        <!--style="float:left"-->
-        <!--class="upload-demo"-->
-        <!--action="api/upload"-->
-        <!--:http-request="myUpload"-->
-        <!--:on-preview="handlePreview"-->
-        <!--:on-remove="handleRemove"-->
-        <!--:before-upload="beforeUpload"-->
-        <!--:before-remove="beforeRemove"-->
-        <!--:auto-upload="false"-->
-        <!--accept=".pdf"-->
-        <!--:limit="1"-->
-        <!--:on-exceed="handleExceed"-->
-        <!--&gt;-->
-        <!--<el-button size="small" type="primary">选择文件</el-button>-->
-        <!--<div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件,文件大小不能超过1M</div>-->
-        <!--</el-upload>-->
-        <!--</el-form-item>-->
+        <el-form-item label="文件上传" style="text-align: left;">
+          <el-upload
+            ref="upload"
+            style="float:left"
+            class="upload-demo"
+            action="api/upload"
+            :http-request="myUpload"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-upload="beforeUpload"
+            :before-remove="beforeRemove"
+            :auto-upload="false"
+            accept=".pdf"
+            :limit="1"
+            :on-exceed="handleExceed"
+          >
+            <el-button size="small" type="primary">选择文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传pdf文件，只能上传一个文件,文件大小不能超过1M</div>
+          </el-upload>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">确认</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -188,12 +154,9 @@
         fileValid: false,
         originalTitle: JSON.parse(localStorage.getItem("messageStore")).title === undefined ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
         topics: JSON.parse(localStorage.getItem("messageStore")).topics === undefined ? this.$route.params.topics : JSON.parse(localStorage.getItem("messageStore")).topics,
-        // topics:["1","2","3"],
         ruleForm: {
           title: JSON.parse(localStorage.getItem("messageStore")).title === undefined ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
-          //filename: '',
           articleAbstract: JSON.parse(localStorage.getItem("messageStore")).articleAbstract === undefined ? this.$route.params.articleAbstract : JSON.parse(localStorage.getItem("messageStore")).articleAbstract,
-          //file: '',
           authors: JSON.parse(localStorage.getItem("messageStore")).writers === undefined ? this.$route.params.writers : JSON.parse(localStorage.getItem("messageStore")).writers,
           checkedTopics: JSON.parse(localStorage.getItem("messageStore")).checkedTopics === undefined ? this.$route.params.checkedTopics : JSON.parse(localStorage.getItem("messageStore")).checkedTopics,
         },
@@ -427,14 +390,7 @@
             //虚晃upload一下，submit以后触发beforeUpload
             //this.$refs.upload.submit();
             //正常的post
-            // if (this.fileValid && this.fileSelected) {
-            // console.log(this.$route.params.conference_id)
-            // console.log(this.originalTitle);
-            // console.log(this.ruleForm.title);
-            // console.log(this.ruleForm.articleAbstract)
-            // console.log(this.ruleForm.authors);
-            // console.log(this.ruleForm.checkedTopics)
-            if (true) {
+            if (this.fileValid && this.fileSelected) {
               console.log(this.$route.params.conference_id)
               console.log(this.$store.state.id);
               console.log(this.ruleForm.title);
