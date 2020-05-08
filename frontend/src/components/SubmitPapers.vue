@@ -183,7 +183,7 @@
         authorAddDisplay: false,
         fileSelected: false,
         fileValid: false,
-        topics: this.$route.params.topics,
+        topics: JSON.parse(localStorage.getItem("messageStore")).topics === undefined ? this.$route.params.topics : JSON.parse(localStorage.getItem("messageStore")).topics,
         ruleForm: {
           title: '',
           filename: '',
