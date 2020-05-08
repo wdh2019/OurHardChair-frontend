@@ -121,7 +121,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <button @click="checkAuthorInAuthors()">查看相关信息</button>
   </div>
 </template>
 
@@ -151,7 +150,7 @@
         authorAddPattern: 0,// 0 添加模式，1 修改模式
         authorAddDisplay: false,
         fileSelected: false,
-        fileValid: false,
+        fileValid: true,
         originalTitle: JSON.parse(localStorage.getItem("messageStore")).title === undefined ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
         topics: JSON.parse(localStorage.getItem("messageStore")).topics === undefined ? this.$route.params.topics : JSON.parse(localStorage.getItem("messageStore")).topics,
         ruleForm: {
@@ -344,12 +343,14 @@
         if (file_size >= 1) {
           this.$message.warning('文件大小不能超过1M');
           this.fileSelected = true;
+          this.fileValid= false;
           return false;
         }
         else {
           this.fileValid = true;
           this.fileSelected = true;
         }
+        if(!this.fileSelected){return false;}
       },
       beforeRemove(file, fileList) {
         //return this.$confirm(`确定移除 ${ file.name }？`);
@@ -388,9 +389,9 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             //虚晃upload一下，submit以后触发beforeUpload
-            //this.$refs.upload.submit();
+            this.$refs.upload.submit();
             //正常的post
-            if (this.fileValid && this.fileSelected) {
+            if (this.fileValid) {
               console.log(this.$route.params.conference_id)
               console.log(this.$store.state.id);
               console.log(this.ruleForm.title);
@@ -431,7 +432,6 @@
                 });
               })
             }
-            //else if (!this.fileSelected) this.$message.warning("请选择上传文件");
           } else {
             this.$message({
               showClose: true,
@@ -448,13 +448,13 @@
       },
     },
     created() {
+      //在页面加载时读取localStorage里的状态信息
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
       //在页面刷新时将vuex里的信息保存到localStorage里
       window.addEventListener("beforeunload", () => {
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
-      //在页面加载时读取localStorage里的状态信息
-      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
     }
   }
 </script>

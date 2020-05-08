@@ -31,10 +31,10 @@
         </el-collapse-item>
       </el-collapse>
       <div  class="topic_section">
-      <span>负责的主题：</span><el-tag v-for="topic in topics" :key="topic" class="topic_tag">{{topic}}</el-tag>
+      <span>负责的主题：</span><el-tag v-for="item in topics" :key="item.topic" class="topic_tag">{{item.topic}}</el-tag>
       </div>
       <el-table
-        :data="articles.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
+        :data="articles.filter(data => !search || data.article.title.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
         style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -103,11 +103,8 @@
   export default{
     data(){
       return{
-        topics:[1,2,3,4],
-        articles:[
-          {title:"111",articleAbstract:"66666666666666",authors:["w1","d1","h1"],topics:["1","2","3"],status:0},
-          {title:"111",articleAbstract:"66666666666666",authors:["w1","d1","h1"],topics:["1","2","3"],status:2}
-        ],
+        topics:[],
+        articles:[],
         pagesize: 10,
         curPage: 1,
         search: '',
@@ -143,12 +140,20 @@
     },
     created() {
         const _this=this;
+        //在页面加载时读取localStorage里的状态信息
+        localStorage.getItem("messageStore") && Object.assign(this.$route.params,JSON.parse(localStorage.getItem("messageStore")));
+        //在页面刷新时将vuex里的信息保存到localStorage里
+        window.addEventListener("beforeunload",()=>{
+          localStorage.removeItem("messageStore");
+          localStorage.setItem("messageStore",JSON.stringify(this.$route.params))
+        });
         this.$axios.post('/reviewArticle',{
           conference_id:this.$route.params.conference_id,
           userId:this.$store.state.id,
         })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              console.log(resp.data.articles);
               _this.topics = resp.data.topics;
               _this.articles = resp.data.articles;
             } else {
@@ -166,12 +171,6 @@
               type: 'error'
             });
           });
-    	  //在页面刷新时将vuex里的信息保存到localStorage里
-    	  window.addEventListener("beforeunload",()=>{
-    	    localStorage.setItem("messageStore",JSON.stringify(this.$route.params))
-    	  });
-    	 //在页面加载时读取localStorage里的状态信息
-    	  localStorage.getItem("messageStore") && Object.assign(this.$route.params,JSON.parse(localStorage.getItem("messageStore")));
       }
   }
 </script>
@@ -256,4 +255,3 @@
     margin-left:10px;
   }
 </style>
-
