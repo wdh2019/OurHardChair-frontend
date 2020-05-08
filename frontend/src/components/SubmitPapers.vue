@@ -42,7 +42,7 @@
         </el-form-item>
         <el-form-item prop="checkedTopics" class="item" label="文章主题">
           <el-checkbox-group v-model="ruleForm.checkedTopics" style="float: left">
-            <el-checkbox v-for="topic in this.$route.params.topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
+            <el-checkbox v-for="topic in $route.params.topics" :label="topic" :key="topic">{{topic}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item prop="articleAbstract" class="item" label="文章摘要">
@@ -182,7 +182,6 @@
         authorAddDisplay: false,
         fileSelected: false,
         fileValid: false,
-        topics: JSON.parse(localStorage.getItem("messageStore")).topics === undefined ? this.$route.params.topics : JSON.parse(localStorage.getItem("messageStore")).topics,
         ruleForm: {
           title: '',
           filename: '',
@@ -235,10 +234,6 @@
       };
     },
     methods: {
-      print() {
-        console.log(this.topics);
-        console.log(this.ruleForm);
-      },
       //处理作者信息添加功能的函数
       handleDelete(index) {
         if (this.row === index) {
@@ -479,8 +474,10 @@
     },
     created() {
       //在页面刷新时将vuex里的信息保存到localStorage里
+      console.log("params 中内容");
+      console.log(this.$route.params);
       window.addEventListener("beforeunload", () => {
-		    localStorage.removeItem("messageStore");
+        localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
       //在页面加载时读取localStorage里的状态信息

@@ -207,6 +207,8 @@
       // "会议开始" 5
 
       enterSubmitPapers(row) {
+        console.log("topics");
+        console.log(row.topics);
         if (row.is_open_submission === 1) {
           this.$message({
             showClose: true,
