@@ -97,7 +97,7 @@
                 this.$axios.post('/submitReviewResult',{
                   conference_id:this.$route.params.conference_id,
                   userId:this.$store.state.id,
-                  title:this.$route.params.title,
+                  articleId:this.$route.params.articleId,
                   score:this.ruleForm.score,
                   comment:this.ruleForm.comment,
                   confidence:this.ruleForm.confidence,
