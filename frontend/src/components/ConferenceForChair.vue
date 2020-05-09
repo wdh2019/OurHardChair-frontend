@@ -349,7 +349,7 @@
                   message: resp.data.message,
                   type: 'success'
                 });
-                window.location.reload();
+                //window.location.reload();
               } else {
                 this.$message({
                   showClose: true,
