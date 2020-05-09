@@ -117,6 +117,7 @@
             title: row.title,
             articleAbstract: row.articleAbstract,
             writers: row.writers,
+            articleID:row.articleID,
           }
         }).catch(err => err);
       },
@@ -148,6 +149,7 @@
           conference_id: this.$route.params.conference_id,
         })
           .then(resp => {
+            console.log(resp.data);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               _this.submissionRecord = resp.data.submissions;
             } else {

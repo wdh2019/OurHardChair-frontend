@@ -151,13 +151,13 @@
         authorAddDisplay: false,
         fileSelected: false,
         fileValid: true,
-        originalTitle: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
-        topics: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.topics : JSON.parse(localStorage.getItem("messageStore")).topics,
+        originalTitle: this.$route.params.title === undefined ? JSON.parse(localStorage.getItem("messageStore")).title : this.$route.params.title,
+        topics: this.$route.params.topics === undefined ? JSON.parse(localStorage.getItem("messageStore")).topics : this.$route.params.topics,
         ruleForm: {
-          title: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.title : JSON.parse(localStorage.getItem("messageStore")).title,
-          articleAbstract: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.articleAbstract : JSON.parse(localStorage.getItem("messageStore")).articleAbstract,
-          authors: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.writers : JSON.parse(localStorage.getItem("messageStore")).writers,
-          checkedTopics: JSON.parse(localStorage.getItem("messageStore")) === null ? this.$route.params.checkedTopics : JSON.parse(localStorage.getItem("messageStore")).checkedTopics,
+          title: this.$route.params.title === undefined ? JSON.parse(localStorage.getItem("messageStore")).title : this.$route.params.title,
+          articleAbstract: this.$route.params.articleAbstract === undefined ? JSON.parse(localStorage.getItem("messageStore")).articleAbstract : this.$route.params.articleAbstract,
+          authors: this.$route.params.writers === undefined ? JSON.parse(localStorage.getItem("messageStore")).writers : this.$route.params.writers,
+          checkedTopics: this.$route.params.checkedTopics === undefined ? JSON.parse(localStorage.getItem("messageStore")).checkedTopics : this.$route.params.checkedTopics,
         },
         rules: {
           title: [
@@ -343,14 +343,16 @@
         if (file_size >= 1) {
           this.$message.warning('文件大小不能超过1M');
           this.fileSelected = true;
-          this.fileValid= false;
+          this.fileValid = false;
           return false;
         }
         else {
           this.fileValid = true;
           this.fileSelected = true;
         }
-        if(!this.fileSelected){return false;}
+        if (!this.fileSelected) {
+          return false;
+        }
       },
       beforeRemove(file, fileList) {
         //return this.$confirm(`确定移除 ${ file.name }？`);
@@ -363,7 +365,9 @@
         formData.append('conference_id', this.$route.params.conference_id);
         //沈征宇修改
         //2020-05-01
-        this.instance.post('/upload', formData).then(resp => {
+        formData.append("articleId", this.$route.params.articleID);
+
+        this.instance.post('/update', formData).then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             this.$message({
               showClose: true,
@@ -386,22 +390,23 @@
         });
       },
       submitForm(formName) {
+        console.log("articleID")
+        console.log(this.$route.params.articleID);
         this.$refs[formName].validate((valid) => {
           if (valid) {
             //虚晃upload一下，submit以后触发beforeUpload
             this.$refs.upload.submit();
             //正常的post
             if (this.fileValid) {
-              console.log(this.$route.params.conference_id)
-              console.log(this.$store.state.id);
-              console.log(this.ruleForm.title);
-              console.log(this.ruleForm.articleAbstract)
-              console.log(this.ruleForm.authors);
-              console.log(this.ruleForm.checkedTopics)
+              // console.log(this.$route.params.conference_id)
+              // console.log(this.$store.state.id);
+              // console.log(this.ruleForm.title);
+              // console.log(this.ruleForm.articleAbstract)
+              // console.log(this.ruleForm.authors);
+              // console.log(this.ruleForm.checkedTopics)
               this.$axios.post('/modifyContribution', {
-                conference_id: this.$route.params.conference_id,
                 originalTitle: this.originalTitle,
-                filename: this.ruleForm.file.name,
+                conference_id: this.$route.params.conference_id,
                 title: this.ruleForm.title,
                 articleAbstract: this.ruleForm.articleAbstract,
                 writers: this.ruleForm.authors,
@@ -446,14 +451,23 @@
       },
     },
     created() {
-      console.log(JSON.parse(localStorage.getItem("messageStore")));
-      //在页面刷新时将vuex里的信息保存到localStorage里
       window.addEventListener("beforeunload", () => {
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
       //在页面加载时读取localStorage里的状态信息
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      console.log("Json");
+      console.log(JSON.parse(localStorage.getItem("messageStore")).writers);
+      console.log("params")
+      console.log(this.$route.params)
+      //在页面刷新时将vuex里的信息保存到localStorage里
+      // window.addEventListener("beforeunload", () => {
+      //   localStorage.removeItem("messageStore");
+      //   localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      // });
+      // //在页面加载时读取localStorage里的状态信息
+      // localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
     }
   }
 </script>
