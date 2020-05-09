@@ -131,6 +131,7 @@
             name: '/CheckPapers',
             params: {
                 conference_id:this.$route.params.conference_id,
+                articleId:row.articleId,
                 title:row.title,
                 articleAbstract:row.articleAbstract,
                 authors:row.authors,
