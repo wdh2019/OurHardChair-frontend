@@ -360,6 +360,8 @@
               }
             })
             .catch(error => {
+              console.log(error);
+              console.log(row.conference_id)
               this.$message({
                 showClose: true,
                 message: "结果开放失败",
