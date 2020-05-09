@@ -8,8 +8,10 @@
       <div class="PCMember" v-for="(temp,index) in $route.params.evaluations" :key="index">
         <h2>PCMember{{index+1}}</h2>
         <p>score:<span>{{temp.score}}</span></p>
+        <br>
         <p>confidence:<span v-if="temp.confidence===-2">very low</span><span v-if="temp.confidence===-1">low</span><span
           v-if="temp.confidence===1">high</span><span v-if="temp.confidence===2">very high</span></p>
+        <br>
         <p>comment:</p>
         <el-input
           type="textarea"
