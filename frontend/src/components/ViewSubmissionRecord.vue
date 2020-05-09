@@ -162,11 +162,14 @@
             });
           });
       } else {
+        console.log(this.$route.params.conference_id);
+        console.log(this.$store.state.id);
         this.$axios.post('/viewReviewResult', {
           conference_id: this.$route.params.conference_id,
           userId: this.$store.state.id,
         })
           .then(resp => {
+            console.log(resp);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               let resultResponses = resp.data.resultResponses;
               for (let i = 0; i < resultResponses.length; i++) {
