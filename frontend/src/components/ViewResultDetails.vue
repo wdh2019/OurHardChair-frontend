@@ -60,7 +60,6 @@
   }
 
   .PCMember {
-    float: left;
     border: 1px solid black;
     padding: 20px;
     border-radius: 15px;
@@ -69,6 +68,7 @@
   }
 
   .PCMember p {
+    float: left;
     font-size: 18px;
   }
 
