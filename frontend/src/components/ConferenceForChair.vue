@@ -336,10 +336,12 @@
         }
       },
       changeReleaseStatus(row) {
+        console.log(row);
+        console.log(row.conference_id);
         if (row.is_open_submission === 3) {
           this.$axios.post('/releaseReviewResult', {
             conference_id: row.conference_id,
-            userId:this.$store.state.id,
+            // userId:this.$store.state.id,
           })
             .then(resp => {
               if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
@@ -360,7 +362,7 @@
             .catch(error => {
               this.$message({
                 showClose: true,
-                message: error.message,
+                message: "结果开放失败",
                 type: 'error'
               })
             });
