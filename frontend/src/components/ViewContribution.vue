@@ -35,7 +35,7 @@
         <el-tag v-for="item in topics" :key="item.topic" class="topic_tag">{{item.topic}}</el-tag>
       </div>
       <el-table
-        :data="articles.filter(data => !search || data.article.title.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
+        :data="articles.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
         style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
