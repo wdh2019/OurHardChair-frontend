@@ -35,7 +35,7 @@
         <el-tag v-for="item in topics" :key="item.topic" class="topic_tag">{{item.topic}}</el-tag>
       </div>
       <el-table
-        :data="articles.filter(data => !search || data.article.title.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
+        :data="articles.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
         style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -85,7 +85,7 @@
           label="操作"
           :show-overflow-tooltip="true">
           <template slot-scope="slot">
-            <el-button type="primary" size="small" @click="enterArticle(slot.row)">审稿</el-button>
+            <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,7 +122,7 @@
             type = "warning";
             break;
           case 1:
-            _status = "审稿已结束";
+            _status = "审稿已完成";
             type = "success";
             break;
           default:
@@ -152,7 +152,12 @@
     },
     created() {
       const _this = this;
-      console.log(this.$route.params);
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      });
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+
       this.$axios.post('/reviewArticle', {
         conference_id: this.$route.params.conference_id,
         userId: this.$store.state.id,
@@ -178,11 +183,6 @@
             type: 'error'
           });
         });
-      window.addEventListener("beforeunload", () => {
-        localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
-      });
-      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
 
     }
   }
