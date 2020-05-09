@@ -152,7 +152,12 @@
     },
     created() {
       const _this = this;
-      console.log(this.$route.params);
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      });
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+
       this.$axios.post('/reviewArticle', {
         conference_id: this.$route.params.conference_id,
         userId: this.$store.state.id,
@@ -178,11 +183,6 @@
             type: 'error'
           });
         });
-      window.addEventListener("beforeunload", () => {
-        localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
-      });
-      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
 
     }
   }
