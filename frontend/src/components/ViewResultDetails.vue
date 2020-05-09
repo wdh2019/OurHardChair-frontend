@@ -5,7 +5,7 @@
         <h3 class="title">评分详情</h3>
         <p class="description">评分具体情况见下面内容</p>
       </div>
-      <div class="PCMember" v-for="(temp,index) in this.$route.params.evaluations" :key="index">
+      <div class="PCMember" v-for="(temp,index) in $route.params.evaluations" :key="index">
         <h2>PCMember{{index+1}}</h2>
         <p>score:<span>{{temp.score}}</span></p>
         <p>confidence:<span v-if="temp.confidence===-2">very low</span><span v-if="temp.confidence===-1">low</span><span v-if="temp.confidence===1">high</span><span v-if="temp.confidence===2">very high</span></p>
