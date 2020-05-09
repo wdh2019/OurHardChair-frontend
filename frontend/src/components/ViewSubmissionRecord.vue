@@ -63,7 +63,7 @@
           prop="topics"
           :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <el-tag v-for="key in scope.row.topics" :key="key">{{key}}</el-tag>
+            <el-tag v-for="key in scope.row.topics" :key="key">{{key.topic}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -73,7 +73,7 @@
           <template slot-scope="scope" width="50px">
             <el-tag type="danger" v-show="scope.row.status===0">未审稿</el-tag>
             <el-tag type="primary" v-show="scope.row.status===1">审稿中</el-tag>
-            <el-tag type="success" v-show="scope.row.status===2">已发布</el-tag>
+            <el-tag type="success" v-show="scope.row.status===2">结果已发布</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -180,14 +180,11 @@
             });
           });
       } else {
-        console.log(this.$route.params.conference_id);
-        console.log(this.$store.state.id);
         this.$axios.post('/viewReviewResult', {
           conference_id: this.$route.params.conference_id,
           userId: this.$store.state.id,
         })
           .then(resp => {
-            console.log(resp);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               let resultResponses = resp.data.resultResponses;
               for (let i = 0; i < resultResponses.length; i++) {
@@ -203,7 +200,6 @@
             }
           })
           .catch(error => {
-            console.log(error);
             this.$message({
               showClose: true,
               message: '请求相关记录失败',
@@ -212,9 +208,6 @@
           });
       }
 
-    },
-    destroyed() {
-          window.removeEventListener('beforeunload');
     },
   }
 </script>
@@ -295,7 +288,7 @@
   .label {
     float: left;
   }
-  
+
   .el-tag{
     margin-right:5px;
   }

@@ -198,16 +198,13 @@
         }
       },
     },
-	created() {
-		  window.addEventListener("beforeunload", () => {
-		    localStorage.removeItem("messageStore");
-		    localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
-		  });
-		  localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-	  },
-   destroyed() {
-         window.removeEventListener('beforeunload');
-   }, 
+	  created() {
+		  window.addEventListener("beforeunload",() => {
+	      localStorage.removeItem("messageStore");
+	      localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
+	    });
+	    localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+	 },
   }
 </script>
 

@@ -430,9 +430,6 @@
       });
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
     },
-	destroyed() {
-	      window.removeEventListener('beforeunload');
-	},
   }
 </script>
 

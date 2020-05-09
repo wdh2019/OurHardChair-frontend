@@ -163,7 +163,6 @@
         userId: this.$store.state.id,
       })
         .then(resp => {
-          console.log(resp.data);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.topics = resp.data.topics;
             _this.articles = resp.data.articles;
@@ -176,7 +175,6 @@
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             showClose: true,
             message: '请求相关记录失败',
@@ -185,9 +183,6 @@
         });
 
     },
-	destroyed() {
-	      window.removeEventListener('beforeunload');
-	},
   }
 </script>
 

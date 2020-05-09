@@ -156,14 +156,14 @@
           <template slot-scope="scope">
             <el-tag type="warning" v-show="scope.row.is_open_submission===1">未开启</el-tag>
             <el-tag type="success" v-show="scope.row.is_open_submission===2">已开启</el-tag>
-            <el-tag type="info" v-show="scope.row.is_open_submission===3">已截止</el-tag>
+            <el-tag type="info" v-show="scope.row.is_open_submission>2">已截止</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="审稿状态" width="120px">
           <template slot-scope="scope">
             <el-tag type="warning" v-show="scope.row.is_open_submission<3">未开启</el-tag>
             <el-tag type="success" v-show="scope.row.is_open_submission===3">已开启</el-tag>
-            <el-tag type="info" v-show="scope.row.is_open_submission===4">结果已发布</el-tag>
+            <el-tag type="info" v-show="scope.row.is_open_submission>3">结果已发布</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -336,8 +336,6 @@
         }
       },
       changeReleaseStatus(row) {
-        console.log(row);
-        console.log(isNaN(row.conference_id));
         if (row.is_open_submission === 3) {
           this.$axios.post('/releaseReviewResult', {
             conference_id: row.conference_id,
@@ -359,8 +357,6 @@
               }
             })
             .catch(error => {
-              console.log(error);
-              console.log(row.conference_id)
               this.$message({
                 showClose: true,
                 message: "结果开放失败",

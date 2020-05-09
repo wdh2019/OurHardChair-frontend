@@ -12,8 +12,8 @@ export default {
       window.addEventListener('unload',e => this.unloadHandler(e));
   },
   destroyed() {
-      window.removeEventListener('beforeunload');
-      window.removeEventListener('unload');
+      window.removeEventListener('beforeunload',e => this.beforeunloadHandler(e),true);
+      window.removeEventListener('unload',e => this.unloadHandler(e),true);
   },
   methods:{
     beforeunloadHandler(){

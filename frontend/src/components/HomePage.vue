@@ -34,12 +34,10 @@
     },
     mounted() {
       this.getImages();
-      window.addEventListener("resize",()=>{
-        this.setSize();
-      });
+      window.addEventListener("resize",this.setSize());
     },
 	destroyed() {
-	  window.removeEventListener('resize');
+	    window.removeEventListener('resize',this.setSize(),true);
 	},
     methods: {
       setSize(){
