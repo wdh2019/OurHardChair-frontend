@@ -145,7 +145,7 @@
             articleId: row.articleId,
             title: row.title,
             articleAbstract: row.articleAbstract,
-            authors: row.authors,
+            authors: row.writers,
           }
         }).catch(err => err);
       }

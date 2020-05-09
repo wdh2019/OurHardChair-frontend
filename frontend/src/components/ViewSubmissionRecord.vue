@@ -62,8 +62,8 @@
           :show-overflow-tooltip="true">
           <template slot-scope="scope" width="50px">
             <el-tag type="danger" v-show="scope.row.status===0">未审稿</el-tag>
-            <el-tag type="danger" v-show="scope.row.status===1">审稿中</el-tag>
-            <el-tag type="primary" v-show="scope.row.status===2">已发布</el-tag>
+            <el-tag type="primary" v-show="scope.row.status===1">审稿中</el-tag>
+            <el-tag type="success" v-show="scope.row.status===2">已发布</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" v-show="!($route.params.is_open_submission===3)">
