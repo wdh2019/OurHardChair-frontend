@@ -125,10 +125,6 @@
             _status = "审稿已结束";
             type = "success";
             break;
-          case 2:
-            _status = "已发布审稿";
-            type = "warning";
-            break;
           default:
             _status = "未完成审稿";
             type = "warning";
