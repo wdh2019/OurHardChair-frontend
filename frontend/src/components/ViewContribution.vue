@@ -157,7 +157,7 @@
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-      console.log(this.$route.params)
+      console.log(this.$route.params);
       this.$axios.post('/reviewArticle', {
         conference_id: this.$route.params.conference_id,
         userId: this.$store.state.id,
@@ -176,6 +176,7 @@
           }
         })
         .catch(error => {
+          console.log(error)
           this.$message({
             showClose: true,
             message: '请求相关记录失败',
