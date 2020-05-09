@@ -184,7 +184,10 @@
           });
         });
 
-    }
+    },
+	destroyed() {
+	      window.removeEventListener('beforeunload');
+	},
   }
 </script>
 

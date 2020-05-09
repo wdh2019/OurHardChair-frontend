@@ -40,7 +40,10 @@
       });
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
 
-    }
+    },
+    destroyed() {
+          window.removeEventListener('beforeunload');
+    },
   }
 </script>
 
@@ -71,6 +74,7 @@
 
   .PCMember p {
     float: left;
+    clear:both;
     font-size: 18px;
   }
 

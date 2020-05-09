@@ -38,6 +38,9 @@
         this.setSize();
       });
     },
+	destroyed() {
+	  window.removeEventListener('resize');
+	},
     methods: {
       setSize(){
         this.height=window.innerHeight+"px";

@@ -63,7 +63,7 @@
           prop="topics"
           :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <span v-for="key in scope.row.topics" :key="key">{{key.topic}}</span>
+            <el-tag v-for="key in scope.row.topics" :key="key">{{key}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -212,7 +212,10 @@
           });
       }
 
-    }
+    },
+    destroyed() {
+          window.removeEventListener('beforeunload');
+    },
   }
 </script>
 
@@ -291,6 +294,10 @@
 
   .label {
     float: left;
+  }
+  
+  .el-tag{
+    margin-right:5px;
   }
 
 </style>

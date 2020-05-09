@@ -62,7 +62,6 @@
     },
     methods: {
       quit: function (path) {
-        localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
         this.$confirm('真的要注销账户吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
