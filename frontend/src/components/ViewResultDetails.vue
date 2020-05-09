@@ -30,6 +30,7 @@
     data() {
     },
     created() {
+      console.log(this.$route.params);
       window.addEventListener("beforeunload", () => {
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
