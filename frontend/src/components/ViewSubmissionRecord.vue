@@ -39,22 +39,32 @@
         style="width: 100%">
         <el-table-column
           label="文章标题"
-          prop="title" :show-overflow-tooltip="true">
+          :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span>{{scope.row.title}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="文件名"
-          prop="filename"
           :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span>{{scope.row.filename}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="文章摘要"
-          prop="articleAbstract"
           :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span>{{scope.row.articleAbstract}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="文章主题"
           prop="topics"
           :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <span v-for="key in scope.row.topics" :key="key">{{key.topic}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="状态"
@@ -66,12 +76,19 @@
             <el-tag type="success" v-show="scope.row.status===2">已发布</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" v-show="!($route.params.is_open_submission===3)">
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
               v-show="$route.params.is_open_submission===2"
               size="mini"
               type="primary"
+              @click="handleEdit(scope.$index, scope.row)">修改信息
+            </el-button>
+            <el-button
+              v-show="$route.params.is_open_submission===3"
+              size="mini"
+              type="primary"
+              disabled
               @click="handleEdit(scope.$index, scope.row)">修改信息
             </el-button>
             <el-button
@@ -83,6 +100,7 @@
           </template>
         </el-table-column>
       </el-table>
+
     </div>
 
   </div>
@@ -174,7 +192,7 @@
               let resultResponses = resp.data.resultResponses;
               for (let i = 0; i < resultResponses.length; i++) {
                 _this.submissionRecord.push(resultResponses[i].article);
-                _this.evaluations.push(resultResponses[i].result);
+                _this.evaluations.push(resultResponses[i].result.evaluation);
               }
             } else {
               this.$message({
