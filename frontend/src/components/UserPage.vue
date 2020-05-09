@@ -62,6 +62,7 @@
     },
     methods: {
       quit: function (path) {
+        localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
         this.$confirm('真的要注销账户吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -73,13 +74,15 @@
             message: '注销成功'
           });
           this.$store.commit('logout');
-          this.$router.push("/").catch(err => err);
+          this.$router.push("/");
         }).catch(() => {
+          console.log(this.$route.params);
           this.$message({
             showClose: true,
             type: 'info',
             message: '已取消注销'
           });
+
         });
       }
 
