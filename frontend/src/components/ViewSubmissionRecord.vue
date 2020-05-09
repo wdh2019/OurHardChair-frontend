@@ -133,16 +133,11 @@
     //接口需要进一步协商
     created() {
       const _this = this;
-      if (this.$route.params) {
-        localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-      }
-      else {
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
-      }
       window.addEventListener("beforeunload", () => {
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
 
       if (this.$route.params.is_open_submission === 2 || this.$route.params.is_open_submission === 3) {
         this.$axios.post('/showMySubmission', {

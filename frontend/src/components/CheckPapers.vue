@@ -56,10 +56,7 @@
     data(){
       return{
         topics:[1,2,3,4],
-        articles:[
-          {title:"111",articleAbstract:"66666666666666",authors:["w1","d1","h1"],topics:["1","2","3"],status:0},
-          {title:"111",articleAbstract:"66666666666666",authors:["w1","d1","h1"],topics:["1","2","3"],status:2}
-        ],
+        articles:[],
         pagesize: 10,
         curPage: 1,
         search: '',
@@ -134,17 +131,11 @@
         },
     },
     created() {
-        const _this=this;
-    	  if(this.$route.params){
-    	    localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-    	  }
-    	  else{
-    	    localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
-    	  }
     	  window.addEventListener("beforeunload", () => {
     	    localStorage.removeItem("messageStore");
     	    localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
     	  });
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
       }
   }
 </script>
