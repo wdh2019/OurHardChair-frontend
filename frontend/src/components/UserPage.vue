@@ -39,7 +39,7 @@
       <el-submenu index="user" style="float:right">
         <template slot="title"><i class="el-icon-user" style="color: white"></i>{{$store.state.username}}</template>
         <el-menu-item class="nav_item" index="/UserInfo">用户信息</el-menu-item>
-        <el-menu-item class="nav_item" index="/" @click="quit" >注销</el-menu-item>
+        <p class="quit_nav"  @click="quit" >注销</p>
       </el-submenu>
     </el-menu>
     <el-main>
@@ -128,6 +128,16 @@
     color:white;
     padding:0 10px 0 20px;
     cursor:default;
+  }
+  .quit_nav{
+    color: white;
+    font-size: 14px;
+    padding:7px 10px 5px 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .quit_nav:hover{
+    background: rgba(0,0,0,0.15);
   }
   .el-menu.el-menu--popup{
     min-width:115px;
