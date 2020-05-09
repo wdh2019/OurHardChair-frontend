@@ -337,7 +337,7 @@
       },
       changeReleaseStatus(row) {
         console.log(row);
-        console.log(row.conference_id);
+        console.log(isNumber(conference_id));
         if (row.is_open_submission === 3) {
           this.$axios.post('/releaseReviewResult', {
             conference_id: row.conference_id,
