@@ -152,18 +152,13 @@
     },
     created() {
       const _this = this;
-      window.addEventListener("beforeunload", () => {
-        localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
-      });
-      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
       console.log(this.$route.params);
       this.$axios.post('/reviewArticle', {
         conference_id: this.$route.params.conference_id,
         userId: this.$store.state.id,
       })
         .then(resp => {
-          console.log(this.resp.data);
+          console.log(resp.data);
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.topics = resp.data.topics;
             _this.articles = resp.data.articles;
@@ -176,13 +171,19 @@
           }
         })
         .catch(error => {
-          console.log(error)
+          console.log(error);
           this.$message({
             showClose: true,
             message: '请求相关记录失败',
             type: 'error'
           });
         });
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      });
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+
     }
   }
 </script>
