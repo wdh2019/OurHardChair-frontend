@@ -49,7 +49,7 @@
           :selectable="checkInvitable"
           width="55">
         </el-table-column>
-        <el-table-column prop="fullName" width="300px">
+        <el-table-column prop="fullName" width="400px">
           <template slot="header" slot-scope="scope">
             <label class="label">用户姓名</label>
             <el-input class="search_input"

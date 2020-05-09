@@ -390,7 +390,7 @@
         });
       },
       submitForm(formName) {
-        console.log("articleID")
+        console.log("articleID");
         console.log(this.$route.params.articleID);
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -461,10 +461,10 @@
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
-      console.log("Json");
-      console.log(JSON.parse(localStorage.getItem("messageStore")).writers);
-      console.log("params")
-      console.log(this.$route.params)
+      // console.log("Json");
+      // console.log(JSON.parse(localStorage.getItem("messageStore")).writers);
+      // console.log("params")
+      // console.log(this.$route.params)
     }
   }
 </script>

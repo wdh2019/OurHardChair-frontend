@@ -137,6 +137,7 @@
     margin-right: 10px;
   }
   .quit_nav:hover{
+    cursor: pointer;
     background: rgba(0,0,0,0.15);
   }
   .el-menu.el-menu--popup{

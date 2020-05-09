@@ -89,7 +89,7 @@
         viewPDF(conference_id,title){
           window.open(
           "http://114.116.112.8:8080/js/pdf/web/viewer.html?file="
-           + encodeURIComponent("/preview/"+conference_id+"/"+title+".pdf"));
+           + encodeURIComponent("/preview/"+conference_id+"/"+title));
         },
         submitForm(formName) {
           this.$refs[formName].validate((valid) => {

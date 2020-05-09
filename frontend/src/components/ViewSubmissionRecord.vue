@@ -75,7 +75,7 @@
               @click="handleEdit(scope.$index, scope.row)">修改信息
             </el-button>
             <el-button
-              v-show="$route.params.is_open_submission!==2"
+              v-show="$route.params.is_open_submission===4||$route.params.is_open_submission===5"
               size="mini"
               type="primary"
               @click="viewDetails(scope.$index,scope.row)">查看详情
@@ -117,7 +117,7 @@
             title: row.title,
             articleAbstract: row.articleAbstract,
             writers: row.writers,
-            articleID:row.articleID,
+            articleID: row.articleID,
           }
         }).catch(err => err);
       },
@@ -134,10 +134,10 @@
     //接口需要进一步协商
     created() {
       const _this = this;
-      if(this.$route.params){
+      if (this.$route.params) {
         localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
       }
-      else{
+      else {
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
       }
       window.addEventListener("beforeunload", () => {
@@ -147,7 +147,7 @@
 
       console.log("submission");
       console.log(this.$route.params.is_open_submission);
-      if (this.$route.params.is_open_submission === 2) {
+      if (this.$route.params.is_open_submission === 2 || this.$route.params.is_open_submission === 3) {
         this.$axios.post('/showMySubmission', {
           conference_id: this.$route.params.conference_id,
         })
@@ -171,8 +171,9 @@
             });
           });
       } else {
-        this.$axios.post('/showMySubmission', {
+        this.$axios.post('/viewReviewResult', {
           conference_id: this.$route.params.conference_id,
+          userId: this.$store.state.id,
         })
           .then(resp => {
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
