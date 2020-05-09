@@ -142,7 +142,7 @@
         this.$router.push({
           name: '/ViewResultDetails',
           params: {
-            evaluations: this.evaluations,
+            evaluations: this.evaluations[index],
           }
         }).catch(err => err)
       }
@@ -192,7 +192,7 @@
               let resultResponses = resp.data.resultResponses;
               for (let i = 0; i < resultResponses.length; i++) {
                 _this.submissionRecord.push(resultResponses[i].article);
-                _this.evaluations.push(resultResponses[i].result.evaluation);
+                _this.evaluations.push(resultResponses[i].result.evaluations);
               }
             } else {
               this.$message({
