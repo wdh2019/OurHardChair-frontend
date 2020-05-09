@@ -85,7 +85,7 @@
           label="操作"
           :show-overflow-tooltip="true">
           <template slot-scope="slot">
-            <el-button type="primary" size="small" @click="enterArticle(slot.row)">审稿</el-button>
+            <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,7 +122,7 @@
             type = "warning";
             break;
           case 1:
-            _status = "审稿已结束";
+            _status = "审稿已完成";
             type = "success";
             break;
           default:
