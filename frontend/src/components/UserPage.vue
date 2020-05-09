@@ -76,7 +76,6 @@
           this.$store.commit('logout');
           this.$router.push("/");
         }).catch(() => {
-          console.log(this.$route.params);
           this.$message({
             showClose: true,
             type: 'info',
@@ -111,7 +110,6 @@
           } else {}
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             showClose: true,
             message: '获取信息失败',

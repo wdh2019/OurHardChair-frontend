@@ -242,7 +242,6 @@
       const _this = this;
       this.$axios.post('/ConferenceForAuthor')
         .then(resp => {
-          console.log(resp.data)
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             //meetings中所包含的属性
             // conference_id

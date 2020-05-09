@@ -2,7 +2,7 @@
   <div class="base_conference">
     <div class="conference_container">
       <div class="title_section">
-        <h3 class="title">查看您在 {{this.$route.params.short_name}}  会议中被分配到的稿件</h3>
+        <h3 class="title">查看您在 {{this.$route.params.short_name}} 会议中被分配到的稿件</h3>
       </div>
       <el-collapse class="meeting_introduction">
         <el-collapse-item>
@@ -30,8 +30,9 @@
           </div>
         </el-collapse-item>
       </el-collapse>
-      <div  class="topic_section">
-      <span>负责的主题：</span><el-tag v-for="item in topics" :key="item.topic" class="topic_tag">{{item.topic}}</el-tag>
+      <div class="topic_section">
+        <span>负责的主题：</span>
+        <el-tag v-for="item in topics" :key="item.topic" class="topic_tag">{{item.topic}}</el-tag>
       </div>
       <el-table
         :data="articles.filter(data => !search || data.article.title.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
@@ -50,11 +51,11 @@
             </el-form>
           </template>
         </el-table-column>
-          <el-table-column
-            label="文章标题"
-            prop="title" :show-overflow-tooltip="true" width="400px">
-            <template slot="header" slot-scope="scope">
-              <div style="display: inline-flex;">
+        <el-table-column
+          label="文章标题"
+          prop="title" :show-overflow-tooltip="true" width="400px">
+          <template slot="header" slot-scope="scope">
+            <div style="display: inline-flex;">
               <label class="label" style="width: 100px">文章标题</label>
               <el-input class="search_input"
                         v-model="search"
@@ -62,30 +63,31 @@
                         placeholder="输入关键字搜索"
                         style="width: 150px">
               </el-input>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="审稿状态"
-            prop="status" :show-overflow-tooltip="true">
-            <template slot-scope="slot">
-              <el-tag :type="getArticleStatus(slot.row.status).type">{{getArticleStatus(slot.row.status).status}}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="预览"
-            :show-overflow-tooltip="true">
-            <template slot-scope="slot">
-              <el-button type="danger" size="small" @click="viewPDF($route.params.conference_id,slot.row.title)">预览</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            :show-overflow-tooltip="true">
-            <template slot-scope="slot">
-              <el-button type="primary" size="small" @click="enterArticle(slot.row)">审稿</el-button>
-            </template>
-          </el-table-column>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="审稿状态"
+          prop="status" :show-overflow-tooltip="true">
+          <template slot-scope="slot">
+            <el-tag :type="getArticleStatus(slot.row.status).type">{{getArticleStatus(slot.row.status).status}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="预览"
+          :show-overflow-tooltip="true">
+          <template slot-scope="slot">
+            <el-button type="danger" size="small" @click="viewPDF($route.params.conference_id,slot.row.title)">预览
+            </el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          :show-overflow-tooltip="true">
+          <template slot-scope="slot">
+            <el-button type="primary" size="small" @click="enterArticle(slot.row)">审稿</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         :current-page.sync="curPage"
@@ -100,162 +102,176 @@
 </template>
 
 <script>
-  export default{
-    data(){
-      return{
-        topics:[],
-        articles:[],
+  export default {
+    data() {
+      return {
+        topics: [],
+        articles: [],
         pagesize: 10,
         curPage: 1,
         search: '',
       }
     },
-    methods:{
-        getArticleStatus(status){
-          let _status="";
-          let type="";
-           switch(status){
-             case 0: _status="待审稿";type="warning";break;
-             case 1: _status="已审稿";type="success";break;
-             default: _status="待审稿";type="warning";break;
-           }
-           return {status:_status,type:type};
-        },
-        viewPDF(conference_id,title){
-          window.open(
-          "http://114.116.112.8:8080/js/pdf/web/viewer.html?file="
-           + encodeURIComponent("/preview/"+conference_id+"/"+title));
-        },
-        enterArticle(row){
-          this.$router.push({
-            name: '/CheckPapers',
-            params: {
-                conference_id:this.$route.params.conference_id,
-                articleId:row.articleId,
-                title:row.title,
-                articleAbstract:row.articleAbstract,
-                authors:row.authors,
-            }
-          }).catch(err => err);
+    methods: {
+      getArticleStatus(status) {
+        let _status = "";
+        let type = "";
+        switch (status) {
+          case 0:
+            _status = "未完成审稿";
+            type = "warning";
+            break;
+          case 1:
+            _status = "审稿已结束";
+            type = "success";
+            break;
+          case 2:
+            _status = "已发布审稿";
+            type = "warning";
+            break;
+          default:
+            _status = "未完成审稿";
+            type = "warning";
+            break;
         }
+        return {status: _status, type: type};
+      },
+      viewPDF(conference_id, title) {
+        window.open(
+          "http://114.116.112.8:8080/js/pdf/web/viewer.html?file="
+          + encodeURIComponent("/preview/" + conference_id + "/" + title));
+      },
+      enterArticle(row) {
+        this.$router.push({
+          name: '/CheckPapers',
+          params: {
+            conference_id: this.$route.params.conference_id,
+            articleId: row.articleId,
+            title: row.title,
+            articleAbstract: row.articleAbstract,
+            authors: row.authors,
+          }
+        }).catch(err => err);
+      }
     },
     created() {
-        const _this=this;
-        if(this.$route.params){
-          localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-        }
-        else{
-          localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
-        }
-        window.addEventListener("beforeunload", () => {
-          localStorage.removeItem("messageStore");
-          localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
-        });
-        this.$axios.post('/reviewArticle',{
-          conference_id:this.$route.params.conference_id,
-          userId:this.$store.state.id,
-        })
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-              console.log(resp.data.articles);
-              _this.topics = resp.data.topics;
-              _this.articles = resp.data.articles;
-            } else {
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'warning'
-              });
-            }
-          })
-          .catch(error => {
-           this.$message({
-              showClose: true,
-              message: '请求相关记录失败',
-              type: 'error'
-            });
-          });
+      const _this = this;
+      if (this.$route.params) {
+        localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
       }
+      else {
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
+      }
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
+      });
+      this.$axios.post('/reviewArticle', {
+        conference_id: this.$route.params.conference_id,
+        userId: this.$store.state.id,
+      })
+        .then(resp => {
+          console.log(this.resp.data);
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            _this.topics = resp.data.topics;
+            _this.articles = resp.data.articles;
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            });
+          }
+        })
+        .catch(error => {
+          this.$message({
+            showClose: true,
+            message: '请求相关记录失败',
+            type: 'error'
+          });
+        });
+    }
   }
 </script>
 
 <style scoped>.demo-table-expand {
-    font-size: 0;
-  }
+  font-size: 0;
+}
 
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
 
-  .collapse-title {
-    flex: 1 0 90%;
-    order: 1;
-  }
+.collapse-title {
+  flex: 1 0 90%;
+  order: 1;
+}
 
-  .el-collapse-item__header {
-    flex: 1 0 auto;
-    order: -1;
-  }
+.el-collapse-item__header {
+  flex: 1 0 auto;
+  order: -1;
+}
 
-  .meeting_introduction {
+.meeting_introduction {
 
-    text-align: left;
-    margin-left: 35px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
+  text-align: left;
+  margin-left: 35px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
 
-  .meeting_introduction .content {
-    font-size: 15px;
-  }
+.meeting_introduction .content {
+  font-size: 15px;
+}
 
-  .meeting_introduction .label {
-    color: #99a9bf;
-    font-weight: bold;
-  }
-  .conference_container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 10px auto;
-    width: 70%;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    clear: left;
-  }
+.meeting_introduction .label {
+  color: #99a9bf;
+  font-weight: bold;
+}
 
-  .title {
-    margin: 20px auto;
-    padding-left: 20px;
-    text-align: left;
-    color: #494e8f;
-    font-size: 24px;
-    font-weight: normal;
-  }
+.conference_container {
+  border-radius: 15px;
+  background-clip: padding-box;
+  margin: 10px auto;
+  width: 70%;
+  padding: 35px 35px 15px 35px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+  clear: left;
+}
 
-  p.description {
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 20px;
-    color: #999;
-    line-height: 1.4285;
-    font-size: 14px;
-  }
+.title {
+  margin: 20px auto;
+  padding-left: 20px;
+  text-align: left;
+  color: #494e8f;
+  font-size: 24px;
+  font-weight: normal;
+}
 
-  .label {
-    float: left;
-  }
+p.description {
+  text-align: left;
+  padding-top: 10px;
+  padding-left: 20px;
+  color: #999;
+  line-height: 1.4285;
+  font-size: 14px;
+}
 
-  .topic_section{
-    text-align: left;
-    font-size:16px;
-    padding-left:40px;
-    margin-bottom: 20px;
-  }
+.label {
+  float: left;
+}
 
-  .topic_tag,.author_tag{
-    margin-left:10px;
-  }
+.topic_section {
+  text-align: left;
+  font-size: 16px;
+  padding-left: 40px;
+  margin-bottom: 20px;
+}
+
+.topic_tag, .author_tag {
+  margin-left: 10px;
+}
 </style>

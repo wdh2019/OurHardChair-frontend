@@ -105,7 +105,6 @@
       //一开始就向后端请求已申请的会议
       this.$axios.post('/ReviewConference')
         .then(resp => {
-          console.log(resp.data)
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.conferencesForApproval = resp.data.meetings;
           } else {

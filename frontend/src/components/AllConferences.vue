@@ -207,8 +207,6 @@
       // "会议开始" 5
 
       enterSubmitPapers(row) {
-        console.log("topics");
-        console.log(row.topics);
         if (row.is_open_submission === 1) {
           this.$message({
             showClose: true,
@@ -243,7 +241,6 @@
       this.$axios.post('/AllConferences')
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-            console.log(resp.data.meetings);
             _this.allConferences = resp.data.meetings;
           } else {
             this.$message({

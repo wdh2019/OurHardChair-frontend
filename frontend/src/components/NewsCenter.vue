@@ -340,7 +340,6 @@
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.allInfo = resp.data.messages;
-            console.log(resp.data.messages);
             for (let i = 0; i < _this.allInfo.length; i++) {
               //新增字段selectedTopics,使可选topics和已选topics分开
               _this.$set(_this.allInfo[i],"selectedTopics",[]);

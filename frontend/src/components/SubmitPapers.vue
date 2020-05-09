@@ -308,7 +308,6 @@
         return false;
       },
       changeAuthorSubmitForm(formName, index) {
-        console.log(index);
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let author = {};
@@ -316,9 +315,6 @@
             author.institution = this.authorRulesForm.institution;
             author.country = this.authorRulesForm.country;
             author.email = this.authorRulesForm.email;
-            console.log(author);
-            console.log(this.checkAuthorInAuthors(author));
-            console.log(this.ruleForm.authors);
             if (!this.checkAuthorInAuthors(author)) {
               this.$set(this.ruleForm.authors[index], 'writerName', this.authorRulesForm.writerName);
               // this.ruleForm.authors[index].name = this.authorRulesForm.name;
@@ -332,7 +328,6 @@
                 type: "warning",
               });
             }
-            //console.log(this.ruleForm.authors);
             this.resetAuthorSubmitForm();
             this.authorAddDisplay = false;
           }
@@ -417,12 +412,6 @@
             this.$refs.upload.submit();
             //正常的post
             if (this.fileValid && this.fileSelected) {
-              console.log(this.$route.params.conference_id)
-              console.log(this.$store.state.id);
-              console.log(this.ruleForm.title);
-              console.log(this.ruleForm.articleAbstract)
-              console.log(this.ruleForm.authors);
-              console.log(this.ruleForm.checkedTopics);
               this.$axios.post('/contribute', {
                 //会议id需要传进来！！！！！
                 conference_id: this.$route.params.conference_id,
@@ -433,7 +422,6 @@
                 writers: this.ruleForm.authors,
                 topics: this.ruleForm.checkedTopics,
               }).then(resp => {
-                console.log(resp);
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$message({
                     showClose: true,

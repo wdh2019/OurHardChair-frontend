@@ -66,7 +66,7 @@
             <el-tag type="primary" v-show="scope.row.status===2">已发布</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" v-show="!($route.params.is_open_submission===3)">
           <template slot-scope="scope">
             <el-button
               v-show="$route.params.is_open_submission===2"
@@ -100,7 +100,6 @@
     },
     methods: {
       handleTopics(topics) {
-        //console.log(topics);
         let tempTopic = "";
         for (let i = 0; i < topics.length; i++) {
           tempTopic += topics[i] + "   "
@@ -145,14 +144,11 @@
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
 
-      console.log("submission");
-      console.log(this.$route.params.is_open_submission);
       if (this.$route.params.is_open_submission === 2 || this.$route.params.is_open_submission === 3) {
         this.$axios.post('/showMySubmission', {
           conference_id: this.$route.params.conference_id,
         })
           .then(resp => {
-            console.log(resp.data);
             if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               _this.submissionRecord = resp.data.submissions;
             } else {
