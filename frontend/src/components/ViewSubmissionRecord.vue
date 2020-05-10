@@ -63,8 +63,13 @@
           prop="topics"
           :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <el-tag v-for="key in scope.row.topics" :key="key" v-show="!($route.params.is_open_submission === 2 || $route.params.is_open_submission === 3)">{{key.topic}}</el-tag>
-            <el-tag v-for="key in scope.row.topics" :key="key" v-show="$route.params.is_open_submission === 2 || $route.params.is_open_submission === 3">{{key}}</el-tag>
+            <el-tag v-for="key in scope.row.topics" :key="key"
+                    v-show="!($route.params.is_open_submission === 2 || $route.params.is_open_submission === 3)">
+              {{key.topic}}
+            </el-tag>
+            <el-tag v-for="key in scope.row.topics" :key="key"
+                    v-show="$route.params.is_open_submission === 2 || $route.params.is_open_submission === 3">{{key}}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -157,7 +162,8 @@
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-
+      console.log(this.$route.params.is_open_submission);
+      console.log(this.$route.params);
       if (this.$route.params.is_open_submission === 2 || this.$route.params.is_open_submission === 3) {
         this.$axios.post('/showMySubmission', {
           conference_id: this.$route.params.conference_id,
@@ -290,8 +296,8 @@
     float: left;
   }
 
-  .el-tag{
-    margin-right:5px;
+  .el-tag {
+    margin-right: 5px;
   }
 
 </style>
