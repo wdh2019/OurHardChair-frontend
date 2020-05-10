@@ -41,9 +41,36 @@
           <template slot-scope="props">
             <el-form label-position="left" class="demo-table-expand">
               <el-form-item>
-                <label>作者</label>
-                <el-tag v-for="author in props.row.writers" :key="author" class="author_tag">{{ author.writerName }}
-                </el-tag>
+                <el-table
+                  :data="props.row.writers"
+                  class="author_info"
+                >
+                  <el-table-column
+                    label="作者姓名"
+                    prop="writerName"
+                    width="150"
+                    :show-overflow-tooltip="true">
+                  </el-table-column>
+                  <el-table-column
+                    label="所在单位"
+                    prop="institution"
+                    width="150"
+                    :show-overflow-tooltip="true">
+                  </el-table-column>
+                  <el-table-column
+                    label="所在地区"
+                    prop="country"
+                    width="150"
+                    :show-overflow-tooltip="true">
+                  </el-table-column>
+
+                  <el-table-column
+                    label="作者邮箱"
+                    prop="email"
+                    width="150"
+                    :show-overflow-tooltip="true">
+                  </el-table-column>
+                </el-table>
               </el-form-item>
               <el-form-item>
                 <label>文章摘要</label><br>
