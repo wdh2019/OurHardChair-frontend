@@ -358,7 +358,7 @@
           return false;
         }
         else {
-          postContribution();
+          this.postContribution();
         }
       },
       myUpload(content) {
