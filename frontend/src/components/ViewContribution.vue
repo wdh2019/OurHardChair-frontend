@@ -42,7 +42,8 @@
             <el-form label-position="left" class="demo-table-expand">
               <el-form-item>
                 <label>作者</label>
-                <el-tag v-for="author in props.row.writers" :key="author" class="author_tag">{{ author }}</el-tag>
+                <el-tag v-for="author in props.row.writers" :key="author" class="author_tag">{{ author.writerName }}
+                </el-tag>
               </el-form-item>
               <el-form-item>
                 <label>文章摘要</label><br>
@@ -85,7 +86,8 @@
           label="操作"
           :show-overflow-tooltip="true">
           <template slot-scope="slot">
-            <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿</el-button>
+            <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
