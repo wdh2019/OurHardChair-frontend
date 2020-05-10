@@ -11,7 +11,7 @@
             <p class="content"><label class="label">文章标题: </label>{{this.$route.params.title}}</p>
           </div>
           <div>
-            <p class="content"><label class="label">作者：</label><el-tag v-for="author in this.$route.params.authors" :key="author" class="author_tag">{{author}}</el-tag></p>
+            <p class="content"><label class="label">作者：</label><el-tag v-for="author in $route.params.authors" :key="author" class="author_tag">{{author}}</el-tag></p>
           </div>
           <div>
             <p class="content"><label class="label">文章摘要: </label>{{this.$route.params.articleAbstract}}</p>

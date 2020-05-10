@@ -42,7 +42,7 @@
             <el-form label-position="left" class="demo-table-expand">
               <el-form-item>
                 <label>作者</label>
-                <el-tag v-for="author in props.row.authors" :key="author" class="author_tag">{{ author }}</el-tag>
+                <el-tag v-for="author in props.row.writers" :key="author" class="author_tag">{{ author }}</el-tag>
               </el-form-item>
               <el-form-item>
                 <label>文章摘要</label><br>
