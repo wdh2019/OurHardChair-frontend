@@ -165,6 +165,7 @@
       console.log(this.$route.params.is_open_submission);
       console.log(this.$route.params);
       if (this.$route.params.is_open_submission === 2 || this.$route.params.is_open_submission === 3) {
+        console.log("查看showMySubmission");
         this.$axios.post('/showMySubmission', {
           conference_id: this.$route.params.conference_id,
         })
@@ -180,13 +181,15 @@
             }
           })
           .catch(error => {
+            console.log(error)
             this.$message({
               showClose: true,
-              message: '请求相关记录失败',
+              message: '请求相关记录失败1',
               type: 'error'
             });
           });
       } else {
+        console.log("查看viewReviewResult");
         this.$axios.post('/viewReviewResult', {
           conference_id: this.$route.params.conference_id,
           userId: this.$store.state.id,
@@ -207,14 +210,14 @@
             }
           })
           .catch(error => {
+            console.log(error);
             this.$message({
               showClose: true,
-              message: '请求相关记录失败',
+              message: '请求相关记录失败2',
               type: 'error'
             });
           });
       }
-
     },
   }
 </script>

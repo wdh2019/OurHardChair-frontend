@@ -149,22 +149,24 @@
         }
       },
       enterMeeting(row) {
-		  let params={
-            conference_id: row.conference_id,
-            full_name: row.full_name,
-            short_name: row.short_name,
-            place: row.place,
-            start_date: row.start_date,
-            deadline_date: row.deadline_date,
-            release_date: row.release_date,
-            status: row.status,
-            chair_username: row.chair_username,
-            is_open_submission: row.is_open_submission,
-            can_release: row.can_release,
-            topics: row.topics,
-            topicsString: row.topicsString,
-          };
-		    localStorage.setItem('viewSubmissionRecord',JSON.stringify(params));
+        console.log("进会议前");
+        console.log(row.is_open_submission);
+        let params = {
+          conference_id: row.conference_id,
+          full_name: row.full_name,
+          short_name: row.short_name,
+          place: row.place,
+          start_date: row.start_date,
+          deadline_date: row.deadline_date,
+          release_date: row.release_date,
+          status: row.status,
+          chair_username: row.chair_username,
+          is_open_submission: row.is_open_submission,
+          can_release: row.can_release,
+          topics: row.topics,
+          topicsString: row.topicsString,
+        };
+        localStorage.setItem('viewSubmissionRecord', JSON.stringify(params));
         this.$router.push({
           name: '/ViewSubmissionRecord',
           params: params,
