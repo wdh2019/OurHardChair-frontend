@@ -149,8 +149,6 @@
         }
       },
       enterMeeting(row) {
-        console.log("进会议前");
-        console.log(row.is_open_submission);
         let params = {
           conference_id: row.conference_id,
           full_name: row.full_name,
