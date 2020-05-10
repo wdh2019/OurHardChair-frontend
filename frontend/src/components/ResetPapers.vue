@@ -149,7 +149,6 @@
         row: 0,
         authorAddPattern: 0,// 0 添加模式，1 修改模式
         authorAddDisplay: false,
-        fileSelected: false,
         fileValid: true,
         originalTitle: this.$route.params.title === undefined ? JSON.parse(localStorage.getItem("messageStore")).title : this.$route.params.title,
         topics: this.$route.params.topics === undefined ? JSON.parse(localStorage.getItem("messageStore")).topics : this.$route.params.topics,
@@ -317,36 +316,21 @@
         }
         return result;
       },
-      handleRemove(file, fileList) {
-        //console.log(file, fileList);
-      },
-      handlePreview(file) {
-        //console.log(file.name);
-      },
       handleExceed(files, fileList) {
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
       //上传前，先把文件COPY一份到ruleForm.file里
       beforeUpload(file) {
-        this.fileSelected = false;
         this.ruleForm.file = file;
         const file_size = file.size / 1024 / 1024;
         if (file_size >= 1) {
           this.$message.warning('文件大小不能超过1M');
-          this.fileSelected = true;
           this.fileValid = false;
           return false;
         }
         else {
           this.fileValid = true;
-          this.fileSelected = true;
         }
-        if (!this.fileSelected) {
-          return false;
-        }
-      },
-      beforeRemove(file, fileList) {
-        //return this.$confirm(`确定移除 ${ file.name }？`);
       },
       myUpload(content) {
         var formData = new FormData();

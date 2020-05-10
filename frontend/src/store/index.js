@@ -12,7 +12,6 @@ export default new Vuex.Store({
     email: localStorage.getItem('email') || null,
     country: localStorage.getItem('country') || null,
     institution: localStorage.getItem('institution') || null
-
   },
   mutations: {
     login(state, data) {
@@ -41,8 +40,9 @@ export default new Vuex.Store({
       localStorage.removeItem('country');
       localStorage.removeItem('institution');
       localStorage.removeItem('messageStore');
+	    localStorage.removeItem('backStore');
       state.username = null;
-	    state.fullName = null;
+	  state.fullName = null;
       state.email = null;
       state.country = null;
       state.institution = null;

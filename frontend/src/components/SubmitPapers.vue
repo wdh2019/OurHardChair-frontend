@@ -180,8 +180,6 @@
         row: 0,
         authorAddPattern: 0,// 0 添加模式，1 修改模式
         authorAddDisplay: false,
-        fileSelected: false,
-        fileValid: false,
         ruleForm: {
           title: '',
           filename: '',
@@ -339,7 +337,6 @@
         for (let [key, value] of Object.entries(this.authorRulesForm)) {
           this.authorRulesForm[key] = '';
         }
-
       },
       handleTopics(topics) {
         let result = "";
@@ -348,32 +345,24 @@
         }
         return result;
       },
-      handleRemove(file, fileList) {
-        //console.log(file, fileList);
-      },
-      handlePreview(file) {
-        //console.log(file.name);
-      },
       handleExceed(files, fileList) {
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
-      //上传前，先把文件COPY一份到ruleForm.file里
+      //上传前，先检验文件合法性。在上传文件之前上传稿件信息
       beforeUpload(file) {
-        this.fileSelected = false;
+        if(file===null) {
+          this.$message.warning('请选择文件');
+          return false;
+        }
         this.ruleForm.file = file;
         const file_size = file.size / 1024 / 1024;
         if (file_size >= 1) {
           this.$message.warning('文件大小不能超过1M');
-          this.fileSelected = true;
           return false;
         }
         else {
-          this.fileValid = true;
-          this.fileSelected = true;
+          postContribution();
         }
-      },
-      beforeRemove(file, fileList) {
-        //return this.$confirm(`确定移除 ${ file.name }？`);
       },
       myUpload(content) {
         var formData = new FormData();
@@ -402,41 +391,6 @@
           if (valid) {
             //虚晃upload一下，submit以后触发beforeUpload
             this.$refs.upload.submit();
-            //正常的post
-            if (this.fileValid && this.fileSelected) {
-              this.$axios.post('/contribute', {
-                //会议id需要传进来！！！！！
-                conference_id: this.$route.params.conference_id,
-                contributorID: this.$store.state.id,
-                filename: this.ruleForm.file.name,
-                title: this.ruleForm.title,
-                articleAbstract: this.ruleForm.articleAbstract,
-                writers: this.ruleForm.authors,
-                topics: this.ruleForm.checkedTopics,
-              }).then(resp => {
-                if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-                  this.$message({
-                    showClose: true,
-                    message: "投稿成功",
-                    type: "success",
-                  });
-                  this.$router.push('/AllConferences');
-                } else {
-                  this.$message({
-                    showClose: true,
-                    message: resp.data.message,
-                    type: 'warning'
-                  });
-                }
-              }).catch(error => {
-                this.$message({
-                  showClose: true,
-                  message: "上传投稿信息失败",
-                  type: 'error'
-                });
-              })
-            }
-            else if (!this.fileSelected) this.$message.warning("请选择上传文件");
           } else {
             this.$message({
               showClose: true,
@@ -446,6 +400,38 @@
 
           }
         });
+      },
+      postContribution(){
+        this.$axios.post('/contribute', {
+          conference_id: this.$route.params.conference_id,
+          contributorID: this.$store.state.id,
+          filename: this.ruleForm.file.name,
+          title: this.ruleForm.title,
+          articleAbstract: this.ruleForm.articleAbstract,
+          writers: this.ruleForm.authors,
+          topics: this.ruleForm.checkedTopics,
+        }).then(resp => {
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            this.$message({
+              showClose: true,
+              message: "投稿成功",
+              type: "success",
+            });
+            this.$router.push('/AllConferences');
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            });
+          }
+        }).catch(error => {
+          this.$message({
+            showClose: true,
+            message: "上传投稿信息失败",
+            type: 'error'
+          });
+        })
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
