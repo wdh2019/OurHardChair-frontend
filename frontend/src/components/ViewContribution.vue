@@ -48,26 +48,26 @@
                   <el-table-column
                     label="作者姓名"
                     prop="writerName"
-                    width="150"
+                    width="200"
                     :show-overflow-tooltip="true">
                   </el-table-column>
                   <el-table-column
                     label="所在单位"
                     prop="institution"
-                    width="150"
+                    width="200"
                     :show-overflow-tooltip="true">
                   </el-table-column>
                   <el-table-column
                     label="所在地区"
                     prop="country"
-                    width="150"
+                    width="200"
                     :show-overflow-tooltip="true">
                   </el-table-column>
 
                   <el-table-column
                     label="作者邮箱"
                     prop="email"
-                    width="150"
+                    width="250"
                     :show-overflow-tooltip="true">
                   </el-table-column>
                 </el-table>
