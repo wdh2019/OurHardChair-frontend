@@ -44,7 +44,7 @@
           params: JSON.parse(localStorage.getItem('viewSubmissionRecord')),
         });
       }
-    }
+    },
     created() {
       window.addEventListener("beforeunload", this.setMessageStore);
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
