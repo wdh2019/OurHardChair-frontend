@@ -33,14 +33,30 @@
     data() {
 		  return{}
     },
-    created() {
-      window.addEventListener("beforeunload", () => {
+    methods:{
+      setMessageStore(){
         localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
-      });
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
+      },
+      goBack(){
+        this.$router.push({
+          name:'ViewSubmissionRecord',
+          params: JSON.parse(localStorage.getItem('viewSubmissionRecord')),
+        });
+      }
+    }
+    created() {
+      window.addEventListener("beforeunload", this.setMessageStore);
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-
+      if (window.history && window.history.pushState) {
+          history.pushState(null, null, document.URL);
+          window.addEventListener('popstate', this.goBack);
+        }
     },
+    destroyed() {
+      window.removeEventListener('beforeunload',this.setMessageStore);
+      window.removeEventListener('popstate', this.goBack);
+    }
   }
 </script>
 
