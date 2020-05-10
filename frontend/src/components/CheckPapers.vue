@@ -136,7 +136,7 @@
       },
       goBack(){
         this.$router.push({
-          name:'ViewContribution',
+          name:'/ViewContribution',
           params: JSON.parse(localStorage.getItem('viewContribution')),
         });
       }

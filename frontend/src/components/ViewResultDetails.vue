@@ -40,7 +40,7 @@
       },
       goBack(){
         this.$router.push({
-          name:'ViewSubmissionRecord',
+          name:'/ViewSubmissionRecord',
           params: JSON.parse(localStorage.getItem('viewSubmissionRecord')),
         });
       }
