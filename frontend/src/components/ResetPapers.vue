@@ -102,10 +102,7 @@
             class="upload-demo"
             action="api/upload"
             :http-request="myUpload"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
             :before-upload="beforeUpload"
-            :before-remove="beforeRemove"
             :auto-upload="false"
             accept=".pdf"
             :limit="1"
@@ -376,7 +373,7 @@
                     message: "更新投稿成功",
                     type: "success",
                   });
-                  this.$router.push('/AllConferences');
+                  this.goBack();
                 } else {
                   this.$message({
                     showClose: true,
@@ -406,14 +403,29 @@
         this.$refs[formName].resetFields();
         this.$refs.upload.clearFiles();
       },
+	  setMessageStore(){
+	    localStorage.removeItem("messageStore");
+	    localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
+	  },
+	  goBack(){
+	    this.$router.push({
+	      name:'ViewSubmissionRecord',
+	      params: JSON.parse(localStorage.getItem('viewSubmissionRecord')),
+	    });
+	  }
     },
     created() {
-      window.addEventListener("beforeunload", () => {
-        localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
-      });
+      window.addEventListener("beforeunload", this.setMessageStore);
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      if (window.history && window.history.pushState) {
+          history.pushState(null, null, document.URL);
+          window.addEventListener('popstate', this.goBack);
+        }
     },
+    destroyed() {
+      window.removeEventListener('beforeunload',this.setMessageStore);
+      window.removeEventListener('popstate', this.goBack);
+    }
   }
 </script>
 

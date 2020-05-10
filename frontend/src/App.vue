@@ -12,8 +12,8 @@ export default {
       window.addEventListener('unload',e => this.unloadHandler(e));
   },
   destroyed() {
-      window.removeEventListener('beforeunload',e => this.beforeunloadHandler(e),true);
-      window.removeEventListener('unload',e => this.unloadHandler(e),true);
+      window.removeEventListener('beforeunload',e => this.beforeunloadHandler(e));
+      window.removeEventListener('unload',e => this.unloadHandler(e));
   },
   methods:{
     beforeunloadHandler(){
@@ -24,7 +24,7 @@ export default {
       if(this.gap_time>500){
         this.$store.commit('logout');
       }
-    }
+    },
   }
 }
 </script>

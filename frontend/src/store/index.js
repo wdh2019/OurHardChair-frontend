@@ -22,6 +22,10 @@ export default new Vuex.Store({
       localStorage.setItem('email', data.email);
       localStorage.setItem('country', data.country);
       localStorage.setItem('institution', data.institution);
+      localStorage.setItem('messageStore',null);
+	    localStorage.setItem('viewContribution',null);
+	    localStorage.setItem('viewResultDetails',null);
+	    localStorage.setItem('viewSubmissonRecord',null);
       state.token = data.token
       state.id = data.id;
       state.username = data.username;
@@ -40,9 +44,11 @@ export default new Vuex.Store({
       localStorage.removeItem('country');
       localStorage.removeItem('institution');
       localStorage.removeItem('messageStore');
-	    localStorage.removeItem('backStore');
+	    localStorage.removeItem('viewContribution');
+	    localStorage.removeItem('viewResultDetails');
+      localStorage.removeItem('viewSubmissionRecord');
       state.username = null;
-	  state.fullName = null;
+	    state.fullName = null;
       state.email = null;
       state.country = null;
       state.institution = null;

@@ -106,7 +106,7 @@
                   message: resp.data.message,
                   type: "success",
                 });
-                this.$router.push('/AllConferences');
+                this.goBack();
               } else {
                 this.$message({
                   showClose: true,
@@ -130,14 +130,29 @@
           }
         });
       },
-    },
-    created() {
-      window.addEventListener("beforeunload", () => {
+      setMessageStore(){
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
-      });
-      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      },
+      goBack(){
+        this.$router.push({
+          name:'ViewContribution',
+          params: JSON.parse(localStorage.getItem('viewContribution')),
+        });
+      }
     },
+    created() {
+      window.addEventListener("beforeunload", this.setMessageStore);
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      if (window.history && window.history.pushState) {
+          history.pushState(null, null, document.URL);
+          window.addEventListener('popstate', this.goBack);
+        }
+    },
+    destroyed() {
+      window.removeEventListener('beforeunload',this.setMessageStore);
+      window.removeEventListener('popstate', this.goBack);
+    }
   }
 </script>
 

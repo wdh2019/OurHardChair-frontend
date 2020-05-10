@@ -127,19 +127,21 @@
     },
     methods: {
       enterMeeting(row) {
+        let params={
+          conference_id: row.conference_id,
+          full_name: row.full_name,
+          short_name: row.short_name,
+          place: row.place,
+          start_date: row.start_date,
+          deadline_date: row.deadline_date,
+          release_date: row.release_date,
+          status: row.status,
+          isOpenSubmission: row.is_open_submission,
+        };
+        localStorage.setItem('viewContribution',JSON.stringify(params));
         this.$router.push({
           name: '/ViewContribution',
-          params: {
-            conference_id: row.conference_id, 
-            full_name: row.full_name,
-            short_name: row.short_name,
-            place: row.place,
-            start_date: row.start_date,
-            deadline_date: row.deadline_date,
-            release_date: row.release_date,
-            status: row.status,
-            isOpenSubmission: row.is_open_submission,
-          },
+          params: params,
         }).catch(err => err);
       },
       getTime(time) {

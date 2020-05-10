@@ -149,9 +149,7 @@
         }
       },
       enterMeeting(row) {
-        this.$router.push({
-          name: '/ViewSubmissionRecord',
-          params: {
+		  let params={
             conference_id: row.conference_id,
             full_name: row.full_name,
             short_name: row.short_name,
@@ -165,7 +163,11 @@
             can_release: row.can_release,
             topics: row.topics,
             topicsString: row.topicsString,
-          },
+          };
+		    localStorage.setItem('viewSubmissionRecord',JSON.stringify(params));
+        this.$router.push({
+          name: '/ViewSubmissionRecord',
+          params: params,
         }).catch(err => err);
       },
       getTime(time) {
