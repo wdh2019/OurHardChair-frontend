@@ -42,7 +42,7 @@
         <p class="quit_nav"  @click="quit" >注销</p>
       </el-submenu>
     </el-menu>
-    <el-main>
+    <el-main id="main">
       <router-view></router-view>
     </el-main>
   </div>
@@ -120,6 +120,9 @@
 </script>
 
 <style>
+	#main{
+		padding: 0;
+	}
   .news_type{
     font-size: 14px;
     color:white;

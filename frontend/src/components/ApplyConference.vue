@@ -1,6 +1,5 @@
 <template>
   <div id="base_conference">
-
     <div class="conference_container">
       <!--标题-->
       <h3 class="conference_title">会议申请</h3>
@@ -200,7 +199,6 @@
 </script>
 
 <style scoped>
-
   .userinfo ul {
     padding: 0;
   }
@@ -210,10 +208,12 @@
   }
 
   #base_conference {
-    height: 100%;
+    height: 92%;
     width: 100%;
     background-size: cover;
     position: fixed;
+    overflow: auto;
+    overflow-y: auto;
   }
 
   .conference_container {
@@ -241,7 +241,7 @@
   .conference_container .item .middle_button {
     width: 30%;
     border: none;
-    margin-top: 40px;
+    margin-top: 20px;
   }
 
   .middle_button {
