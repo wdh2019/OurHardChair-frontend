@@ -240,68 +240,7 @@
 </script>
 
 <style scoped>
-  .demo-table-expand {
-    font-size: 0;
-  }
-
-  .demo-table-expand .label {
-    width: 90px;
-    color: #99a9bf;
-    font-weight: bold;
-  }
-
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
-
-  .base_conference {
-    width: 100%;
-  }
-
   .conference_container {
     width:85%;
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 10px auto;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    clear: left;
-  }
-
-  .title {
-    margin: 20px auto;
-    padding-left: 20px;
-    text-align: left;
-    color: #494e8f;
-    font-size: 24px;
-    font-weight: normal;
-  }
-
-  p.description {
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 20px;
-    color: #999;
-    line-height: 1.4285;
-    font-size: 14px;
-  }
-
-  .conference_container .el-table {
-    text-align: center;
-    margin: 30px auto;
-  }
-
-  .label {
-    float: left;
-  }
-
-  .search_input {
-    float: right;
-    width: 150px;
-    margin-right: 30px;
   }
 </style>

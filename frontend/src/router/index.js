@@ -47,11 +47,6 @@ export const router = new Router({
           name: '会议申请',
           component: ApplyConference,
         },
-        // {
-        //   path: '/AllConferences',
-        //   name: '我要投稿',
-        //   component: AllConferences,
-        // },
       ]
     },
 
@@ -74,7 +69,7 @@ export const router = new Router({
       name: '我的会议',
       component: UserPage,
       meta: {
-        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [
         {
@@ -156,13 +151,11 @@ export const router = new Router({
         {
           //投稿
           path: '/SubmitPapers',
-          //path: '/SubmitPapers/:row',
           name: '/SubmitPapers',
           component: SubmitPapers,
         },
         {
           path: '/ViewSubmissionRecord',
-          //path: '/SubmitPapers/:row',
           name: '/ViewSubmissionRecord',
           component: ViewSubmissionRecord,
         },
@@ -214,15 +207,15 @@ router.beforeEach(function (to, from, next) {
       });
     }
   } else {
-    next()
+    next();
   }
   if (from.fullPath === "/" && to.fullPath === "/login" || to.fullPath === '/register') {
-    if (localStorage.getItem('token')) {
+    if (store.state.token) {
       store.commit('logout');
     }
   }
   if (to.fullPath === "/" || to.fullPath === "/login" || to.fullPath === '/register') {
-    if (localStorage.getItem('token')) {
+    if (store.state.token) {
       next({
         path: from.fullPath
       });
@@ -249,13 +242,5 @@ router.beforeEach(function (to, from, next) {
       });
     }
   }
-  // if(to.fullPath==="/ApproveConference"){
-  //   if(localStorage.username!=='admin'){
-  //     next({
-  //       path:from.fullPath
-  //     })
-  //   }else{
-  //     next();
-  //   }
-  // }
+
 });

@@ -127,20 +127,7 @@
   }
 
 </script>
-
 <style scoped>
-  .conference_container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 10px auto;
-    width: 1500px;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    clear: left;
-  }
-
   .title {
     margin: 20px auto;
     padding-left: 20px;

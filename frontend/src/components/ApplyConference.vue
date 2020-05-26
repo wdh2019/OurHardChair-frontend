@@ -1,5 +1,5 @@
 <template>
-  <div id="base_conference">
+  <div class="base_conference">
     <div class="conference_container">
       <!--标题-->
       <h3 class="conference_title">会议申请</h3>
@@ -199,43 +199,24 @@
 </script>
 
 <style scoped>
-  .userinfo ul {
-    padding: 0;
-  }
-
-  .userinfo h3 {
-    text-align: center;
-  }
-
-  #base_conference {
+  .base_conference {
     height: 92%;
     width: 100%;
-    background-size: cover;
     position: fixed;
     overflow: auto;
     overflow-y: auto;
   }
 
   .conference_container {
-    border-radius: 15px;
-    background-clip: padding-box;
     margin: 20px auto;
     width: 480px;
     padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    clear: left;
   }
 
   .conference_title {
     margin: 0px auto 40px auto;
     text-align: center;
     color: #494e8f;
-  }
-
-  .conference_container . {
-    margin-bottom: 20px;
   }
 
   .conference_container .item .middle_button {

@@ -1,6 +1,7 @@
 <template>
-  <el-container style="height: 500px; border: 1px solid #eee;">
-    <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+  <div class="base_conference">
+  <el-container style="height:900px;border: 1px solid #eee;" direction="horizontal">
+    <el-aside width="200px" style="height:900px;background-color: rgb(238, 241, 246)">
       <el-menu :default-active="show+''" style="top:60px">
         <el-menu-item index="1" @click="not_read">
           <i class="el-icon-setting"></i>
@@ -13,7 +14,7 @@
       </el-menu>
     </el-aside>
     <!--未读页面-->
-    <el-container style="height: 480px">
+    <el-container style="height:900px" direction="vertical">
       <el-header style="font-size: 20px;font-weight: bold;">
         消息中心
       </el-header>
@@ -24,22 +25,24 @@
           <el-table-column
             label="发送者"
             width="180px"
-            prop="senderName">
+            prop="senderName"
+            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-tag size="medium" effect="plain">{{ scope.row.senderName }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
             label="相关会议"
-            width="180"
-            prop="relatedConferenceName">
+            width="240px"
+            prop="relatedConferenceName"
+            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-tag size="medium" effect="plain" type="info">{{ scope.row.relatedConferenceName }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
             label="消息类型"
-            width="180"
+            width="180px"
             prop="messageCategory">
             <template slot-scope="scope">
               <el-tag size="medium" effect="plain"
@@ -71,7 +74,7 @@
           </el-table-column>
           <el-table-column
             label="具体内容"
-            width="400px"
+            width="360px"
             prop="message">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.message}}</span>
@@ -91,7 +94,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="300px">
+          <el-table-column label="操作">
             <!--标为已读，对接于/markRead 对应于markRead函数-->
             <template slot-scope="scope">
               <div v-show="scope.row.messageCategory!=='PCMemberInvitationRequest'">
@@ -128,7 +131,7 @@
           style="width: 100%">
           <el-table-column
             label="发送者"
-            width="180"
+            width="180px"
             prop="senderName">
             <template slot-scope="scope">
               <el-tag size="medium" effect="plain">{{ scope.row.senderName }}</el-tag>
@@ -136,7 +139,7 @@
           </el-table-column>
           <el-table-column
             label="相关会议"
-            width="180"
+            width="240px"
             prop="relatedConferenceName">
             <template slot-scope="scope">
               <el-tag size="medium" effect="plain" type="info">{{ scope.row.relatedConferenceName }}</el-tag>
@@ -145,7 +148,7 @@
 
           <el-table-column
             label="消息类型"
-            width="180"
+            width="180px"
             prop="messageCategory">
             <template slot-scope="scope">
 
@@ -178,7 +181,6 @@
           </el-table-column>
           <el-table-column
             label="具体内容"
-            width="400px"
             prop="message">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.message}}</span>
@@ -188,27 +190,8 @@
       </el-main>
     </el-container>
   </el-container>
+  </div>
 </template>
-<style scoped>
-  .el-tag{
-    margin:2px;
-  }
-  .el-menu-item{
-    height:65px;
-    border: 1px solid #eee;
-    padding-left:0px !important;
-  }
-  .el-header {
-    background-color: rgb(238, 241, 246);
-    /*background-color: #B3C0D1;*/
-    color: #333;
-    line-height: 60px;
-  }
-
-  .el-aside {
-    color: #333;
-  }
-</style>
 
 <script>
   export default {
@@ -330,6 +313,7 @@
         notReadInfo: [],
         hasReadInfo: [],
         show: 1,
+        height:0,
       }
     },
 
@@ -362,3 +346,28 @@
     }
   };
 </script>
+
+<style scoped>
+  .el-tag{
+    margin:2px;
+  }
+  .el-menu-item{
+    height:65px;
+    border: 1px solid #eee;
+    padding-left:0px !important;
+  }
+  .el-header {
+    background-color: rgb(238, 241, 246);
+    /*background-color: #B3C0D1;*/
+    color: #333;
+    line-height: 60px;
+  }
+
+  .el-aside {
+    color: #333;
+  }
+  .el-table__header{
+    margin:0;
+  }
+
+</style>

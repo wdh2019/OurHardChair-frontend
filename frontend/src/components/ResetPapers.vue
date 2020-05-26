@@ -1,6 +1,6 @@
 <template>
-  <div id="base">
-    <div class="container">
+  <div class="base_conference">
+    <div class="conference_container">
       <div>
         <h3 class="title">{{this.$store.state.fullName}},欢迎您的投稿</h3>
         <p class="description">请您填写以下信息</p>
@@ -430,12 +430,6 @@
 </script>
 
 <style scoped>
-
-  .collapse-title {
-    flex: 1 0 90%;
-    order: 1;
-  }
-
   .meeting_introduction {
     text-align: left;
     margin-left: 35px;
@@ -452,33 +446,10 @@
     font-weight: bold;
   }
 
-  .container {
-    border-radius: 15px;
-    background-clip: padding-box;
+  .conference_container {
     margin: 10px auto;
     margin-top: -10px;
     width: 70%;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    clear: left;
-  }
-
-  .title {
-    margin: 20px auto;
-    text-align: left;
-    color: #494e8f;
-    font-size: 24px;
-    font-weight: normal;
-  }
-
-  p.description {
-    text-align: left;
-    color: #999;
-    line-height: 1.4285;
-    padding-top: 10px;
-    font-size: 14px;
   }
 
   .button_add {

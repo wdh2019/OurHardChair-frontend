@@ -61,20 +61,8 @@
 </script>
 
 <style scoped>
-  .base_conference {
-    width: 100%;
-  }
-
   .conference_container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 10px auto;
     width: 90%;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    clear: left;
   }
 
   .PCMember {

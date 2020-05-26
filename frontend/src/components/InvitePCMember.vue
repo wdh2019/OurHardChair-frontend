@@ -208,78 +208,16 @@
   }
 </script>
 
-<style>
+<style scoped>
+  .conference_container {
+    width: 90%;
+  }
+
   .demo-form-inline {
     text-align: left;
     margin-left: 35px;
   }
 
-  .collapse-title {
-    flex: 1 0 90%;
-    order: 1;
-  }
-
-  .el-collapse-item__header {
-    flex: 1 0 auto;
-    order: -1;
-  }
-
-  .meeting_introduction {
-
-    text-align: left;
-    margin-left: 35px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
-
-  .meeting_introduction .content {
-    font-size: 15px;
-  }
-
-  .meeting_introduction .label {
-    color: #99a9bf;
-    font-weight: bold;
-  }
-
-  .conference_container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 10px auto;
-    width: 90%;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    clear: left;
-  }
-
-  .title {
-    margin: 20px auto;
-    padding-left: 20px;
-    text-align: left;
-    color: #494e8f;
-    font-size: 24px;
-    font-weight: normal;
-  }
-
-  p.description {
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 20px;
-    color: #999;
-    line-height: 1.4285;
-    font-size: 14px;
-  }
-
-  .label {
-    float: left;
-  }
-
-  .search_input {
-    float: right;
-    width: 150px;
-    margin-right: 30px;
-  }
 
   .selectButton {
     margin-top: 10px;

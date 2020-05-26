@@ -11,7 +11,7 @@
           <template slot-scope="scope">
             <el-form label-position="left" inline class="demo-table-expand">
               <!--开启投稿-->
-              <el-form-item>
+              <el-form-item v-show="scope.row.status === 2&&scope.row.is_open_submission >= 1">
                 <el-switch
                   ref="switch"
                   v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==1"
@@ -29,7 +29,7 @@
               <!--开启投稿 end-->
               <!--开启审稿-->
               <div>
-                <el-form-item>
+                <el-form-item v-show="scope.row.status === 2&&scope.row.is_open_submission === 2">
                   <label class="label">稿件分配策略</label>
                   <el-radio-group v-model="scope.row.allocationStrategy">
                     <el-radio :label="1">基于topic相关度</el-radio>
@@ -38,10 +38,10 @@
                 </el-form-item>
               </div>
               <div>
-                <el-form-item>
+                <el-form-item v-show="scope.row.status === 2&&scope.row.is_open_submission >= 2">
                   <el-switch
                     ref="switch"
-                    v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==2||scope.row.allocationStrategy===''"
+                    v-bind:disabled="scope.row.is_open_submission!==2||scope.row.allocationStrategy===''"
                     v-bind:value="scope.row.is_open_submission>2"
                     active-text="开启审稿"
                     inactive-text="未开启审稿"
@@ -57,7 +57,7 @@
               <!--开启审稿end-->
               <!--开启评审结果发布-->
               <div>
-                <el-form-item>
+                <el-form-item v-show="scope.row.status === 2&&scope.row.is_open_submission >= 3">
                   <el-switch
                     ref="switch"
                     v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==3"
@@ -396,14 +396,12 @@
 </script>
 
 <style scoped>
-  .demo-table-expand {
-    font-size: 0;
+  .conference_container {
+    width: 95%;
   }
 
   .demo-table-expand .label {
     width: fit-content;
-    color: #606266;
-    font-weight: bold;
     margin-right: 20px;
   }
 
@@ -420,55 +418,6 @@
   /* 展开行的背景色 */
   .el-table >>> .el-table__expanded-cell[class*="cell"] {
     background-color: rgb(236, 245, 255);
-  }
-
-  .base_conference {
-    width: 100%;
-  }
-
-  .conference_container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 10px auto;
-    width: 95%;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    clear: left;
-  }
-
-  .title {
-    margin: 20px auto;
-    padding-left: 20px;
-    text-align: left;
-    color: #494e8f;
-    font-size: 24px;
-    font-weight: normal;
-  }
-
-  p.description {
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 20px;
-    color: #999;
-    line-height: 1.4285;
-    font-size: 14px;
-  }
-
-  .conference_container .el-table {
-    text-align: center;
-    margin: 30px auto;
-  }
-
-  .label {
-    float: left;
-  }
-
-  .search_input {
-    float: right;
-    width: 150px;
-    margin-right: 30px;
   }
 
   .red {
