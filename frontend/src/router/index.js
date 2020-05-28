@@ -20,6 +20,8 @@ import ViewSubmissionRecord from "../components/ViewSubmissionRecord"
 import ViewContribution from "../components/ViewContribution"
 import ResetPapers from "../components/ResetPapers"
 import ViewResultDetails from "../components/ViewResultDetails"
+import PostBar from "../components/PostBar"
+import Post from "../components/Post"
 
 
 Vue.use(Router);
@@ -130,10 +132,23 @@ export const router = new Router({
     },
     {
       path: '/UserPage',
+      name: '我的贴吧',
+      component: UserPage,
+      meta: {
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
+      children: [{
+        path: '/PostBar',
+        name: '贴吧',
+        component: PostBar,
+      }]
+    },
+    {
+      path: '/UserPage',
       name: '其他功能',
       component: UserPage,
       meta: {
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+        //requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       children: [
         {
@@ -173,7 +188,12 @@ export const router = new Router({
           path: '/ResetPapers',
           name: '/ResetPapers',
           component: ResetPapers,
-        }
+        },
+        {
+          path: '/Post',
+          name: '/Post',
+          component: Post,
+        },
       ]
     },
 
