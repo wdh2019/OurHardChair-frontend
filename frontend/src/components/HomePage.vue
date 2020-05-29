@@ -3,7 +3,7 @@
       <el-carousel indicator-position="inside" :height="height" :width="width">
         <el-carousel-item v-for="(item,index) in imgUrls" :key="index">
           <div class="demo1">
-            <p class="logo">Gysw.co</p>
+            <p class="logo">GYSW</p>
             <div class="welcome">
               <p class="welcome1">欢迎使用</p>
               <p class="welcome2">Gysw 会议系统</p></div>
