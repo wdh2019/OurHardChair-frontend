@@ -8,6 +8,9 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#1EAEFF" router>
+
+      <img src="../../static/favicon2.png" class="favicon">
+
       <el-submenu index="0">
         <template slot="title">操作中心</template>
         <el-menu-item v-for="(child) in $router.options.routes[0].children" :index="child.path" :key="child.path"
@@ -120,6 +123,12 @@
 </script>
 
 <style>
+  .favicon{
+    width: 45px;
+    height:45px;
+    float:left;
+    margin: 10px 0 0 10px;
+  }
 	#main{
 		padding: 0;
 	}

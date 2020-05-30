@@ -86,13 +86,14 @@
           postHeader.classList.remove("fixed");
         }
       }
+
     },
     mounted() {
       this.headerTop = document.querySelector('#post-header').offsetTop;
       window.addEventListener('scroll', this.fixHeader,true);
     },
     destroyed(){
-      windwo.removeEventListener('scroll',this.fixHeader,true);
+      window.removeEventListener('scroll',this.fixHeader,true);
     }
   }
 </script>
