@@ -62,8 +62,25 @@
                     ref="switch"
                     v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==3"
                     v-bind:value="scope.row.is_open_submission>3"
-                    active-text="发布评审结果"
-                    inactive-text="未发布评审结果"
+                    active-text="发布第一次录用结果"
+                    inactive-text="未发布"
+                    :active-value='true'
+                    :inactive-value='false'
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    @change="changeReleaseStatus(scope.row)">
+                    <label>{{scope.row.is_open_submission}}</label>
+                  </el-switch>
+                </el-form-item>
+              </div>
+              <div>
+                <el-form-item v-show="scope.row.status === 2&&scope.row.is_open_submission >= 4">
+                  <el-switch
+                    ref="switch"
+                    v-bind:disabled="scope.row.status!==2||scope.row.is_open_submission!==4"
+                    v-bind:value="scope.row.is_open_submission>4"
+                    active-text="发布第二次录用结果"
+                    inactive-text="未发布"
                     :active-value='true'
                     :inactive-value='false'
                     active-color="#13ce66"
@@ -108,6 +125,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>投稿截止，开始评审</span>
+                  <el-button type="primary">查看讨论</el-button>
                 </el-form-item>
               </div>
               <div
@@ -115,6 +133,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>评审结果发布</span>
+                  <el-button type="primary">查看讨论</el-button>
                 </el-form-item>
               </div>
               <div
@@ -122,7 +141,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议开始</span>
-                  <!--之后，此处可能填入进入会议按钮，功能为参与会议-->
+                  <el-button type="primary">查看讨论</el-button>
                 </el-form-item>
               </div>
 
@@ -331,11 +350,12 @@
                 showClose: true,
                 message: error.message,
                 type: 'error'
-              })
+              });
             });
         }
       },
       changeReleaseStatus(row) {
+        /* 第一次录用结果发布 */
         if (row.is_open_submission === 3) {
           this.$axios.post('/releaseReviewResult', {
             conference_id: row.conference_id,
@@ -359,10 +379,41 @@
             .catch(error => {
               this.$message({
                 showClose: true,
-                message: "结果开放失败",
+                message: "错误发生于第一次发布录用结果",
                 type: 'error'
-              })
+              });
+              console.log("error:"+error);
             });
+        }
+        /* 第二次录用结果发布 */
+        else if(row.is_open_submission === 4){
+          this.$axios.post('/releaseFinalReviewResult', {
+            conference_id: row.conference_id,
+          })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'success'
+              });
+              window.location.reload();
+            } else {
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'warning'
+              })
+            }
+          })
+          .catch(error => {
+            this.$message({
+              showClose: true,
+              message: "错误发生于第二次发布录用结果",
+              type: 'error'
+            });
+            console.log("error:"+error);
+          });
         }
       },
     },

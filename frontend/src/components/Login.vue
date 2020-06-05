@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="base_login">
-      <el-popover placement="bottom" trigger="click" content="账号:admin 密码:password 版本号:Lab5.1">
+      <el-popover placement="bottom" trigger="click" content="账号:admin 密码:password 版本号:Lab5.2">
         <el-button slot="reference" type="primary">查看管理员账号</el-button>
       </el-popover>
       <div class="login_container">

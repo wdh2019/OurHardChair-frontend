@@ -9,16 +9,15 @@
         <div class="content">
         <el-scrollbar style="height: 100%" class="hidden_scrollbar">
             <ul class="infinite-list" v-infinite-scroll="load">
-             <!-- <li v-for="(post,index) in postList" class="infinite-list-item" v-bind:key="index" >
-               <a>针对文章{{post.articleID}}的讨论</a>
+              <li v-for="(post,index) in postList" class="infinite-list-item" v-bind:key="index" >
+               <a @click="enterPost(post.articleID)">针对文章"{{post.articleTitle}}"的讨论</a>
                <p>{{post.words}}</p>
-               <span><i class="el-icon-user-solid"></i>{{post.ownerID}}</span><span>回帖数：{{post.replyNumber}}</span>
-              </li> -->
-              <li v-for="i in totalPage" class="infinite-list-item" v-bind:key="i">
-                {{i}}
+               <br>
+               <span><i class="el-icon-user-solid"></i>{{post.ownerFullName}}</span><span>回帖数：{{post.replyNumber}}</span>
               </li>
             </ul>
         </el-scrollbar>
+        <span v-show="postList.length ===0 ">暂无帖子</span>
         </div>
       </template>
     </div>
@@ -29,18 +28,52 @@
   export default{
     data(){
       return{
-        curPage:0,
-        totalPage:10,
-        postList:[]
+        postList:[],
+        postListLength:0,
       }
     },
     methods:{
       /* 无限滚动条-滚动行为函数 */
       load () {
-        if(this.totalPage<50)
-        this.totalPage+=2;
+        if(this.postListLength<postList.length)
+        this.postListLength+=2;
+      },
+      /* 进入单个帖子 */
+      enterPost(articleID){
+        this.$router.push({
+          name:'/Post',
+          params:{
+            articleID:articleID,
+          }
+        }).catch(err => err);
       }
     },
+    created() {
+      /* 展示“我”作为PCMember需要参加讨论的帖子 */
+      const _this = this;
+      this.$axios.post('/browseAllPosts',{
+        userID:this.$store.state.id,
+      })
+        .then(resp => {
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            _this.postList = resp.data.postList;
+            console.log("请求到的帖子："+_this.postList);
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            });
+          }
+        })
+        .catch(error => {
+          this.$message({
+            showClose: true,
+            message: '错误发生于请求所有帖子',
+            type: 'error'
+          });
+        })
+    }
   }
 </script>
 
