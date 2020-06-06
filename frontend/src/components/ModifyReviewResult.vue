@@ -158,7 +158,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .demo-ruleForm {
     text-align: left;
   }

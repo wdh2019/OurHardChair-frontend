@@ -94,7 +94,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .conference_container{
     width:60%;
   }
