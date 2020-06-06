@@ -109,8 +109,10 @@
     methods:{
       /* 无限滚动条-滚动行为函数 */
       load () {
-        if(this.postListLength<this.postList.length)
-        this.postListLength+=2;
+        if(this.postListLength<this.postList.length){
+          this.postListLength+=2;
+        }
+        
       },
       /* 进入单个帖子 */
       enterPost(articleID){
