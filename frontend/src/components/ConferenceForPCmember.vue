@@ -59,8 +59,8 @@
                   <span>投稿截止，开始评审</span>
                 </el-form-item>
                 <el-form-item>
-                <el-button type="primary" @click="enterMeeting(scope.row)">进行审稿</el-button>
-                <el-button type="primary">查看讨论</el-button> 
+                <el-button type="primary" @click="enterMeeting(scope.row)">查看待审稿件</el-button>
+                <el-button type="primary">查看讨论</el-button>
                 </el-form-item>
               </div>
               <div
@@ -70,7 +70,7 @@
                   <span>评审结果发布</span>
                 </el-form-item>
                 <el-form-item>
-                <el-button type="primary" @click="enterMeeting(scope.row)">进行审稿</el-button>
+                <el-button type="primary" @click="enterMeeting(scope.row)">查看已审稿件</el-button>
                 <el-button type="primary">查看讨论</el-button>
                 </el-form-item>
               </div>

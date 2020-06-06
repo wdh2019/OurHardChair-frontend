@@ -22,6 +22,8 @@ import ResetPapers from "../components/ResetPapers"
 import ViewResultDetails from "../components/ViewResultDetails"
 import PostBar from "../components/PostBar"
 import Post from "../components/Post"
+import Rebuttal from "../components/Rebuttal"
+import ModifyReviewResult from "../components/ModifyReviewResult"
 
 
 Vue.use(Router);
@@ -194,6 +196,16 @@ export const router = new Router({
           name: '/Post',
           component: Post,
         },
+        {
+          path:'/Rebuttal',
+          name:'/Rebuttal',
+          component: Rebuttal,
+        },
+        {
+          path:'/ModifyReviewResult',
+          name:'/ModifyReviewResult',
+          component: ModifyReviewResult,
+        }
       ]
     },
 

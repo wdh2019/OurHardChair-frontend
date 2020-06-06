@@ -43,8 +43,7 @@
               <el-form-item>
                 <el-table
                   :data="props.row.writers"
-                  class="author_info"
-                >
+                  class="author_info">
                   <el-table-column
                     label="作者姓名"
                     prop="writerName"
@@ -115,6 +114,16 @@
           <template slot-scope="slot">
             <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿
             </el-button>
+            <!--未完成 -->
+            <el-button v-if="slot.row.isDiscussed===-1" type="primary" size="small" @click="startDiscussion(slot.row)">发起讨论
+            </el-button>
+            <el-button v-if="slot.row.isDiscussed===1" type="primary" size="small" @click="enterPost(slot.row)">查看讨论
+            </el-button>
+            <el-button v-if="slot.row.status===1&&slot.row.isDiscussed===1" type="primary" size="small" @click="confirmResult(slot.row)">确认评审结果
+            </el-button>
+            <el-button v-if="slot.row.status===1&&slot.row.isDiscussed===1" type="primary" size="small" @click="changeResult(slot.row)">修改评审结果
+            </el-button>
+            <!--end-->
           </template>
         </el-table-column>
       </el-table>
@@ -177,6 +186,22 @@
             authors: row.writers,
           }
         }).catch(err => err);
+      },
+      /* 发起对某篇文章讨论 */
+      startDiscussion(row){
+
+      },
+      /* 进入对谋篇文章的的讨论帖 */
+      enterPost(row){
+
+      },
+      /* 确认评审结果 */
+      confirmResult(row){
+
+      },
+      /* 修改评审结果 */
+      changeResult(row){
+
       }
     },
     created() {

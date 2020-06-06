@@ -2,12 +2,12 @@
   <div class="base_conference">
     <div class="outside_container">
       <div class="title_section">
-      <h3 class="title">贴吧</h3>
+      <h3 class="title">讨论区</h3>
       <p class="description">查看所有针对你审核过的文章发起的讨论</p>
       </div>
       <template>
         <div class="content">
-        <span v-show="postList.length ===0 ">暂无帖子</span>
+        <span v-show="postList.length ===0 ">暂无帖子，请到作为PCMember的会议->查看待审/已审稿件->发起讨论</span>
         <el-scrollbar style="height: 100%" class="hidden_scrollbar">
             <ul class="infinite-list" v-infinite-scroll="load">
               <li v-for="(post,index) in postList" class="infinite-list-item" v-bind:key="index" >

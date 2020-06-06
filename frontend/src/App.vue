@@ -52,6 +52,7 @@ export default {
 
   .conference_container {
     margin: 10px auto;
+    margin-bottom: 100px;
     width: 90%;
     padding: 35px 35px 15px 35px;
     overflow: auto;

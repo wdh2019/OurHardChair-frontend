@@ -2,7 +2,7 @@
   <div class="base_conference">
     <div class="conference_container">
       <div class="title_section">
-        <h3 class="title">正在评审稿件 {{this.$route.params.title}} </h3>
+        <h3 class="title">正在对稿件 {{this.$route.params.title}} 修改评审结果</h3>
       </div>
       <el-collapse class="article_introduction">
         <el-collapse-item>
@@ -62,9 +62,11 @@
         curPage: 1,
         search: '',
         ruleForm: {
+          /* 需要设置默认值 */
           score: '',
           comment: '',
           confidence: '',
+          /* end */
         },
         rules: {
           score: [
@@ -92,7 +94,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$axios.post('/submitReviewResult', {
+            this.$axios.post('/modifyReviewResult', {
               conference_id: this.$route.params.conference_id,
               userId: this.$store.state.id,
               articleId: this.$route.params.articleId,
@@ -117,7 +119,7 @@
             }).catch(error => {
               this.$message({
                 showClose: true,
-                message: "评审信息发送失败",
+                message: "错误发生于修改评审信息",
                 type: 'error'
               });
             })
@@ -156,7 +158,7 @@
   }
 </script>
 
-<style scoped>
+<style>
   .demo-ruleForm {
     text-align: left;
   }
@@ -199,5 +201,4 @@
   .topic_tag, .author_tag {
     margin-left: 10px;
   }
-
 </style>
