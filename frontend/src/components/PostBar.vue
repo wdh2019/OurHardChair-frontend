@@ -7,17 +7,18 @@
       </div>
       <template>
         <div class="content">
+        <span v-show="postList.length ===0 ">暂无帖子</span>
         <el-scrollbar style="height: 100%" class="hidden_scrollbar">
             <ul class="infinite-list" v-infinite-scroll="load">
               <li v-for="(post,index) in postList" class="infinite-list-item" v-bind:key="index" >
-               <a @click="enterPost(post.articleID)">针对文章"{{post.articleTitle}}"的讨论</a>
-               <p>{{post.words}}</p>
+               <el-button type="text" class="post-header" @click="enterPost(post.articleID)">针对文章"{{post.articleTitle}}"的讨论</el-button>
+               <p class="words">{{post.words}}</p>
                <br>
-               <span><i class="el-icon-user-solid"></i>{{post.ownerFullName}}</span><span>回帖数：{{post.replyNumber}}</span>
+               <div class="post-footer"><span><i class="el-icon-user-solid"></i>{{post.ownerFullName}}</span><span>回帖数：{{post.replyNumber}}</span></div>
               </li>
             </ul>
         </el-scrollbar>
-        <span v-show="postList.length ===0 ">暂无帖子</span>
+
         </div>
       </template>
     </div>
@@ -28,14 +29,87 @@
   export default{
     data(){
       return{
-        postList:[],
+        postList:[
+          {
+            id:1,
+            ownerID:1,
+            ownerFullName:"wdh2020",
+            articleID:1,
+            articleTitle:"lab5.pdf",
+            replyNumber:1,
+            words:"你在干什么",
+            replyList:[{
+              id:2,
+              floorNumber:2,
+              ownerID:2,
+              ownerFullName:"wdh2021",
+              replyToFloorNumber:-1,
+              words:"我在干什么?"
+            },{
+              id:2,
+              floorNumber:3,
+              ownerID:2,
+              ownerFullName:"wdh2021",
+              replyToFloorNumber:2,
+              words:"我在干什么?"
+            },
+            {
+              id:2,
+              floorNumber:3,
+              ownerID:2,
+              ownerFullName:"wdh2021",
+              replyToFloorNumber:2,
+              words:"我在干什么?"
+            }],
+          },
+          {
+            id:1,
+            ownerID:1,
+            ownerFullName:"wdh2020",
+            articleID:1,
+            articleTitle:"lab5.pdf",
+            replyNumber:1,
+            words:"你在干什么？",
+            replyList:[],
+          },
+          {
+            id:1,
+            ownerID:1,
+            ownerFullName:"wdh2020",
+            articleID:1,
+            articleTitle:"lab5.pdf",
+            replyNumber:1,
+            words:"你在干什么？",
+            replyList:[],
+          },
+          {
+            id:1,
+            ownerID:1,
+            ownerFullName:"wdh2020",
+            articleID:1,
+            articleTitle:"lab5.pdf",
+            replyNumber:1,
+            words:"你在干什么？",
+            replyList:[],
+          },
+          {
+            id:1,
+            ownerID:1,
+            ownerFullName:"wdh2020",
+            articleID:1,
+            articleTitle:"lab5.pdf",
+            replyNumber:1,
+            words:"你在干什么？",
+            replyList:[],
+          },
+        ],
         postListLength:0,
       }
     },
     methods:{
       /* 无限滚动条-滚动行为函数 */
       load () {
-        if(this.postListLength<postList.length)
+        if(this.postListLength<this.postList.length)
         this.postListLength+=2;
       },
       /* 进入单个帖子 */
@@ -98,6 +172,7 @@
   div.content{
     height:600px;
     width:100%;
+    text-align: left;
   }
   ul.infinite-list{
     padding:20px;
@@ -106,7 +181,19 @@
     list-style: none;
     height:fit-content;
     border: 1px solid #E5E5E5;
-    padding:20px;
+    padding:20px 20px 20px 50px;
   }
-
+  .post-header{
+    font-size: 1.2em;
+  }
+  .post-footer{
+    font-size: 0.8em;
+  }
+  .post-footer span{
+    margin-right: 3em;
+  }
+  p.words{
+    word-wrap: normal;
+    word-break: break-all;
+  }
 </style>
