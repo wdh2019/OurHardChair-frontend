@@ -208,19 +208,11 @@
             words:this.words,
           })
           .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
               this.$message({
                 showClose: true,
                 message: resp.data.message,
                 type: 'warning'
               });
-            } else {
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'warning'
-              });
-            }
           });
           window.location.reload();
         }else{
@@ -248,19 +240,11 @@
           conference_id:this.$route.params.conference_id,
         })
         .then(resp => {
-          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             this.$message({
               showClose: true,
               message: resp.data.message,
               type: 'warning'
             });
-          } else {
-            this.$message({
-              showClose: true,
-              message: resp.data.message,
-              type: 'warning'
-            });
-          }
         });
         window.location.reload();
       },
