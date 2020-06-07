@@ -90,38 +90,7 @@
       return{
         curPage:1,
         headerTop:0, //标题距离顶部的距离
-        post:{
-          id:1,
-          ownerID:1,
-          ownerFullName:"wdh2020",
-          articleID:1,
-          articleTitle:"lab5.pdf",
-          replyNumber:1,
-          words:"你在干什么？",
-          replyList:[{
-            id:2,
-            floorNumber:2,
-            ownerID:2,
-            ownerFullName:"wdh2021",
-            replyToFloorNumber:-1,
-            words:"我在干什么?"
-          },{
-            id:2,
-            floorNumber:3,
-            ownerID:2,
-            ownerFullName:"wdh2021",
-            replyToFloorNumber:2,
-            words:"我在干什么?"
-          },
-          {
-            id:2,
-            floorNumber:3,
-            ownerID:2,
-            ownerFullName:"wdh2021",
-            replyToFloorNumber:2,
-            words:"我在干什么?"
-          }],
-        }, //主题帖
+        post:'', //主题帖
         showReply:false, //是否显示回复
         showReplyInput:false, //是否显示回复输入框
         showReplyTip:false, //是否显示回复输入框为空的提示

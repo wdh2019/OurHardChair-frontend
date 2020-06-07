@@ -60,7 +60,7 @@
                 </el-form-item>
                 <el-form-item>
                 <el-button type="primary" @click="enterMeeting(scope.row)">查看待审稿件</el-button>
-                <el-button type="primary">查看讨论</el-button>
+                <el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>
                 </el-form-item>
               </div>
               <div
@@ -71,7 +71,7 @@
                 </el-form-item>
                 <el-form-item>
                 <el-button type="primary" @click="enterMeeting(scope.row)">查看已审稿件</el-button>
-                <el-button type="primary">查看讨论</el-button>
+                <el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>
                 </el-form-item>
               </div>
               <div
@@ -145,6 +145,9 @@
           name: '/ViewContribution',
           params: params,
         }).catch(err => err);
+      },
+      enterPost(){
+        this.$router.push('/PostBar').catch(err => err);
       },
       getTime(time) {
         //2015-05-06 00:00:00

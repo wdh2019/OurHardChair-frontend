@@ -29,80 +29,7 @@
   export default{
     data(){
       return{
-        postList:[
-          {
-            id:1,
-            ownerID:1,
-            ownerFullName:"wdh2020",
-            articleID:1,
-            articleTitle:"lab5.pdf",
-            replyNumber:1,
-            words:"你在干什么",
-            replyList:[{
-              id:2,
-              floorNumber:2,
-              ownerID:2,
-              ownerFullName:"wdh2021",
-              replyToFloorNumber:-1,
-              words:"我在干什么?"
-            },{
-              id:2,
-              floorNumber:3,
-              ownerID:2,
-              ownerFullName:"wdh2021",
-              replyToFloorNumber:2,
-              words:"我在干什么?"
-            },
-            {
-              id:2,
-              floorNumber:3,
-              ownerID:2,
-              ownerFullName:"wdh2021",
-              replyToFloorNumber:2,
-              words:"我在干什么?"
-            }],
-          },
-          {
-            id:1,
-            ownerID:1,
-            ownerFullName:"wdh2020",
-            articleID:1,
-            articleTitle:"lab5.pdf",
-            replyNumber:1,
-            words:"你在干什么？",
-            replyList:[],
-          },
-          {
-            id:1,
-            ownerID:1,
-            ownerFullName:"wdh2020",
-            articleID:1,
-            articleTitle:"lab5.pdf",
-            replyNumber:1,
-            words:"你在干什么？",
-            replyList:[],
-          },
-          {
-            id:1,
-            ownerID:1,
-            ownerFullName:"wdh2020",
-            articleID:1,
-            articleTitle:"lab5.pdf",
-            replyNumber:1,
-            words:"你在干什么？",
-            replyList:[],
-          },
-          {
-            id:1,
-            ownerID:1,
-            ownerFullName:"wdh2020",
-            articleID:1,
-            articleTitle:"lab5.pdf",
-            replyNumber:1,
-            words:"你在干什么？",
-            replyList:[],
-          },
-        ],
+        postList:[],
         postListLength:0,
       }
     },
@@ -112,7 +39,7 @@
         if(this.postListLength<this.postList.length){
           this.postListLength+=2;
         }
-        
+
       },
       /* 进入单个帖子 */
       enterPost(articleID){
@@ -127,6 +54,7 @@
     created() {
       /* 展示“我”作为PCMember需要参加讨论的帖子 */
       const _this = this;
+      console.log(this.$store.state.id);
       this.$axios.post('/browseAllPosts',{
         userID:this.$store.state.id,
       })

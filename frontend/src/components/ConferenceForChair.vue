@@ -125,7 +125,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>投稿截止，开始评审</span>
-                  <el-button type="primary">查看讨论</el-button>
+                  <el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>
                 </el-form-item>
               </div>
               <div
@@ -133,7 +133,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>评审结果发布</span>
-                  <el-button type="primary">查看讨论</el-button>
+                  <el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>
                 </el-form-item>
               </div>
               <div
@@ -141,7 +141,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议开始</span>
-                  <el-button type="primary">查看讨论</el-button>
+                  <el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>
                 </el-form-item>
               </div>
 
@@ -224,6 +224,9 @@
             isOpenSubmission: row.is_open_submission,
           },
         }).catch(err => err);
+      },
+      enterPost(){
+        this.$router.push('/PostBar').catch(err => err);
       },
       getTime(time) {
         //2015-05-06 00:00:00
@@ -336,7 +339,6 @@
                   message: resp.data.message,
                   type: 'success'
                 });
-                window.location.reload();
               } else {
                 this.$message({
                   showClose: true,
@@ -344,6 +346,7 @@
                   type: 'warning'
                 })
               }
+              window.location.reload();
             })
             .catch(error => {
               this.$message({
@@ -357,6 +360,7 @@
       changeReleaseStatus(row) {
         /* 第一次录用结果发布 */
         if (row.is_open_submission === 3) {
+
           this.$axios.post('/releaseReviewResult', {
             conference_id: row.conference_id,
           })
@@ -367,7 +371,6 @@
                   message: resp.data.message,
                   type: 'success'
                 });
-                window.location.reload();
               } else {
                 this.$message({
                   showClose: true,
@@ -375,6 +378,7 @@
                   type: 'warning'
                 })
               }
+              window.location.reload();
             })
             .catch(error => {
               this.$message({
@@ -382,11 +386,13 @@
                 message: "错误发生于第一次发布录用结果",
                 type: 'error'
               });
-              console.log("error:"+error);
+              console.log("error:");
+              console.log(error);
             });
         }
         /* 第二次录用结果发布 */
         else if(row.is_open_submission === 4){
+          console.log(row.conference_id);
           this.$axios.post('/releaseFinalReviewResult', {
             conference_id: row.conference_id,
           })
@@ -412,7 +418,8 @@
               message: "错误发生于第二次发布录用结果",
               type: 'error'
             });
-            console.log("error:"+error);
+            console.log("error:");
+            console.log(error);
           });
         }
       },

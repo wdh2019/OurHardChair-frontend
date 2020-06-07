@@ -115,7 +115,7 @@
             <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿
             </el-button>
             <!--未完成 -->
-            <el-button v-if="slot.row.isDiscussed===-1" type="primary" size="small" @click="startDiscussion(slot.row)">发起讨论
+            <el-button v-if="slot.row.isDiscussed===-1" type="primary" size="small" @click="showDialogInput(slot.row)">发起讨论
             </el-button>
             <el-button v-if="slot.row.isDiscussed===1" type="primary" size="small" @click="enterPost(slot.row)">查看讨论
             </el-button>
@@ -135,6 +135,10 @@
         background
         layout="total, prev, pager, next, jumper">
       </el-pagination>
+      <el-dialog title="讨论内容" :visible.sync="showDialog">
+        <el-input v-model="words" type="textarea" :rows="4" placeholder="输入您想讨论的内容"></el-input>
+        <el-button type="primary" @click="startDiscussion(row)"></el-button>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -148,6 +152,9 @@
         pagesize: 10,
         curPage: 1,
         search: '',
+        words:'',
+        row:'', //临时存放发起讨论的文章信息
+        showDialog:false, //展示发起讨论输入框
       }
     },
     methods: {
@@ -187,21 +194,88 @@
           }
         }).catch(err => err);
       },
+      /* 点击发起讨论按钮后，弹出填写讨论内容的输入框 */
+      showDialogInput(row){
+        this.row = row;
+        this.showDialog = !this.showDialog;
+      },
       /* 发起对某篇文章讨论 */
       startDiscussion(row){
-
+        if(this.words.length>0){
+          this.$axios.post('/postOnArticle',{
+            articleID:this.$route.params.articleId,
+            ownerID:this.$store.state.id,
+            words:this.words,
+          })
+          .then(resp => {
+            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'warning'
+              });
+            } else {
+              this.$message({
+                showClose: true,
+                message: resp.data.message,
+                type: 'warning'
+              });
+            }
+          });
+          window.location.reload();
+        }else{
+          this.$message({
+            showClose: true,
+            message: "请填写要发起的讨论内容",
+            type: 'warning'
+          });
+        }
       },
       /* 进入对谋篇文章的的讨论帖 */
       enterPost(row){
-
+        this.$router.push({
+          name: '/Post',
+          params: {
+            articleId: row.articleId,
+          }
+        }).catch(err => err)
       },
       /* 确认评审结果 */
       confirmResult(row){
-
+        this.$axios.post('/confirmReviewResult',{
+          userId:this.$store.state.id,
+          articleID:this.$route.params.articleId,
+          conference_id:this.$route.params.conference_id,
+        })
+        .then(resp => {
+          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              message: resp.data.message,
+              type: 'warning'
+            });
+          }
+        });
+        window.location.reload();
       },
       /* 修改评审结果 */
       changeResult(row){
-
+        this.$router.push({
+          name: '/ModifyReviewResult',
+          params: {
+            conference_id: this.$route.params.conference_id,
+            articleId: row.articleId,
+            title: row.title,
+            articleAbstract: row.articleAbstract,
+            authors: row.writers,
+          }
+        }).catch(err => err)
       }
     },
     created() {
