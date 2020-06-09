@@ -58,7 +58,7 @@
         console.log(this.$route.params.articleID);
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$axios.post('/submitRebuttal', {
+            this.$axios.post('/Rebuttal', {
               authorID: this.$route.params.authorID,
               articleID: this.$route.params.articleID,
               words: this.ruleForm.rebuttal,
