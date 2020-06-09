@@ -58,6 +58,8 @@
         let params = {
           authorID: this.$route.params.authorID,
           articleID: this.$route.params.articleID,
+          title:this.$route.params.title,
+          evaluations:this.$route.params.evaluations
         };
         this.$router.push({
           name: "/Rebuttal",

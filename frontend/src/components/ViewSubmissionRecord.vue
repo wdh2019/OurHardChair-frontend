@@ -152,6 +152,7 @@
           params: {
             authorID: row.contributorID,
             articleID: row.id,
+            title:row.title,
             evaluations: this.evaluations[index],
           }
         }).catch(err => err)
