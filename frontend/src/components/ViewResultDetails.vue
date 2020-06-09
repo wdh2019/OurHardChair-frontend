@@ -23,19 +23,7 @@
       </div>
       {{this.setRebuttal($route.params.evaluations)}}
       {{$route.params}}
-      <div v-show="setRebuttal($route.params.evaluations)">
-        <el-form :model="ruleForm" :rules="rules" label-position="left" ref="ruleForm">
-          <el-form-item label="rebuttal" prop="rebuttal">
-            <el-input v-model="ruleForm.rebuttal"
-                      type="textarea"
-                      :rows="8"
-                      placeholder="填写你的rebuttal信息"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+      <el-button v-show="setRebuttal($route.params.evaluations)" type="primary" @click="ToRebuttal()">Rebuttal</el-button>
     </div>
   </div>
 </template>
@@ -44,14 +32,7 @@
   export default {
     name: "ViewResultDetails",
     data() {
-      return {
-        ruleForm: {
-          rebuttal: '',
-        },
-        rules: {
-          rebuttal: [{required: true, message: "rebuttal信息不能为空", trigger: 'blur'}],
-        }
-      }
+      return {}
     },
     methods: {
       setMessageStore() {
@@ -77,49 +58,14 @@
         let params = {
           authorID: this.$route.params.authorID,
           articleID: this.$route.params.articleID,
-          title: this.$route.params.title,
-          evaluations: this.$route.params.evaluations
+          title:this.$route.params.title,
+          evaluations:this.$route.params.evaluations,
         };
         this.$router.push({
           name: "/Rebuttal",
           params: params,
         })
-      },
-      submitForm(formName) {
-        console.log(this.$route.params.authorID);
-        console.log(this.$route.params.articleID);
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$axios.post('/submitRebuttal', {
-              authorID: this.$route.params.authorID,
-              articleID: this.$route.params.articleID,
-              words: this.ruleForm.rebuttal,
-            })
-              .then(resp => {
-                if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-                  this.$message({
-                    showClose: true,
-                    message: '欢迎回来' + resp.data.username,
-                    type: 'success'
-                  });
-                } else {
-                  this.$message({
-                    showClose: true,
-                    message: resp.data.message,
-                    type: 'warning'
-                  });
-                }
-              })
-              .catch(error => {
-                this.$message({
-                  showClose: true,
-                  message: "错误发生于提交rebuttal信息",
-                  type: 'error'
-                });
-              })
-          }
-        });
-      },
+      }
     },
     created() {
       window.addEventListener("beforeunload", this.setMessageStore);
