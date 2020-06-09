@@ -25,7 +25,6 @@
       {{$route.params}}
       <el-button v-show="setRebuttal($route.params.evaluations)" type="primary" @click="ToRebuttal()">Rebuttal</el-button>
     </div>
-
   </div>
 </template>
 
@@ -59,7 +58,7 @@
         let params = {
           authorID: this.$route.params.authorID,
           articleID: this.$route.params.articleID,
-        }
+        };
         this.$router.push({
           name: "/Rebuttal",
           params: params,
