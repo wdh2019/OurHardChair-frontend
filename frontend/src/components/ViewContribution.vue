@@ -110,18 +110,18 @@
         </el-table-column>
         <el-table-column
           label="操作"
-          :show-overflow-tooltip="true">
+          width="500px">
           <template slot-scope="slot">
             <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿
             </el-button>
             <!--未完成 -->
-            <el-button v-if="slot.row.isDiscussed===-1" type="primary" size="small" @click="showDialogInput(slot.row)">发起讨论
+            <el-button v-if="slot.row.canPost===1" type="primary" size="small" @click="showDialogInput(slot.row)">发起讨论
             </el-button>
-            <el-button v-if="slot.row.isDiscussed===1" type="primary" size="small" @click="enterPost(slot.row)">查看讨论
+            <el-button v-if="slot.row.canPost===-1" type="primary" size="small" @click="enterPost(slot.row)">查看讨论
             </el-button>
-            <el-button v-if="slot.row.status===1&&slot.row.isDiscussed===1" type="primary" size="small" @click="confirmResult(slot.row)">确认评审结果
+            <el-button v-if="slot.row.status===1&&slot.row.canPost===-1" type="primary" size="small" @click="confirmResult(slot.row)">确认评审结果
             </el-button>
-            <el-button v-if="slot.row.status===1&&slot.row.isDiscussed===1" type="primary" size="small" @click="changeResult(slot.row)">修改评审结果
+            <el-button v-if="slot.row.status===1&&slot.row.canPost===-1" type="primary" size="small" @click="changeResult(slot.row)">修改评审结果
             </el-button>
             <!--end-->
           </template>

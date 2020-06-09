@@ -67,7 +67,7 @@
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$message({
                     showClose: true,
-                    message: '欢迎回来' + resp.data.username,
+                    message: resp.data.message,
                     type: 'success'
                   });
                 } else {
