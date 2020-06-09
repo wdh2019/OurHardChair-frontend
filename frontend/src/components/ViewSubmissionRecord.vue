@@ -150,7 +150,7 @@
           name: '/ViewResultDetails',
           params: {
             authorID: row.contributorID,
-            articleID: row.articleID,
+            articleID: row.id,
             evaluations: this.evaluations[index],
           }
         }).catch(err => err)
