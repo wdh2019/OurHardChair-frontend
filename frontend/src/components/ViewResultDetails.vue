@@ -23,7 +23,7 @@
       </div>
       {{this.setRebuttal($route.params.evaluations)}}
       {{$route.params}}
-      <el-button v-show="setRebuttal($route.params.evaluations)" type="primary">Rebuttal</el-button>
+      <el-button v-show="setRebuttal($route.params.evaluations)" type="primary" @click="ToRebuttal()">Rebuttal</el-button>
     </div>
 
   </div>
@@ -53,12 +53,16 @@
         }
         return false;
       },
-      ToRebuttal(){
-        let params={
-          authorID:this.$route.params
+      ToRebuttal() {
+        console.log("rebuttal");
+        console.log(this.$route.params);
+        let params = {
+          authorID: this.$route.params.authorID,
+          articleID: this.$route.params.articleID,
         }
         this.$router.push({
-          name:"/Rebuttal",
+          name: "/Rebuttal",
+          params: params,
         })
       }
     },

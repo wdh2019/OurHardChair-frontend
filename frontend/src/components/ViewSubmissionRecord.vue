@@ -149,6 +149,8 @@
         this.$router.push({
           name: '/ViewResultDetails',
           params: {
+            authorID: row.contributorID,
+            articleID: row.articleID,
             evaluations: this.evaluations[index],
           }
         }).catch(err => err)
@@ -163,8 +165,8 @@
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params))
       });
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-      
-	  if (this.$route.params.is_open_submission === 2 || this.$route.params.is_open_submission === 3) {
+
+      if (this.$route.params.is_open_submission === 2 || this.$route.params.is_open_submission === 3) {
         this.$axios.post('/showMySubmission', {
           conference_id: this.$route.params.conference_id,
         })
@@ -222,7 +224,7 @@
   .conference_container {
     width: 90%;
   }
-  
+
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
@@ -233,7 +235,7 @@
     margin-bottom: 0;
     width: 50%;
   }
-  
+
   .el-tag {
     margin-right: 5px;
   }
