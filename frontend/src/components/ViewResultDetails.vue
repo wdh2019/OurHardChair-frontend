@@ -22,6 +22,7 @@
         ></el-input>
       </div>
       {{this.setRebuttal($route.params.evaluations)}}
+      <el-button v-show="setRebuttal($route.params.evaluations)" type="primary">Rebuttal</el-button>
     </div>
 
   </div>
@@ -45,7 +46,11 @@
         });
       },
       setRebuttal(evaluations) {
-        return evaluations[0].score;
+        for (let i = 0; i < evaluations.length; i++) {
+          if (evaluations.score < 0)
+            return true;
+        }
+        return false;
       }
     },
     created() {
