@@ -62,7 +62,7 @@
               authorID: this.$route.params.authorID,
               articleID: this.$route.params.articleID,
               words: this.ruleForm.rebuttal,
-            })
+            }) 
               .then(resp => {
                 if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
                   this.$message({
