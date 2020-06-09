@@ -52,6 +52,8 @@
     },
     methods: {
       submitForm(formName) {
+        console.log(this.$route.params.authorID);
+        console.log(this.$route.params.articleID);
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$axios.post('/submitRebuttal', {
