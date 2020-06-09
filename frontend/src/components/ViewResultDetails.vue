@@ -21,7 +21,7 @@
           show-word-limit
         ></el-input>
       </div>
-
+      {{this.setRebuttal($route.params.evaluations)}}
     </div>
 
   </div>
@@ -31,30 +31,33 @@
   export default {
     name: "ViewResultDetails",
     data() {
-		  return{}
+      return {}
     },
-    methods:{
-      setMessageStore(){
+    methods: {
+      setMessageStore() {
         localStorage.removeItem("messageStore");
         localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
       },
-      goBack(){
+      goBack() {
         this.$router.push({
-          name:'/ViewSubmissionRecord',
+          name: '/ViewSubmissionRecord',
           params: JSON.parse(localStorage.getItem('viewSubmissionRecord')),
         });
+      },
+      setRebuttal(evaluations) {
+        return evaluations[0].score;
       }
     },
     created() {
       window.addEventListener("beforeunload", this.setMessageStore);
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
       if (window.history && window.history.pushState) {
-          history.pushState(null, null, document.URL);
-          window.addEventListener('popstate', this.goBack);
-        }
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', this.goBack);
+      }
     },
     destroyed() {
-      window.removeEventListener('beforeunload',this.setMessageStore);
+      window.removeEventListener('beforeunload', this.setMessageStore);
       window.removeEventListener('popstate', this.goBack);
     }
   }
@@ -75,7 +78,7 @@
 
   .PCMember p {
     float: left;
-    clear:both;
+    clear: both;
     font-size: 18px;
   }
 
