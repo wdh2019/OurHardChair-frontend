@@ -125,7 +125,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>投稿截止，开始评审</span>
-                  <el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>
+                  <!--<el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>-->
                 </el-form-item>
               </div>
               <div
@@ -133,7 +133,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>评审结果发布</span>
-                  <el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>
+                  <!--<el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>-->
                 </el-form-item>
               </div>
               <div
@@ -141,7 +141,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议开始</span>
-                  <el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>
+                  <!--<el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>-->
                 </el-form-item>
               </div>
 
@@ -377,6 +377,7 @@
                   message: resp.data.message,
                   type: 'warning'
                 })
+
               }
               window.location.reload();
             })

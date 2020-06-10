@@ -95,7 +95,8 @@
         </el-table-column>
         <el-table-column
           label="审稿状态"
-          prop="status" :show-overflow-tooltip="true">
+          prop="status" :show-overflow-tooltip="true"
+          width="150px">
           <template slot-scope="slot">
             <el-tag :type="getArticleStatus(slot.row.status).type">{{getArticleStatus(slot.row.status).status}}</el-tag>
           </template>
@@ -110,20 +111,27 @@
         </el-table-column>
         <el-table-column
           label="操作"
-          :show-overflow-tooltip="true">
+          :show-overflow-tooltip="true"
+          width="400px">
           <template slot-scope="slot">
             <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿
             </el-button>
             <!--未完成 -->
-            <el-button v-if="slot.row.isDiscussed===-1" type="primary" size="small" @click="showDialogInput(slot.row)">发起讨论
+            <el-button v-if="slot.row.status===1" type="primary" size="small" @click="confirmResult(slot.row)">确认评审结果
             </el-button>
-            <el-button v-if="slot.row.isDiscussed===1" type="primary" size="small" @click="enterPost(slot.row)">查看讨论
-            </el-button>
-            <el-button v-if="slot.row.status===1&&slot.row.isDiscussed===1" type="primary" size="small" @click="confirmResult(slot.row)">确认评审结果
-            </el-button>
-            <el-button v-if="slot.row.status===1&&slot.row.isDiscussed===1" type="primary" size="small" @click="changeResult(slot.row)">修改评审结果
+            <el-button v-if="slot.row.status===1" type="primary" size="small" @click="changeResult(slot.row)">修改评审结果
             </el-button>
             <!--end-->
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="讨论"
+          :show-overflow-tooltip="true">
+          <template slot-scope="slot">
+            <el-button type="primary" size="small" v-if="slot.row.canPost===1" @click="showDialogInput(slot.row)">发起讨论
+            </el-button>
+            <el-button type="primary" size="small" v-if="slot.row.canPost===-1" @click="enterPost(slot.row)">查看讨论
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -137,7 +145,7 @@
       </el-pagination>
       <el-dialog title="讨论内容" :visible.sync="showDialog">
         <el-input v-model="words" type="textarea" :rows="4" placeholder="输入您想讨论的内容"></el-input>
-        <el-button type="primary" @click="startDiscussion(row)"></el-button>
+        <el-button type="primary" @click="startDiscussion(row)">确认</el-button>
       </el-dialog>
     </div>
   </div>
@@ -152,9 +160,9 @@
         pagesize: 10,
         curPage: 1,
         search: '',
-        words:'',
-        row:'', //临时存放发起讨论的文章信息
-        showDialog:false, //展示发起讨论输入框
+        words: '',
+        row: '', //临时存放发起讨论的文章信息
+        showDialog: false, //展示发起讨论输入框
       }
     },
     methods: {
@@ -195,27 +203,28 @@
         }).catch(err => err);
       },
       /* 点击发起讨论按钮后，弹出填写讨论内容的输入框 */
-      showDialogInput(row){
+      showDialogInput(row) {
         this.row = row;
         this.showDialog = !this.showDialog;
       },
       /* 发起对某篇文章讨论 */
-      startDiscussion(row){
-        if(this.words.length>0){
-          this.$axios.post('/postOnArticle',{
-            articleID:this.$route.params.articleId,
-            ownerID:this.$store.state.id,
-            words:this.words,
+      startDiscussion(row) {
+        console.log(this.$route.params);
+        console.log(row);
+        if (this.words.length > 0) {
+          this.$axios.post('/postOnArticle', {
+            articleID: row.articleId,
+            ownerID: this.$store.state.id,
+            words: this.words,
           })
-          .then(resp => {
+            .then(resp => {
               this.$message({
                 showClose: true,
                 message: resp.data.message,
                 type: 'warning'
               });
-          });
-          window.location.reload();
-        }else{
+            });
+        } else {
           this.$message({
             showClose: true,
             message: "请填写要发起的讨论内容",
@@ -224,7 +233,7 @@
         }
       },
       /* 进入对谋篇文章的的讨论帖 */
-      enterPost(row){
+      enterPost(row) {
         this.$router.push({
           name: '/Post',
           params: {
@@ -233,23 +242,24 @@
         }).catch(err => err)
       },
       /* 确认评审结果 */
-      confirmResult(row){
-        this.$axios.post('/confirmReviewResult',{
-          userId:this.$store.state.id,
-          articleID:this.$route.params.articleId,
-          conference_id:this.$route.params.conference_id,
+      confirmResult(row) {
+        console.log(row);
+        console.log(this.$route.params);
+        this.$axios.post('/confirmReviewResult', {
+          userId: this.$store.state.id,
+          articleID: row.articleId,
+          conference_id: this.$route.params.conference_id,
         })
-        .then(resp => {
+          .then(resp => {
             this.$message({
               showClose: true,
               message: resp.data.message,
               type: 'warning'
             });
-        });
-        window.location.reload();
+          });
       },
       /* 修改评审结果 */
-      changeResult(row){
+      changeResult(row) {
         this.$router.push({
           name: '/ModifyReviewResult',
           params: {
@@ -299,23 +309,23 @@
 </script>
 
 <style scoped>
-.conference_container {
-  width: 70%;
-}
+  .conference_container {
+    width: 70%;
+  }
 
-.demo-table-expand label {
-  width: 90px;
-  color: #99a9bf;
-}
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
 
-.topic_section {
-  text-align: left;
-  font-size: 16px;
-  padding-left: 40px;
-  margin-bottom: 20px;
-}
+  .topic_section {
+    text-align: left;
+    font-size: 16px;
+    padding-left: 40px;
+    margin-bottom: 20px;
+  }
 
-.topic_tag, .author_tag {
-  margin-left: 10px;
-}
+  .topic_tag, .author_tag {
+    margin-left: 10px;
+  }
 </style>

@@ -21,9 +21,8 @@
           show-word-limit
         ></el-input>
       </div>
-      {{this.setRebuttal($route.params.evaluations)}}
-      {{$route.params}}
       <el-button v-show="setRebuttal($route.params.evaluations)" type="primary" @click="ToRebuttal()">Rebuttal</el-button>
+      <h3 v-show="$route.params.timesLeftForRebuttal===0" class="red">你的驳回机会已使用!</h3>
     </div>
   </div>
 </template>
@@ -46,9 +45,11 @@
         });
       },
       setRebuttal(evaluations) {
-        for (let i = 0; i < evaluations.length; i++) {
-          if (evaluations[i].score < 0)
-            return true;
+        if(this.$route.params.timesLeftForRebuttal>0){
+          for (let i = 0; i < evaluations.length; i++) {
+            if (evaluations[i].score < 0)
+              return true;
+          }
         }
         return false;
       },
@@ -106,4 +107,7 @@
     margin-left: 5px;
   }
 
+  .red{
+    color: red;
+  }
 </style>

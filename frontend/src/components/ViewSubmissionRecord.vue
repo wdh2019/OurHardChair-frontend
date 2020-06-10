@@ -63,13 +63,13 @@
           prop="topics"
           :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <el-tag v-for="key in scope.row.topics" :key="key"
+            <el-tag v-for="(key,index) in scope.row.topics" :key="index"
                     v-show="!($route.params.is_open_submission === 2 || $route.params.is_open_submission === 3)">
               {{key.topic}}
             </el-tag>
-            <el-tag v-for="key in scope.row.topics" :key="key"
-                    v-show="$route.params.is_open_submission === 2 || $route.params.is_open_submission === 3">{{key}}
-            </el-tag>
+            <!--<el-tag v-for="(key,index) in scope.row.topics" :key="index"-->
+                    <!--v-show="$route.params.is_open_submission === 2 || $route.params.is_open_submission === 3">{{key}}-->
+            <!--</el-tag>-->
           </template>
         </el-table-column>
         <el-table-column
@@ -106,7 +106,6 @@
           </template>
         </el-table-column>
       </el-table>
-
     </div>
 
   </div>
@@ -153,6 +152,7 @@
             authorID: row.contributorID,
             articleID: row.id,
             title:row.title,
+            timesLeftForRebuttal:row.timesLeftForRebuttal,
             evaluations: this.evaluations[index],
           }
         }).catch(err => err)
