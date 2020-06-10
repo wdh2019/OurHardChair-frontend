@@ -113,6 +113,7 @@
           label="操作"
           :show-overflow-tooltip="true"
           width="400px">
+          >>>>>>> d72c47b464831b793fd477032ce9d17c546d9808
           <template slot-scope="slot">
             <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿
             </el-button>
