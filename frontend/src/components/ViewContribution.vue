@@ -113,7 +113,6 @@
           label="操作"
           :show-overflow-tooltip="true"
           width="400px">
-          >>>>>>> d72c47b464831b793fd477032ce9d17c546d9808
           <template slot-scope="slot">
             <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿
             </el-button>
@@ -212,18 +211,19 @@
       startDiscussion(row) {
         console.log(this.$route.params);
         console.log(row);
+        console.log('/postOnArticle/' + row.articleId + "/" + this.$store.state.id + "/" + this.words)
         if (this.words.length > 0) {
-          this.$axios.post('/postOnArticle', {
-            articleID: row.articleId,
-            ownerID: this.$store.state.id,
-            words: this.words,
-          })
+          this.$axios.post('/postOnArticle/' + row.articleId + "/" + this.$store.state.id + "/" + this.words)
             .then(resp => {
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'warning'
-              });
+              if (resp.status = 200 && resp.data.hasOwnProperty("token")) {
+                this.enterPost(row);
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,
+                  type: 'warning'
+                });
+              }
             });
         } else {
           this.$message({
@@ -235,6 +235,9 @@
       },
       /* 进入对谋篇文章的的讨论帖 */
       enterPost(row) {
+        //console.log("enterPost")
+        localStorage.removeItem("messageStore");
+        //console.log(localStorage);
         this.$router.push({
           name: '/Post',
           params: {
@@ -246,11 +249,7 @@
       confirmResult(row) {
         console.log(row);
         console.log(this.$route.params);
-        this.$axios.post('/confirmReviewResult', {
-          userId: this.$store.state.id,
-          articleID: row.articleId,
-          conference_id: this.$route.params.conference_id,
-        })
+        this.$axios.post('/confirmReviewResult/'+this.$route.params.conference_id+"/"+row.articleId+"/"+this.$store.state.id)
           .then(resp => {
             this.$message({
               showClose: true,

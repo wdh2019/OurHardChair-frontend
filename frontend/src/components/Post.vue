@@ -8,7 +8,7 @@
           :current-page.sync="curPage"
           :page-size="10"
           :pager-count="7"
-          :total="post.replyList.length">
+          :total="total">
         </el-pagination>
 
         <el-header id="post-header">{{post.articleTitle}}</el-header>
@@ -31,10 +31,11 @@
           <el-main>
             <div class="words">{{reply.words}}</div>
             <div class="show_reply_container">
-              <el-button type="text" @click="showReply=!showReply" class="show-reply-button">显示回复</el-button>
+              <el-button type="text" @click="openReply(index)" class="show-reply-button">显示回复
+              </el-button>
             </div>
             <!-- 对回复帖的回复 -->
-            <div class="comment_container" v-show="showReply">
+            <div class="comment_container" v-show=showReply[index]>
               <div class="comment" v-for="(comment,index) in post.replyList" v-bind:key="index"
                    v-if="comment.replyToFloorNumber === reply.floorNumber">
                 <div class="words"><i class="el-icon-user-solid"></i><span>{{comment.ownerFullName}}:</span>
@@ -64,7 +65,7 @@
           :current-page.sync="curPage"
           :page-size="10"
           :pager-count="7"
-          :total="post.replyList.length">
+          :total="total">
         </el-pagination>
 
       </el-container>
@@ -81,7 +82,7 @@
               placeholder="开通超级会员发帖0倍经验"
               @blur="checkReply()"></el-input>
             <div style="position:relative"><span class="tip" v-show="showReplyTip">评论内容需包含文字</span></div>
-            <el-button type="primary" @click="replyPost(-1,)" class="submit-reply-button">发表</el-button>
+            <el-button type="primary" @click="replyPost(-1)" class="submit-reply-button">发表</el-button>
           </el-main>
         </el-container>
       </el-container>
@@ -96,7 +97,8 @@
         curPage: 1,
         headerTop: 0, //标题距离顶部的距离
         post: '', //主题帖
-        showReply: false, //是否显示回复
+        total: 0,
+        showReply: [], //是否显示回复
         showReplyInput: false, //是否显示回复输入框
         showReplyTip: false, //是否显示回复输入框为空的提示
         showCommentTip: false,//是否显示评论输入框为空的提示
@@ -117,21 +119,28 @@
           postHeader.classList.remove("fixed");
         }
       },
+      openReply(index) {
+        // console.log(this.showReply[index]);
+        // console.log(this.showReply);
+        this.showReply.splice(index,1,!this.showReply[index]);
+        // console.log(this.showReply[index]);
+        // console.log(this.showReply);
+      },
       /* 回复帖子 */
       replyPost(floorNumber) {
+        // console.log(floorNumber);
+        // console.log(typeof parseInt(this.$store.state.id));
+        // console.log(parseInt(this.$store.state.id))
+        // console.log(typeof this.post.id);
+        let _this = this;
         let words = floorNumber === -1 ? this.myReply : this.myComment;
+        console.log('/replyPost/' + this.post.id + "/" + this.$store.state.id + "/" + floorNumber + "/" + words);
         /* 输入非空检验 */
         if (words.length > 0) {
-          this.$axios.post('/replyPost', {
-            postID: this.post.id,
-            ownerID: this.$store.state.id,
-            words: words,
-            floorNumber: floorNumber,
-          })
+          this.$axios.post('/replyPost/' + this.post.id + "/" + this.$store.state.id + "/" + floorNumber + "/" + words)
             .then(resp => {
               if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-                _this.post = resp.data.post;
-                console.log("请求到的帖子：" + _this.post);
+                window.location.reload();
               } else {
                 this.$message({
                   showClose: true,
@@ -140,7 +149,7 @@
                 });
               }
             });
-          window.location.reload();
+
         }
         /* 回帖为空 */
         else if (floorNumber === -1) {
@@ -177,19 +186,20 @@
       },
     },
     created() {
-      window.addEventListener("beforeunload", () => {
-        localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
-      });
-      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
-
+      // console.log(localStorage);
+      // console.log(this.$route.params);
       /* 请求单个帖子 */
-      console.log(this.$route.params.articleId);
+
+      let articleId = this.$route.params.articleId === undefined ? JSON.parse(localStorage.getItem("messageStore")).articleId : this.$route.params.articleId;
       const _this = this;
-      this.$axios.post('/browsePostOnArticle/'+this.$route.params.articleId)
+      this.$axios.post('/browsePostOnArticle/' + articleId)
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.post = resp.data.post;
+            _this.total = resp.data.post.replyList.length;
+            for (let i = 0; i < _this.post.replyList.length; i++) {
+              _this.showReply.push(false);
+            }
             console.log("请求到的帖子：");
             console.log(_this.post)
           } else {
@@ -207,6 +217,12 @@
             type: 'error'
           });
         });
+      window.addEventListener("beforeunload", () => {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
+      });
+      localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+
     },
     mounted() {
       /* 添加标题滚动事件 */

@@ -70,7 +70,7 @@
                     message: resp.data.message,
                     type: 'success'
                   });
-                  this.$router.push("/ConferenceForChair").catch(err => err);
+                  this.$router.push("/ConferenceForAuthor").catch(err => err);
                 } else {
                   this.$message({
                     showClose: true,
