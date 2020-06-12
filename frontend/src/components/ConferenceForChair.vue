@@ -313,7 +313,7 @@
               this.$message({
                 showClose: true,
                 message: resp.data.message,
-                type: 'success'
+                type: 'info'
               });
               window.location.reload();
             } else {
@@ -343,7 +343,7 @@
                 this.$message({
                   showClose: true,
                   message: resp.data.message,
-                  type: 'success'
+                  type: 'info'
                 });
               } else {
                 this.$message({
@@ -375,7 +375,7 @@
                 this.$message({
                   showClose: true,
                   message: resp.data.message,
-                  type: 'success'
+                  type: 'info'
                 });
               } else {
                 this.$message({
@@ -408,7 +408,7 @@
                 this.$message({
                   showClose: true,
                   message: resp.data.message,
-                  type: 'success'
+                  type: 'info'
                 });
                 window.location.reload();
               } else {
