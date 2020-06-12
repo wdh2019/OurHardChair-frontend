@@ -144,6 +144,7 @@
         }).catch(err => err);
       },
       viewDetails(index, row) {
+        console.log(index);
         console.log("ViewResultDetails下面为row");
         console.log(row);
         this.$router.push({
@@ -202,6 +203,7 @@
                 _this.submissionRecord.push(resultResponses[i].article);
                 _this.evaluations.push(resultResponses[i].result.evaluations);
               }
+              console.log(_this.evaluations)
             } else {
               this.$message({
                 showClose: true,

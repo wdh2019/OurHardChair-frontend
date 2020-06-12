@@ -125,7 +125,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>投稿截止，开始评审</span>
-                  <!--<el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>-->
+                  <el-button type="primary" @click="enterPost(scope.row)">进入论坛</el-button>
                 </el-form-item>
               </div>
               <div
@@ -133,7 +133,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>评审结果发布</span>
-                  <!--<el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>-->
+                  <el-button type="primary" @click="enterPost(scope.row)">进入论坛</el-button>
                 </el-form-item>
               </div>
               <div
@@ -141,7 +141,7 @@
                 <el-form-item>
                   <label class="label">会议状态</label>
                   <span>会议开始</span>
-                  <!--<el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>-->
+                  <el-button type="primary" @click="enterPost(scope.row)">进入论坛</el-button>
                 </el-form-item>
               </div>
 
@@ -225,8 +225,14 @@
           },
         }).catch(err => err);
       },
-      enterPost(){
-        this.$router.push('/PostBar').catch(err => err);
+      enterPost(row) {
+        console.log(row);
+        this.$router.push({
+          name: '/AllPostsForChair',
+          params: {
+            conference_id: row.conference_id,
+          }
+        }).catch(err => err);
       },
       getTime(time) {
         //2015-05-06 00:00:00
@@ -392,36 +398,36 @@
             });
         }
         /* 第二次录用结果发布 */
-        else if(row.is_open_submission === 4){
+        else if (row.is_open_submission === 4) {
           console.log(row.conference_id);
           this.$axios.post('/releaseFinalReviewResult', {
             conference_id: row.conference_id,
           })
-          .then(resp => {
-            if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+            .then(resp => {
+              if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,
+                  type: 'success'
+                });
+                window.location.reload();
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: resp.data.message,
+                  type: 'warning'
+                })
+              }
+            })
+            .catch(error => {
               this.$message({
                 showClose: true,
-                message: resp.data.message,
-                type: 'success'
+                message: "错误发生于第二次发布录用结果",
+                type: 'error'
               });
-              window.location.reload();
-            } else {
-              this.$message({
-                showClose: true,
-                message: resp.data.message,
-                type: 'warning'
-              })
-            }
-          })
-          .catch(error => {
-            this.$message({
-              showClose: true,
-              message: "错误发生于第二次发布录用结果",
-              type: 'error'
+              console.log("error:");
+              console.log(error);
             });
-            console.log("error:");
-            console.log(error);
-          });
         }
       },
     },

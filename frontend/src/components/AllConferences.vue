@@ -12,6 +12,7 @@
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item class="el-form-item">
                 <label class="label">会议简称</label>
+
                 <span>{{ scope.row.short_name }}</span>
               </el-form-item>
               <el-form-item class="el-form-item">
@@ -36,41 +37,31 @@
                 <span>{{ scope.row.release_date }}</span>
               </el-form-item>
               <!--显示在此的所有会议都是审核通过的，所以不用判断status-->
-              <div
-                v-show="scope.row.is_open_submission===1">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>审核通过，投稿尚未开始</span>
-                </el-form-item>
-              </div>
-              <div
-                v-show="scope.row.is_open_submission===2">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>开始投稿</span>
-                </el-form-item>
-              </div>
-              <div
-                v-show="scope.row.is_open_submission===3">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>投稿截止，开始评审</span>
-                </el-form-item>
-              </div>
-              <div
-                v-show="scope.row.is_open_submission===4">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>评审结果发布</span>
-                </el-form-item>
-              </div>
-              <div
-                v-show="scope.row.is_open_submission===5">
-                <el-form-item>
-                  <label class="label">会议状态</label>
-                  <span>会议开始</span>
-                </el-form-item>
-              </div>
+              <el-form-item v-show="scope.row.is_open_submission===1" class="el-form-item">
+                <label class="label">会议状态</label>
+                <span>审核通过，投稿尚未开始</span>
+              </el-form-item>
+              <el-form-item v-show="scope.row.is_open_submission===2" class="el-form-item">
+                <label class="label">会议状态</label>
+                <span>开始投稿</span>
+              </el-form-item>
+              <el-form-item v-show="scope.row.is_open_submission===3" class="el-form-item">
+                <label class="label">会议状态</label>
+                <span>投稿截止，开始评审</span>
+              </el-form-item>
+              <el-form-item v-show="scope.row.is_open_submission===4" class="el-form-item">
+                <label class="label">会议状态</label>
+                <span>评审结果发布</span>
+                <el-button type="primary" class="button_view" @click="enterViewAcceptedArticles(scope.row)">
+                  查看录用文章
+                </el-button>
+              </el-form-item>
+              <el-form-item v-show="scope.row.is_open_submission===5">
+                <label class="label">会议状态</label>
+                <span>会议开始</span>
+                <el-button type="primary" class="button_view" @click="enterViewAcceptedArticles(scope.row)">查看录用文章
+                </el-button>
+              </el-form-item>
               <el-form-item class="el-form-item" v-show="scope.row.is_open_submission===2">
                 <label class="label">操作</label>
                 <el-button
@@ -137,6 +128,15 @@
       }
     },
     methods: {
+      enterViewAcceptedArticles(row) {
+        console.log(row)
+        this.$router.push({
+          name: "/ViewAcceptedArticles",
+          params: {
+            conference_id: row.conference_id,
+          }
+        }).catch(err=>err)
+      },
       getTime(time) {
         //2015-05-06 00:00:00
         let year = parseInt(time.slice(0, 4));
@@ -262,5 +262,7 @@
 </script>
 
 <style>
-
+  .button_view {
+    margin-left: 10%;
+  }
 </style>

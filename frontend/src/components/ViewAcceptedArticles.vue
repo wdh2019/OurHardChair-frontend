@@ -1,39 +1,7 @@
 <template>
   <div class="base_conference">
     <div class="conference_container">
-      <div class="title_section">
-        <h3 class="title">查看您在 {{this.$route.params.short_name}} 会议中被分配到的稿件</h3>
-      </div>
-      <el-collapse class="meeting_introduction">
-        <el-collapse-item>
-          <span slot="title" class="collapse-title">会议简介</span>
-          <div>
-            <p class="content"><label class="label">会议简称: </label>{{this.$route.params.short_name}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议全称: </label>{{this.$route.params.full_name}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议主席: </label>{{this.$route.params.chair_username}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议地点: </label>{{this.$route.params.place}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议开始时间: </label>{{this.$route.params.start_date}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议结束时间: </label>{{this.$route.params.deadline_date}}</p>
-          </div>
-          <div>
-            <p class="content"><label class="label">会议截稿时间: </label>{{this.$route.params.release_date}}</p>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
-      <div class="topic_section">
-        <span>负责的主题：</span>
-        <el-tag v-for="item in topics" :key="item.topic" class="topic_tag">{{item.topic}}</el-tag>
-      </div>
+      <h2 v-if="articles.length===0">暂未有文章被录用</h2>
       <el-table
         :data="articles.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase())).slice((curPage-1)*pagesize,curPage*pagesize)"
         style="width: 100%">
@@ -94,6 +62,15 @@
           </template>
         </el-table-column>
         <el-table-column
+          label="文件名"
+          prop="filename" :show-overflow-tooltip="true" width="400px">
+          <template slot="header" slot-scope="scope">
+            <div style="display: inline-flex;">
+              <label class="label" style="width: 100px">文件名</label>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
           label="审稿状态"
           prop="status" :show-overflow-tooltip="true"
           width="150px">
@@ -101,39 +78,7 @@
             <el-tag :type="getArticleStatus(slot.row.status).type">{{getArticleStatus(slot.row.status).status}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          label="预览"
-          :show-overflow-tooltip="true">
-          <template slot-scope="slot">
-            <el-button type="danger" size="small" @click="viewPDF($route.params.conference_id,slot.row.title)">预览
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          :show-overflow-tooltip="true"
-          width="400px">
-          <template slot-scope="slot">
-            <el-button :disabled="slot.row.status===1" type="primary" size="small" @click="enterArticle(slot.row)">审稿
-            </el-button>
-            <!--未完成 -->
-            <el-button v-if="slot.row.status===1" type="primary" size="small" @click="confirmResult(slot.row)">确认评审结果
-            </el-button>
-            <el-button v-if="slot.row.status===1" type="primary" size="small" @click="changeResult(slot.row)">修改评审结果
-            </el-button>
-            <!--end-->
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="讨论"
-          :show-overflow-tooltip="true">
-          <template slot-scope="slot">
-            <el-button type="primary" size="small" v-if="slot.row.canPost===1" @click="showDialogInput(slot.row)">发起讨论
-            </el-button>
-            <el-button type="primary" size="small" v-if="slot.row.canPost===-1" @click="enterPost(slot.row)">查看讨论
-            </el-button>
-          </template>
-        </el-table-column>
+
       </el-table>
       <el-pagination
         :current-page.sync="curPage"
@@ -143,10 +88,6 @@
         background
         layout="total, prev, pager, next, jumper">
       </el-pagination>
-      <el-dialog title="讨论内容" :visible.sync="showDialog">
-        <el-input v-model="words" type="textarea" :rows="4" placeholder="输入您想讨论的内容"></el-input>
-        <el-button type="primary" @click="startDiscussion(row)">确认</el-button>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -155,7 +96,6 @@
   export default {
     data() {
       return {
-        topics: [],
         articles: [],
         pagesize: 10,
         curPage: 1,
@@ -245,40 +185,14 @@
       enterPost(row) {
         //console.log("enterPost")
         localStorage.removeItem("messageStore");
-        //console.log(localStorage);
+        console.log(row);
         this.$router.push({
           name: '/Post',
           params: {
-            articleId: row.articleId,
+            articleId: row.id,
           }
         }).catch(err => err)
       },
-      /* 确认评审结果 */
-      confirmResult(row) {
-        console.log(row);
-        console.log(this.$route.params);
-        this.$axios.post('/confirmReviewResult/'+this.$route.params.conference_id+"/"+row.articleId+"/"+this.$store.state.id)
-          .then(resp => {
-            this.$message({
-              showClose: true,
-              message: resp.data.message,
-              type: 'warning'
-            });
-          });
-      },
-      /* 修改评审结果 */
-      changeResult(row) {
-        this.$router.push({
-          name: '/ModifyReviewResult',
-          params: {
-            conference_id: this.$route.params.conference_id,
-            articleId: row.articleId,
-            title: row.title,
-            articleAbstract: row.articleAbstract,
-            authors: row.writers,
-          }
-        }).catch(err => err)
-      }
     },
     created() {
       const _this = this;
@@ -288,14 +202,12 @@
       });
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
 
-      this.$axios.post('/reviewArticle', {
+      this.$axios.post('/showAcceptedArticlesForChair', {
         conference_id: this.$route.params.conference_id,
-        userId: this.$store.state.id,
       })
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-            _this.topics = resp.data.topics;
-            _this.articles = resp.data.articles;
+            _this.articles = resp.data.acceptedArticles;
           } else {
             this.$message({
               showClose: true,

@@ -24,7 +24,8 @@ import PostBar from "../components/PostBar"
 import Post from "../components/Post"
 import Rebuttal from "../components/Rebuttal"
 import ModifyReviewResult from "../components/ModifyReviewResult"
-
+import AllPostsForChair from "../components/AllPostsForChair"
+import ViewAcceptedArticles from "../components/ViewAcceptedArticles"
 
 Vue.use(Router);
 
@@ -197,14 +198,24 @@ export const router = new Router({
           component: Post,
         },
         {
-          path:'/Rebuttal',
-          name:'/Rebuttal',
+          path: '/Rebuttal',
+          name: '/Rebuttal',
           component: Rebuttal,
         },
         {
-          path:'/ModifyReviewResult',
-          name:'/ModifyReviewResult',
+          path: '/ModifyReviewResult',
+          name: '/ModifyReviewResult',
           component: ModifyReviewResult,
+        },
+        {
+          path: '/AllPostsForChair',
+          name: '/AllPostsForChair',
+          component: AllPostsForChair,
+        },
+        {
+          path: "/ViewAcceptedArticles",
+          name: "/ViewAcceptedArticles",
+          component: ViewAcceptedArticles
         }
       ]
     },
