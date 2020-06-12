@@ -184,6 +184,16 @@
           this.showCommentTip = true;
         }
       },
+      setMessageStore() {
+        localStorage.removeItem("messageStore");
+        localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
+      },
+      goBack() {
+        this.$router.push({
+          name: '/ViewContribution',
+          params: JSON.parse(localStorage.getItem('viewContribution')),
+        });
+      },
     },
     created() {
       // console.log(localStorage);
@@ -217,11 +227,12 @@
             type: 'error'
           });
         });
-      window.addEventListener("beforeunload", () => {
-        localStorage.removeItem("messageStore");
-        localStorage.setItem("messageStore", JSON.stringify(this.$route.params));
-      });
+      window.addEventListener("beforeunload", this.setMessageStore);
       localStorage.getItem("messageStore") && Object.assign(this.$route.params, JSON.parse(localStorage.getItem("messageStore")));
+      if (window.history && window.history.pushState) {
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', this.goBack);
+      }
 
     },
     mounted() {
@@ -231,6 +242,8 @@
 
     },
     destroyed() {
+      window.removeEventListener('beforeunload', this.setMessageStore);
+      window.removeEventListener('popstate', this.goBack);
       window.removeEventListener('scroll', this.fixHeader, true);
     }
   }

@@ -75,7 +75,7 @@ export default {
 
   .search_input {
     float: right;
-    width: 150px;
+    width: 150px !important;
     margin-left: 10px;
     margin-right: 30px;
   }
