@@ -60,7 +60,6 @@
                 </el-form-item>
                 <el-form-item>
                 <el-button type="primary" @click="enterMeeting(scope.row)">查看待审稿件</el-button>
-                <!--<el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>-->
                 </el-form-item>
               </div>
               <div
@@ -71,7 +70,6 @@
                 </el-form-item>
                 <el-form-item>
                 <el-button type="primary" @click="enterMeeting(scope.row)">查看已审稿件</el-button>
-                <!--<el-button type="primary" @click="enterPost(scope.row)">查看讨论</el-button>-->
                 </el-form-item>
               </div>
               <div
@@ -200,10 +198,7 @@
                 else if (now_minute > date.minute)
                   return true;
                 else {
-                  if (now_second < date.second)
-                    return false;
-                  else
-                    return true;
+                  return (now_second >= date.second);
                 }
               }
             }

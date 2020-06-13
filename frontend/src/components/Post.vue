@@ -16,7 +16,7 @@
         <!-- 主题帖 -->
         <el-container class="content_container">
           <el-aside>
-            <span><i class="el-icon-user-solid"></i>{{post.ownerFullName}}</span>
+            <span><em class="el-icon-user-solid"></em>{{post.ownerFullName}}</span>
           </el-aside>
           <el-main>
             <div class="words">{{post.words}}</div>
@@ -26,7 +26,7 @@
         <el-container class="content_container" v-for="(reply,index) in post.replyList" v-bind:key="index"
                       v-if="reply.replyToFloorNumber === -1">
           <el-aside>
-            <span><i class="el-icon-user-solid"></i>{{reply.ownerFullName}}</span>
+            <span><em class="el-icon-user-solid"></em>{{reply.ownerFullName}}</span>
           </el-aside>
           <el-main>
             <div class="words">{{reply.words}}</div>
@@ -38,7 +38,7 @@
             <div class="comment_container" v-show=showReply[index]>
               <div class="comment" v-for="(comment,index) in post.replyList" v-bind:key="index"
                    v-if="comment.replyToFloorNumber === reply.floorNumber">
-                <div class="words"><i class="el-icon-user-solid"></i><span>{{comment.ownerFullName}}:</span>
+                <div class="words"><em class="el-icon-user-solid"></em><span>{{comment.ownerFullName}}:</span>
                   {{comment.words}}
                 </div>
                 <el-button type="text" class="reply-button" @click="replyTo(comment.ownerFullName)">回复</el-button>
@@ -120,21 +120,11 @@
         }
       },
       openReply(index) {
-        // console.log(this.showReply[index]);
-        // console.log(this.showReply);
         this.showReply.splice(index,1,!this.showReply[index]);
-        // console.log(this.showReply[index]);
-        // console.log(this.showReply);
       },
       /* 回复帖子 */
       replyPost(floorNumber) {
-        // console.log(floorNumber);
-        // console.log(typeof parseInt(this.$store.state.id));
-        // console.log(parseInt(this.$store.state.id))
-        // console.log(typeof this.post.id);
-        let _this = this;
         let words = floorNumber === -1 ? this.myReply : this.myComment;
-        console.log('/replyPost/' + this.post.id + "/" + this.$store.state.id + "/" + floorNumber + "/" + words);
         /* 输入非空检验 */
         if (words.length > 0) {
           this.$axios.post('/replyPost/' + this.post.id + "/" + this.$store.state.id + "/" + floorNumber + "/" + words)
@@ -196,8 +186,6 @@
       },
     },
     created() {
-      // console.log(localStorage);
-      // console.log(this.$route.params);
       /* 请求单个帖子 */
 
       let articleId = this.$route.params.articleId === undefined ? JSON.parse(localStorage.getItem("messageStore")).articleId : this.$route.params.articleId;
@@ -210,8 +198,6 @@
             for (let i = 0; i < _this.post.replyList.length; i++) {
               _this.showReply.push(false);
             }
-            console.log("请求到的帖子：");
-            console.log(_this.post)
           } else {
             this.$message({
               showClose: true,
@@ -259,7 +245,6 @@
   .wrap_container .el-header {
     width: 920px;
     color: #333;
-    text-align: center;
     line-height: 60px;
     background-color: white;
     text-align: left;

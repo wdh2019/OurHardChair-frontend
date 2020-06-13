@@ -8,7 +8,7 @@
 
         <el-form-item prop="username" class="item">
           <el-input ref="username" v-model="ruleForm.username" placeholder="用户名" type="text" auto-complete="off">
-            <i slot="suffix" class="el-icon-warning-outline" title="只能包含字母,数字或两种特殊字符(-_),只能以字母或-开头,长度为5-32个字符"></i>
+            <em slot="suffix" class="el-icon-warning-outline" title="只能包含字母,数字或两种特殊字符(-_),只能以字母或-开头,长度为5-32个字符"></em>
           </el-input>
         </el-form-item>
         <el-form-item prop="fullName" class="item">
@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item prop="password" class="item">
           <el-input v-model="ruleForm.password" placeholder="密码" type="password" auto-complete="off" show-password>
-          <i slot="suffix" class="el-icon-warning-outline" title="至少包含字母,数字或特殊字符(-_)中的两种,长度6-32个字符,不能包含账号"></i>
+          <em slot="suffix" class="el-icon-warning-outline" title="至少包含字母,数字或特殊字符(-_)中的两种,长度6-32个字符,不能包含账号"></em>
           </el-input>
         </el-form-item>
         <el-form-item prop="ensure_password" class="item">
@@ -212,7 +212,7 @@
     width: 480px;
     height: 620px;
     padding: 35px 35px 15px 35px;
-    background: #fff;
+    background-color: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
   }

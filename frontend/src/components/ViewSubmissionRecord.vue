@@ -67,9 +67,6 @@
                     v-show="!($route.params.is_open_submission === 2 || $route.params.is_open_submission === 3)">
               {{key.topic}}
             </el-tag>
-            <!--<el-tag v-for="(key,index) in scope.row.topics" :key="index"-->
-                    <!--v-show="$route.params.is_open_submission === 2 || $route.params.is_open_submission === 3">{{key}}-->
-            <!--</el-tag>-->
           </template>
         </el-table-column>
         <el-table-column
@@ -144,9 +141,6 @@
         }).catch(err => err);
       },
       viewDetails(index, row) {
-        console.log(index);
-        console.log("ViewResultDetails下面为row");
-        console.log(row);
         this.$router.push({
           name: '/ViewResultDetails',
           params: {
@@ -203,7 +197,6 @@
                 _this.submissionRecord.push(resultResponses[i].article);
                 _this.evaluations.push(resultResponses[i].result.evaluations);
               }
-              console.log(_this.evaluations)
             } else {
               this.$message({
                 showClose: true,

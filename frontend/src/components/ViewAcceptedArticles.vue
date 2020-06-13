@@ -157,9 +157,6 @@
       },
       /* 发起对某篇文章讨论 */
       startDiscussion(row) {
-        console.log(this.$route.params);
-        console.log(row);
-        console.log('/postOnArticle/' + row.articleId + "/" + this.$store.state.id + "/" + this.words)
         if (this.words.length > 0) {
           this.$axios.post('/postOnArticle/' + row.articleId + "/" + this.$store.state.id + "/" + this.words)
             .then(resp => {
@@ -183,9 +180,7 @@
       },
       /* 进入对谋篇文章的的讨论帖 */
       enterPost(row) {
-        //console.log("enterPost")
         localStorage.removeItem("messageStore");
-        console.log(row);
         this.$router.push({
           name: '/Post',
           params: {

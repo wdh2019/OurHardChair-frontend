@@ -9,7 +9,7 @@
       text-color="#fff"
       active-text-color="#1EAEFF" router>
 
-      <img src="../../static/favicon2.png" class="favicon">
+      <img src="../../static/favicon2.png" class="favicon" alt="GYSW">
 
       <el-submenu index="0">
         <template slot="title">操作中心</template>
@@ -40,7 +40,7 @@
       </el-submenu>
 
       <el-submenu index="user" style="float:right">
-        <template slot="title"><i class="el-icon-user" style="color: white"></i>{{$store.state.username}}</template>
+        <template slot="title"><em class="el-icon-user" style="color: white"></em>{{$store.state.username}}</template>
         <el-menu-item class="nav_item" index="/UserInfo">用户信息</el-menu-item>
         <p class="quit_nav"  @click="quit" >注销</p>
       </el-submenu>
@@ -90,7 +90,6 @@
     },
     created: function () {
       //一开始就向后端请求所有消息
-      const _this = this;
       this.$axios.post('/mailCenter')
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
@@ -109,7 +108,7 @@
                 this.newsCount++;
               }
             }
-          } else {}
+          }
         })
         .catch(error => {
           this.$message({

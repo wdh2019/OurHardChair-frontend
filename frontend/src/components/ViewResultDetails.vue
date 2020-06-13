@@ -54,8 +54,6 @@
         return false;
       },
       ToRebuttal() {
-        console.log("rebuttal");
-        console.log(this.$route.params);
         let params = {
           authorID: this.$route.params.authorID,
           articleID: this.$route.params.articleID,

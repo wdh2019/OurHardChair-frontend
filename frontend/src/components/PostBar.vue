@@ -14,7 +14,7 @@
                <el-button type="text" class="post-header" @click="enterPost(post.articleID)">针对文章"{{post.articleTitle}}"的讨论</el-button>
                <p class="words">{{post.words}}</p>
                <br>
-               <div class="post-footer"><span><i class="el-icon-user-solid"></i>{{post.ownerFullName}}</span><span>回帖数：{{post.replyNumber}}</span></div>
+               <div class="post-footer"><span><em class="el-icon-user-solid"></em>{{post.ownerFullName}}</span><span>回帖数：{{post.replyNumber}}</span></div>
               </li>
             </ul>
         </el-scrollbar>
@@ -54,14 +54,12 @@
     created() {
       /* 展示“我”作为PCMember需要参加讨论的帖子 */
       const _this = this;
-      console.log(this.$store.state.id);
       this.$axios.post('/browseAllPosts',{
         userID:this.$store.state.id,
       })
         .then(resp => {
           if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
             _this.postList = resp.data.postList;
-            console.log("请求到的帖子："+_this.postList);
           } else {
             this.$message({
               showClose: true,

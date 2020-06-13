@@ -221,10 +221,7 @@
                 else if (now_minute > date.minute)
                   return true;
                 else {
-                  if (now_second < date.second)
-                    return false;
-                  else
-                    return true;
+                  return (now_second >= date.second);
                 }
               }
             }

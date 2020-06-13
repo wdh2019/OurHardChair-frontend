@@ -217,9 +217,6 @@
       },
       /* 发起对某篇文章讨论 */
       startDiscussion(row) {
-        console.log(this.$route.params);
-        console.log(row);
-        console.log('/postOnArticle/' + row.articleId + "/" + this.$store.state.id + "/" + this.words)
         if (this.words.length > 0) {
           this.$axios.post('/postOnArticle/' + row.articleId + "/" + this.$store.state.id + "/" + this.words)
             .then(resp => {
@@ -243,9 +240,7 @@
       },
       /* 进入对谋篇文章的的讨论帖 */
       enterPost(row) {
-        //console.log("enterPost")
         localStorage.removeItem("messageStore");
-        //console.log(localStorage);
         this.$router.push({
           name: '/Post',
           params: {
@@ -255,8 +250,6 @@
       },
       /* 确认评审结果 */
       confirmResult(row) {
-        console.log(row);
-        console.log(this.$route.params);
         this.$axios.post('/confirmReviewResult/'+this.$route.params.conference_id+"/"+row.articleId+"/"+this.$store.state.id)
           .then(resp => {
             this.$message({

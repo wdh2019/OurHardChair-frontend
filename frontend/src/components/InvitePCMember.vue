@@ -143,7 +143,6 @@
       },
       handleSelectionChange(val) {
         this.users = [];
-        let count = 0;
         for (let user of val) {
           if(user.status===1){
             this.users = this.users.concat(user.username);

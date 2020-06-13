@@ -367,8 +367,7 @@
         formData.append('conference_id', this.$route.params.conference_id);
         formData.append('title',this.ruleForm.title);
         this.instance.post('/upload', formData).then(resp => {
-          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-          } else {
+         if(!(resp.status === 200 && resp.data.hasOwnProperty("token"))){
             this.$message({
               showClose: true,
               message: resp.data.message,

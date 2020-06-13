@@ -58,7 +58,7 @@ export default {
     overflow: auto;
     border-radius: 15px;
     background-clip: padding-box;
-    background: #fff;
+    background-color: #fff;
     background-size: cover;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;

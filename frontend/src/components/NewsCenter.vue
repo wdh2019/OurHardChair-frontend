@@ -4,11 +4,11 @@
     <el-aside width="200px" style="height:900px;background-color: rgb(238, 241, 246)">
       <el-menu :default-active="show+''" style="top:60px">
         <el-menu-item index="1" @click="not_read">
-          <i class="el-icon-setting"></i>
+          <em class="el-icon-setting"></em>
           <span slot="title">未读消息</span>
         </el-menu-item>
         <el-menu-item index="2" @click="has_read">
-          <i class="el-icon-setting"></i>
+          <em class="el-icon-setting"></em>
           <span slot="title">已读消息</span>
         </el-menu-item>
       </el-menu>
@@ -333,7 +333,6 @@
                 this.hasReadInfo.push(_this.allInfo[i]);
               }
             }
-          } else {
           }
         })
         .catch(error => {

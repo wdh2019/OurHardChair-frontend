@@ -192,7 +192,7 @@
     margin: 10px auto;
     width: 70%;
     padding: 35px 35px 15px 35px;
-    background: #fff;
+    background-color: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
     clear: left;

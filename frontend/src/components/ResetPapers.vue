@@ -336,8 +336,7 @@
         formData.append("articleId", this.$route.params.articleID);
 
         this.instance.post('/update', formData).then(resp => {
-          if (resp.status === 200 && resp.data.hasOwnProperty("token")) {
-          } else {
+          if(!(resp.status === 200 && resp.data.hasOwnProperty("token"))) {
             this.$message({
               showClose: true,
               message: resp.data.message,

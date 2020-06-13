@@ -16,7 +16,7 @@
         <div class="inline-block display_username_field">
            <el-form-item prop="username" class="item" label="用户名">
               <el-input v-model="ruleForm.username" :placeholder="$store.state.username" type="text" auto-complete="off" :disabled="username_disabled">
-                <i slot="suffix" class="el-icon-warning-outline" title="只能包含字母,数字或两种特殊字符(-_),只能以字母或-开头,长度为5-32个字符"></i>
+                <em slot="suffix" class="el-icon-warning-outline" title="只能包含字母,数字或两种特殊字符(-_),只能以字母或-开头,长度为5-32个字符"></em>
               </el-input>
            </el-form-item>
         </div>
@@ -40,7 +40,7 @@
         <div class="display_new_password_field">
         <el-form-item prop="new_password" class="item">
           <el-input v-model="ruleForm.ensure_password" placeholder="新密码" type="password" auto-complete="off" show-password disabled>
-            <i slot="suffix" class="el-icon-warning-outline" title="至少包含字母,数字或特殊字符(-_)中的两种,长度6-32个字符,不能包含账号"></i>
+            <em slot="suffix" class="el-icon-warning-outline" title="至少包含字母,数字或特殊字符(-_)中的两种,长度6-32个字符,不能包含账号"></em>
           </el-input>
         </el-form-item>
         </div>
@@ -256,7 +256,7 @@
     margin: 10px auto;
     width: 50%;
     padding: 35px 35px 15px 35px;
-    background: #fff;
+    background-color: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
     clear: left;

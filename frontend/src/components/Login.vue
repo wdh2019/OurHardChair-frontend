@@ -125,7 +125,7 @@
     width:400px;
     height: 350px;
     padding: 35px 35px 15px 35px;
-    background: #fff;
+    background-color: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
 

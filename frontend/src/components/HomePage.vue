@@ -7,7 +7,7 @@
             <div class="welcome">
               <p class="welcome1">欢迎使用</p>
               <p class="welcome2">Gysw 会议系统</p></div>
-            <img class="img" ref='img' :src="item.imageUrl" :height="height" :width="width">
+            <img class="img" ref='img' :src="item.imageUrl" :height="height" :width="width" alt="欢迎使用Gysw会议系统">
             <router-link to="/login" class="button login">
               加入我们
             </router-link>
