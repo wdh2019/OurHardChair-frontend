@@ -146,7 +146,7 @@
           name: '/CheckPapers',
           params: {
             conference_id: this.$route.params.conference_id,
-            articleId: row.articleId,
+            articleId: row.id,
             title: row.title,
             articleAbstract: row.articleAbstract,
             authors: row.writers,
@@ -162,9 +162,9 @@
       startDiscussion(row) {
         console.log(this.$route.params);
         console.log(row);
-        console.log('/postOnArticle/' + row.articleId + "/" + this.$store.state.id + "/" + this.words)
+        console.log('/postOnArticle/' + row.id + "/" + this.$store.state.id + "/" + this.words)
         if (this.words.length > 0) {
-          this.$axios.post('/postOnArticle/' + row.articleId + "/" + this.$store.state.id + "/" + this.words)
+          this.$axios.post('/postOnArticle/' + row.id + "/" + this.$store.state.id + "/" + this.words)
             .then(resp => {
               if (resp.status = 200 && resp.data.hasOwnProperty("token")) {
                 this.enterPost(row);
