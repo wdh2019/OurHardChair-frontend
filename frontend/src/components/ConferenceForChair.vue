@@ -313,7 +313,7 @@
               this.$message({
                 showClose: true,
                 message: resp.data.message,
-                type: 'info'
+                type: 'success'
               });
               window.location.reload();
             } else {
@@ -343,8 +343,9 @@
                 this.$message({
                   showClose: true,
                   message: resp.data.message,
-                  type: 'info'
+                  type: 'success'
                 });
+                window.location.reload();
               } else {
                 this.$message({
                   showClose: true,
@@ -352,7 +353,6 @@
                   type: 'warning'
                 })
               }
-              window.location.reload();
             })
             .catch(error => {
               this.$message({
@@ -375,17 +375,17 @@
                 this.$message({
                   showClose: true,
                   message: resp.data.message,
-                  type: 'info'
+                  type: 'success'
                 });
+                window.location.reload();
               } else {
                 this.$message({
                   showClose: true,
                   message: resp.data.message,
                   type: 'warning'
                 })
-
               }
-              window.location.reload();
+
             })
             .catch(error => {
               this.$message({
@@ -408,7 +408,7 @@
                 this.$message({
                   showClose: true,
                   message: resp.data.message,
-                  type: 'info'
+                  type: 'success'
                 });
                 window.location.reload();
               } else {
